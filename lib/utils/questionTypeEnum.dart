@@ -1,0 +1,4 @@
+enum QuestionTypeEnum {
+  single,
+  multiple
+}
