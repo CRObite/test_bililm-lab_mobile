@@ -7,19 +7,20 @@ class CustomDropDown extends StatefulWidget {
     Key? key,
     required this.dropItems,
     required this.hint,
-    this.onSelected,
+    required this.onSelected,
+    this.selectedItemId,
   }) : super(key: key);
 
-  final VoidCallback? onSelected;
+  final void Function(int) onSelected;
   final String hint;
   final List<EntSubject> dropItems;
+  final int? selectedItemId;
 
   @override
   State<CustomDropDown> createState() => _CustomDropDownState();
 }
 
 class _CustomDropDownState extends State<CustomDropDown> {
-  EntSubject? _selectedItem;
 
   @override
   Widget build(BuildContext context) {
@@ -30,14 +31,14 @@ class _CustomDropDownState extends State<CustomDropDown> {
         borderRadius: BorderRadius.circular(8.0),
         border: Border.all(color: AppColors.colorTextFiledStoke),
       ),
-      child: DropdownButton<EntSubject>(
+      child: DropdownButton<int>(
         isExpanded: true,
         menuMaxHeight: 250,
         hint: Text(widget.hint),
-        value: _selectedItem,
-        items: widget.dropItems.map<DropdownMenuItem<EntSubject>>((EntSubject subject) {
-          return DropdownMenuItem<EntSubject>(
-            value: subject,
+        value: widget.selectedItemId,
+        items: widget.dropItems.map<DropdownMenuItem<int>>((EntSubject subject) {
+          return DropdownMenuItem<int>(
+            value: subject.id,
             child: Text(
               subject.name,
               style: const TextStyle(
@@ -47,12 +48,9 @@ class _CustomDropDownState extends State<CustomDropDown> {
             ),
           );
         }).toList(),
-        onChanged: (EntSubject? newValue) {
+        onChanged: (int? newValue) {
           if (newValue != null) {
-            setState(() {
-              _selectedItem = newValue;
-            });
-            widget.onSelected?.call();
+            widget.onSelected?.call(newValue);
           }
         },
         icon: const Icon(Icons.keyboard_arrow_down_rounded),

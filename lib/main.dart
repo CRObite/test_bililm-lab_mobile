@@ -18,7 +18,7 @@ Future<void> main() async {
 
   ByteData data = await PlatformAssetBundle().load('certificates/bilim-lab_kz.crt');
   SecurityContext.defaultContext.setTrustedCertificatesBytes(data.buffer.asUint8List());
-
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp,]);
   runApp(const MyApp());
 }
 

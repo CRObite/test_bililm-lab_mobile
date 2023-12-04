@@ -1,7 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:test_bilimlab_project/config/handleErrorResponse.dart';
 import 'package:test_bilimlab_project/domain/currentUser.dart';
-
 import '../../domain/entSubject.dart';
 import '../../utils/AppApiUrls.dart';
 
@@ -26,5 +24,26 @@ class SubjectRepository {
       return [];
     }
   }
+
+  Future<List<EntSubject>> getEntSubjectInMSS(int subIndex) async {
+    try {
+      dio.options.headers['Authorization'] = 'Bearer ${CurrentUser.currentTestUser?.accessToken}';
+      final response = await dio.get(
+        AppApiUrls.getAllSubInMSS,
+        queryParameters: {
+          'subjectId': subIndex,
+        }
+      );
+
+      List<dynamic> jsonResponse = response.data;
+      List<EntSubject> entSubjectList =  jsonResponse.map((json) => EntSubject.fromJson(json)).toList();
+      print(entSubjectList);
+      return entSubjectList;
+
+    } catch (e) {
+      return [];
+    }
+  }
+
 
 }

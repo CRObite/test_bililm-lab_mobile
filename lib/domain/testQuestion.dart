@@ -7,10 +7,11 @@ class TestQuestion{
   List<String> _answers;
   int _correctAnswer;
   QuestionTypeEnum _questionType;
-
+  int? _selectedVariant;
+  List<int>? _selectedMultipleVariant;
 
   TestQuestion(this._id, this._question, this._answers, this._correctAnswer,
-      this._questionType);
+      this._questionType, this._selectedVariant, this._selectedMultipleVariant);
 
 
   QuestionTypeEnum get questionType => _questionType;
@@ -43,5 +44,15 @@ class TestQuestion{
     _id = value;
   }
 
+  int? get selectedVariant => _selectedVariant;
 
+  set selectedVariant(int? value) {
+    _selectedVariant = value;
+  }
+
+  List<int>? get selectedMultipleVariant => _selectedMultipleVariant;
+
+  set selectedMultipleVariant(List<int>? value) {
+    _selectedMultipleVariant = value;
+  }
 }

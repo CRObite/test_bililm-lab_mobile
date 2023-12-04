@@ -54,7 +54,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("${widget.user.firstName} ${widget.user.middleName ?? ''} ${widget.user.lastName}", style: const TextStyle(fontWeight: FontWeight.bold),),
+                    Text("${widget.user.lastName} ${widget.user.firstName[0]}.", style: const TextStyle(fontWeight: FontWeight.bold),),
                     Text(widget.user.iin),
                   ],
                 )

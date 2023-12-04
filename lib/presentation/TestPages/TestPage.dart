@@ -9,6 +9,7 @@ import 'package:test_bilimlab_project/presentation/Widgets/SmallButton.dart';
 import 'package:test_bilimlab_project/utils/AlertEnum.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
 import 'package:test_bilimlab_project/utils/AppTexts.dart';
+import 'package:test_bilimlab_project/utils/questionTypeEnum.dart';
 
 import '../../domain/testSubject.dart';
 
@@ -32,7 +33,7 @@ class _TestPageState extends State<TestPage> {
   int currentSubject = 0;
   int currentQuestion = 0;
   int? selectedAnswerIndex;
-
+  List<int>? selectedMultipleAnswerIndex;
   late ScrollController _scrollController;
 
 
@@ -158,16 +159,46 @@ class _TestPageState extends State<TestPage> {
                           scrollDirection: Axis.vertical,
                           itemCount: widget.testSubjects[currentSubject].listOfQuestion[currentQuestion].answers.length,
                           itemBuilder: (context, index) {
-                            return RadioListTile(
+                            if(widget.testSubjects[currentSubject].listOfQuestion[currentQuestion].questionType == QuestionTypeEnum.single){
+                              selectedAnswerIndex = widget.testSubjects[currentSubject].listOfQuestion[currentQuestion].selectedVariant;
+                            }else{
+                              selectedMultipleAnswerIndex = widget.testSubjects[currentSubject].listOfQuestion[currentQuestion].selectedMultipleVariant;
+                            }
+
+                            return widget.testSubjects[currentSubject].listOfQuestion[currentQuestion].questionType == QuestionTypeEnum.single ?
+                            RadioListTile(
                               title: Text(widget.testSubjects[currentSubject].listOfQuestion[currentQuestion].answers[index]),
                               value: index,
                               groupValue: selectedAnswerIndex,
                               onChanged: (int? value) {
                                 setState(() {
-                                  selectedAnswerIndex = value;
+                                  widget.testSubjects[currentSubject].listOfQuestion[currentQuestion].selectedVariant = value;
                                 });
                               },
                               contentPadding: EdgeInsets.zero,
+                            ): CheckboxListTile(
+                              title: Text(widget.testSubjects[currentSubject].listOfQuestion[currentQuestion].answers[index]),
+                              value: widget.testSubjects[currentSubject].listOfQuestion[currentQuestion].selectedMultipleVariant?.contains(index) ?? false,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  if (value != null) {
+                                    List<int>? selectedValues = widget.testSubjects[currentSubject].listOfQuestion[currentQuestion].selectedMultipleVariant;
+                                    if (selectedValues == null) {
+                                      selectedValues = [];
+                                    }
+                                    if (value) {
+                                      selectedValues.add(index);
+                                    } else {
+                                      selectedValues.remove(index);
+                                    }
+
+                                    widget.testSubjects[currentSubject].listOfQuestion[currentQuestion].selectedMultipleVariant = selectedValues;
+                                  }
+                                });
+                              },
+
+                                contentPadding: EdgeInsets.zero,
+                                controlAffinity: ListTileControlAffinity.leading
                             );
                           },
                         ),

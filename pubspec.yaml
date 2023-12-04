@@ -42,14 +42,17 @@ dependencies:
   build_runner: ^2.4.7
   json_annotation: ^4.8.1
 
+flutter_native_splash:
+  color: "#ffffff"
+  image: assets/logo.png
+
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   json_serializable: ^6.7.1
 
-flutter_native_splash:
-  color: "#ffffff"
-  image: assets/logo.png
 
 
   # The "flutter_lints" package below contains a set of recommended lints to
