@@ -1,7 +1,9 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+
+
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:test_bilimlab_project/config/dependency_injection.dart';
 

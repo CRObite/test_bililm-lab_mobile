@@ -3,7 +3,6 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
 import 'package:quickalert/models/quickalert_type.dart';
@@ -19,11 +18,8 @@ import 'package:test_bilimlab_project/utils/AppColors.dart';
 import 'package:test_bilimlab_project/utils/AppTexts.dart';
 import 'package:test_bilimlab_project/utils/TestFormatEnum.dart';
 
-
 import '../../domain/result.dart';
-
 import '../../domain/test.dart';
-import '../../domain/testCategory.dart';
 import '../../domain/testQuestion.dart';
 
 
@@ -129,14 +125,14 @@ class _TestPageState extends State<TestPage> {
 
   void ComplexCheck(){
     if(widget.format == TestFormatEnum.ENT){
-      currentQuestions = widget.test.entTest!.questionsMap[currentSubjects[currentSubject]]!.getAllQuestions() ?? [];
-      allContents = widget.test.entTest!.questionsMap[currentSubjects[currentSubject]]!.getAllContextContents() ?? [];
-      allLength = widget.test.entTest!.questionsMap[currentSubjects[currentSubject]]!.getLengthsOfContextQuestions() ?? [];
+      currentQuestions = widget.test.entTest!.questionsMap[currentSubjects[currentSubject]]!.getAllQuestions();
+      allContents = widget.test.entTest!.questionsMap[currentSubjects[currentSubject]]!.getAllContextContents();
+      allLength = widget.test.entTest!.questionsMap[currentSubjects[currentSubject]]!.getLengthsOfContextQuestions();
       startedIndex = widget.test.entTest!.questionsMap[currentSubjects[currentSubject]]!.getStartedContextQuestionsIndex();
     }else if(widget.format == TestFormatEnum.SCHOOL){
-      currentSchoolQuestions = widget.test.modoTest!.typeSubjectQuestionMap[currentTypeSubjects[currentTypeSubject]]![currentSubjects[currentSubject]]!.getAllSchoolQuestions() ?? [];
-      allContents = widget.test.modoTest!.typeSubjectQuestionMap[currentTypeSubjects[currentTypeSubject]]![currentSubjects[currentSubject]]!.getAllContextContents() ?? [];
-      allLength = widget.test.modoTest!.typeSubjectQuestionMap[currentTypeSubjects[currentTypeSubject]]![currentSubjects[currentSubject]]!.getLengthsOfContextSchoolQuestions() ?? [];
+      currentSchoolQuestions = widget.test.modoTest!.typeSubjectQuestionMap[currentTypeSubjects[currentTypeSubject]]![currentSubjects[currentSubject]]!.getAllSchoolQuestions();
+      allContents = widget.test.modoTest!.typeSubjectQuestionMap[currentTypeSubjects[currentTypeSubject]]![currentSubjects[currentSubject]]!.getAllContextContents();
+      allLength = widget.test.modoTest!.typeSubjectQuestionMap[currentTypeSubjects[currentTypeSubject]]![currentSubjects[currentSubject]]!.getLengthsOfContextSchoolQuestions();
       startedIndex = widget.test.modoTest!.typeSubjectQuestionMap[currentTypeSubjects[currentTypeSubject]]![currentSubjects[currentSubject]]!.getStartedContextQuestionsIndex();
     }
 
@@ -285,7 +281,6 @@ class _TestPageState extends State<TestPage> {
   @override
   Widget build(BuildContext context) {
 
-    Duration duration = Duration(seconds: _elapsedSeconds);
     String formattedTime = DateFormat('h:mm:ss').format(DateTime.utc(0, 1, 1, 0, 0, _elapsedSeconds));
 
 
@@ -392,8 +387,8 @@ class _TestPageState extends State<TestPage> {
                         child: ListView.builder(
                           scrollDirection: Axis.vertical,
                           itemCount: widget.format == TestFormatEnum.ENT ?
-                            currentQuestions[currentQuestion].options.length ?? 0 :
-                            currentQuestions[currentQuestion].options.length ?? 0,
+                            currentQuestions[currentQuestion].options.length :
+                            currentQuestions[currentQuestion].options.length,
                           itemBuilder: (context, index) {
                             if(widget.format == TestFormatEnum.ENT){
                               if(!currentQuestions[currentQuestion].multipleAnswers){
@@ -570,38 +565,17 @@ class _TestPageState extends State<TestPage> {
                           mainAxisSize: MainAxisSize.min,
 
                           children: [
-                            SmallButton(
+                            widget.format == TestFormatEnum.ENT ? SmallButton(
                               onPressed: (){
-                                if(widget.format == TestFormatEnum.ENT){
-                                  if(currentSubject != 0){
-                                    content = null;
-                                    currentContext = 0;
-                                    setState(() {
-                                      currentSubject -= 1;
-                                      currentQuestion = 0;
-                                    });
+                                if(currentSubject != 0){
+                                  content = null;
+                                  currentContext = 0;
+                                  setState(() {
+                                    currentSubject -= 1;
+                                    currentQuestion = 0;
+                                  });
 
-                                    ComplexCheck();
-                                  }
-                                }else if(widget.format == TestFormatEnum.SCHOOL){
-                                  if(currentSubject != 0){
-                                    content = null;
-                                    currentContext = 0;
-                                    setState(() {
-                                      currentSubject-=1;
-                                      currentQuestion = 0;
-                                    });
-
-                                    ComplexCheck();
-                                  }else if(currentTypeSubject != 0){
-                                    content = null;
-                                    currentContext = 0;
-                                    setState(() {
-                                      currentTypeSubject -= 1;
-                                      currentSubject=0;
-                                      currentQuestion = 0;
-                                    });
-                                  }
+                                  ComplexCheck();
                                 }
 
                               },
@@ -610,40 +584,46 @@ class _TestPageState extends State<TestPage> {
                                 Icons.arrow_back_ios_new_rounded,
                                 color: currentSubject != 0 ? Colors.white: Colors.greenAccent,
                               ), isDisabled: currentSubject != 0 ? false: true,
+                            ) : SmallButton(
+                              onPressed: (){
+                                if(currentSubject != 0){
+                                  content = null;
+                                  currentContext = 0;
+                                  setState(() {
+                                    currentSubject-=1;
+                                    currentQuestion = 0;
+                                  });
+
+                                  ComplexCheck();
+                                }else if(currentTypeSubject != 0){
+                                  content = null;
+                                  currentContext = 0;
+                                  setState(() {
+                                    currentTypeSubject -= 1;
+                                    currentSubject=0;
+                                    currentQuestion = 0;
+                                  });
+                                }
+
+                              },
+                              buttonColors: AppColors.colorButton,
+                              innerElement: Icon(
+                                Icons.arrow_back_ios_new_rounded,
+                                color: currentSubject != 0 && currentTypeSubject != 0 ? Colors.white: Colors.greenAccent,
+                              ), isDisabled: currentSubject != 0 && currentTypeSubject != 0  ? false: true,
                             ),
                             const SizedBox(width: 8,),
-                            SmallButton(
+                            widget.format == TestFormatEnum.ENT ? SmallButton(
                               onPressed: (){
-                                if(widget.format == TestFormatEnum.ENT){
-                                  if(currentSubject != currentSubjects.length-1){
-                                    content = null;
-                                    currentContext = 0;
-                                    setState(() {
-                                      currentSubject += 1;
-                                      currentQuestion = 0;
+                                if(currentSubject != currentSubjects.length-1){
+                                  content = null;
+                                  currentContext = 0;
+                                  setState(() {
+                                    currentSubject += 1;
+                                    currentQuestion = 0;
 
-                                      ComplexCheck();
-                                    });
-                                  }
-                                }else if(widget.format == TestFormatEnum.SCHOOL){
-                                  if(currentSubject != currentSubjects.length-1){
-                                    content = null;
-                                    currentContext = 0;
-                                    setState(() {
-                                      currentSubject +=1;
-                                      currentQuestion = 0;
-
-                                      ComplexCheck();
-                                    });
-                                  }else if(currentTypeSubject != currentTypeSubjects.length-1){
-                                    content = null;
-                                    currentContext = 0;
-                                    setState(() {
-                                      currentTypeSubject += 1;
-                                      currentSubject=0;
-                                      currentQuestion = 0;
-                                    });
-                                  }
+                                    ComplexCheck();
+                                  });
                                 }
                               },
                               buttonColors: AppColors.colorButton,
@@ -651,13 +631,39 @@ class _TestPageState extends State<TestPage> {
                                   Icons.arrow_forward_ios_rounded,
                                   color: currentSubject != currentSubjects.length-1 ? Colors.white: Colors.greenAccent
                               ), isDisabled: currentSubject != currentSubjects.length-1 ? false: true,
+                            ): SmallButton(
+                              onPressed: (){
+                                if(currentSubject != currentSubjects.length-1){
+                                  content = null;
+                                  currentContext = 0;
+                                  setState(() {
+                                    currentSubject +=1;
+                                    currentQuestion = 0;
+
+                                    ComplexCheck();
+                                  });
+                                }else if(currentTypeSubject != currentTypeSubjects.length-1){
+                                  content = null;
+                                  currentContext = 0;
+                                  setState(() {
+                                    currentTypeSubject += 1;
+                                    currentSubject=0;
+                                    currentQuestion = 0;
+                                  });
+                                }
+                              },
+                              buttonColors: AppColors.colorButton,
+                              innerElement:  Icon(
+                                  Icons.arrow_forward_ios_rounded,
+                                  color: currentSubject != currentSubjects.length-1 && currentTypeSubject != currentTypeSubjects.length-1 ? Colors.white: Colors.greenAccent
+                              ), isDisabled: currentSubject != currentSubjects.length-1 && currentTypeSubject != currentTypeSubjects.length-1 ? false: true,
                             ),
                           ],
                         ),
 
                         SmallButton(onPressed: (){
                            _onWillPop();
-                          }, innerElement: Text(AppText.endTest, style: TextStyle(color: Colors.white)), buttonColors: Colors.red, isDisabled: false,)
+                          }, innerElement: Text(AppText.endTest, style: const TextStyle(color: Colors.white)), buttonColors: Colors.red, isDisabled: false,)
                       ],
                     )
                   ],
