@@ -17,7 +17,7 @@ class LongButton extends StatelessWidget {
           backgroundColor: AppColors.colorButton,
           minimumSize: const Size(double.infinity, 40),
         ),
-        child: Text(title),
+        child: Text(title, style: TextStyle(color: Colors.white),),
       ),
     );
   }

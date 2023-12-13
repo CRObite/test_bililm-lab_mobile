@@ -1,0 +1,6 @@
+
+
+enum TestTypeEnum {
+  SURVIVAL,
+  CREATIVE,
+}

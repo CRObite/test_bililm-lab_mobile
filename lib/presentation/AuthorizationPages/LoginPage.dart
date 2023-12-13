@@ -16,18 +16,25 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
+  bool isLoading = false;
   String? errorMassage;
 
   final TextEditingController _iinController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   Future<void> onEnterButtonPressed() async {
+
+    setState(() {
+      errorMassage = null;
+      isLoading = true;
+    });
+
     CustomResponse currentResponse = await LoginService().logIn(_iinController.text, _passwordController.text);
     if(currentResponse.code == 200){
       Navigator.pushReplacementNamed(context, '/subject');
     }else{
       setState(() {
+        isLoading = false;
         errorMassage = currentResponse.title;
       });
     }
@@ -82,7 +89,10 @@ class _LoginPageState extends State<LoginPage> {
                               Text(errorMassage!, style: const TextStyle(color: Colors.red),),
                               const SizedBox(height: 16,),
 
-                            LongButton(onPressed: onEnterButtonPressed, title: AppText.enter,),
+                          LongButton(
+                            onPressed: isLoading ? (){} : onEnterButtonPressed,
+                            title: isLoading ? 'Loading...' : AppText.enter,
+                          )
                         ],
                       ),
                     ),

@@ -19,6 +19,11 @@ class AppText {
   static String testResult = 'Тест нәтижесі';
   static String creative = 'ШЫҒАРМАШЫЛЫҚ';
   static String modoClass = 'Сынып';
+  static String selectBoth = 'Екі профиль элементін де таңдаңыз';
+  static String selectClass = 'Сыныпты таңдаңыз';
+  static String continueENT = 'Сізде аяқталмаған ҰБТ сынағы бар. Оны жалғастырғыңыз келе ме?';
+  static String continueSchool = 'Сізде аяқталмаған МОДО сынағы бар. Оны жалғастырғыңыз келе ме?';
+  static String continueExam = 'Сізде аяқталмаған сынақ бар. ';
 
 
 }

@@ -1,0 +1,6 @@
+
+
+enum TestFormatEnum {
+  SCHOOL,
+  ENT,
+}

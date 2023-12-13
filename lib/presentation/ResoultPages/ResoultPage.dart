@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:test_bilimlab_project/domain/result.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/SmallButton.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
 import 'package:test_bilimlab_project/utils/AppTexts.dart';
@@ -9,10 +10,9 @@ import '../../domain/currentUser.dart';
 import '../Widgets/CustomAppBar.dart';
 
 class ResultPage extends StatefulWidget {
-  const ResultPage({super.key, required this.subjects, required this.scores});
+  const ResultPage({super.key, required this.result});
 
-  final List<String> subjects;
-  final List<int> scores;
+  final Result result;
 
 
   @override
@@ -21,22 +21,8 @@ class ResultPage extends StatefulWidget {
 
 class _ResultPageState extends State<ResultPage> {
 
-  String _sumOfScores(List<int> scores) {
-    int sum = 0;
-    
-    for (var element in scores) {sum+= element;}
-    
-    return '$sum';
-  }
 
-  double _percentOfScores(List<int> scores) {
-    int sum = 0;
 
-    for (var element in scores) {sum+= element;}
-
-    return sum/140;
-  }
-  
   
   @override
   Widget build(BuildContext context) {
@@ -62,13 +48,13 @@ class _ResultPageState extends State<ResultPage> {
                     child: CircularProgressIndicator(
                       color: AppColors.colorButton,
                       backgroundColor: AppColors.colorGrayButton,
-                      value: _percentOfScores(widget.scores),
+                      value: widget.result.totalResult.score / widget.result.totalResult.maxScore,
                       strokeWidth: 15.0,
                     ),
                   ),
 
                   Center(
-                    child:Text(_sumOfScores(widget.scores),style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
+                    child:Text('${widget.result.totalResult.score}',style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
                   ),
                 ],
               ),
@@ -79,7 +65,7 @@ class _ResultPageState extends State<ResultPage> {
               width: 250,
               height: 250,
               child: ListView.builder(
-                itemCount: widget.subjects.length,
+                itemCount: widget.result.subjectsResult.length,
                 itemBuilder: (context, index) {
                   return Container(
                     width: double.infinity,
@@ -96,8 +82,8 @@ class _ResultPageState extends State<ResultPage> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(widget.subjects[index]),
-                        Text('${widget.scores[index]}')
+                        Text(widget.result.subjectsResult[index].subjectName),
+                        Text('${widget.result.subjectsResult[index].score}')
                       ],
                     ),
                   );
@@ -106,9 +92,9 @@ class _ResultPageState extends State<ResultPage> {
             ),
 
             SmallButton(
-                onPressed: (){ Navigator.pop(context);},
+                onPressed: (){ Navigator.pushReplacementNamed(context, '/');},
                 buttonColors: AppColors.colorButton,
-                innerElement: Text(AppText.endTest),
+                innerElement: Text(AppText.endTest,style: TextStyle(color: Colors.white)),
                 isDisabled: false
             ),
 

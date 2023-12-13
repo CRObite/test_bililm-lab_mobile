@@ -1,4 +1,7 @@
 enum QuestionTypeEnum {
-  single,
-  multiple
+  question,
+  multipleQuestion,
+  contextQuestion,
+  schoolQuestion,
+  schoolMultipleQuestion,
 }

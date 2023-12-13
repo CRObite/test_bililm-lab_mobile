@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:test_bilimlab_project/domain/testUser.dart';
 
+import '../../utils/AppColors.dart';
 import '../../utils/AppImages.dart';
 
 class CustomAppBar extends StatefulWidget {
@@ -39,13 +40,14 @@ class _CustomAppBarState extends State<CustomAppBar> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
-                  height: 40,
+                Container(
                   width: 40,
-                  child: CircleAvatar(
-                    radius: 40.0,
-                    backgroundImage: AssetImage(AppImages.logo),
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: AppColors.colorGrayButton,
+                    borderRadius: BorderRadius.circular(20),
                   ),
+                  child: Center(child: Text('${widget.user.lastName[0]}${widget.user.firstName[0]}',style: const TextStyle(fontSize: 16),)),
                 ),
                 const SizedBox(
                   width: 8,
