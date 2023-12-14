@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:test_bilimlab_project/data/repository/school_class_reopsitory.dart';
+
 import 'package:test_bilimlab_project/domain/modoClass.dart';
+import 'package:test_bilimlab_project/domain/modoTest.dart';
+import 'package:test_bilimlab_project/domain/test.dart';
 
 import '../../data/service/school_class_service.dart';
 import '../../data/service/test_service.dart';
@@ -64,6 +66,7 @@ class _ModoTestPartState extends State<ModoTestPart> {
       });
 
       CustomResponse response = await TestService().generateSchoolTest(schoolClass!);
+      ModoTest modoTest = response.body as ModoTest;
 
       setState(() {
         isLoading = false;
@@ -74,7 +77,7 @@ class _ModoTestPartState extends State<ModoTestPart> {
           context,
           '/test',
           arguments: {
-            'entTest': response.body,
+            'test': Test(null, modoTest),
             'testFormatEnum': TestFormatEnum.SCHOOL,
           },
         );

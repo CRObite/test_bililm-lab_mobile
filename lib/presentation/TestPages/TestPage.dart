@@ -11,6 +11,8 @@ import 'package:test_bilimlab_project/data/service/ResultService.dart';
 import 'package:test_bilimlab_project/data/service/media_service.dart';
 import 'package:test_bilimlab_project/data/service/test_service.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
+import 'package:test_bilimlab_project/domain/modoResult.dart';
+import 'package:test_bilimlab_project/domain/result.dart';
 import 'package:test_bilimlab_project/domain/schoolQuestion.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/QuestionCircle.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/SmallButton.dart';
@@ -18,7 +20,7 @@ import 'package:test_bilimlab_project/utils/AppColors.dart';
 import 'package:test_bilimlab_project/utils/AppTexts.dart';
 import 'package:test_bilimlab_project/utils/TestFormatEnum.dart';
 
-import '../../domain/result.dart';
+import '../../domain/entResult.dart';
 import '../../domain/test.dart';
 import '../../domain/testQuestion.dart';
 
@@ -255,16 +257,24 @@ class _TestPageState extends State<TestPage> {
     response = await ResultService().getSchoolResult();
 
     if(response.code == 200){
-      if(response.body!= null){
-        Result result = response.body as Result;
-        Navigator.pushReplacementNamed(context, '/result', arguments: result);
+      if(response.body!= null && widget.format == TestFormatEnum.ENT ){
+        EntResult entResult = response.body as EntResult;
+        Navigator.pushReplacementNamed(context, '/result', arguments: {
+            'result': Result(entResult, null),
+            'testFormatEnum': TestFormatEnum.ENT,
+          },
+        );
+      }else if(response.body!= null && widget.format == TestFormatEnum.SCHOOL ){
+        ModoResult modoResult = response.body as ModoResult;
+        Navigator.pushReplacementNamed(context, '/result', arguments: {
+            'result': Result(null, modoResult),
+            'testFormatEnum': TestFormatEnum.SCHOOL,
+          },
+        );
       }
     }else{
       print('${response.code}   ${response.title}');
     }
-
-
-
   }
 
   void _scrollToElement(int index) {

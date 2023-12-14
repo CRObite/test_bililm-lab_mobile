@@ -1,19 +1,22 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:test_bilimlab_project/domain/result.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/SmallButton.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
 import 'package:test_bilimlab_project/utils/AppTexts.dart';
+import 'package:test_bilimlab_project/utils/TestFormatEnum.dart';
 
 import '../../domain/currentUser.dart';
+import '../../domain/result.dart';
+import '../../domain/resultSubject.dart';
+import '../../domain/typeSubject.dart';
 import '../Widgets/CustomAppBar.dart';
 
 class ResultPage extends StatefulWidget {
-  const ResultPage({super.key, required this.result});
+  const ResultPage({super.key, required this.result, required this.format});
 
   final Result result;
-
+  final TestFormatEnum format;
 
   @override
   State<ResultPage> createState() => _ResultPageState();
@@ -29,7 +32,7 @@ class _ResultPageState extends State<ResultPage> {
     return  Scaffold(
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(80),
-          child: CustomAppBar(user:  CurrentUser.currentTestUser!.testUser!)
+          child: CustomAppBar(user:  CurrentUser.currentTestUser!.testUser)
       ),
       body: Center(
         child: Column(
@@ -48,24 +51,31 @@ class _ResultPageState extends State<ResultPage> {
                     child: CircularProgressIndicator(
                       color: AppColors.colorButton,
                       backgroundColor: AppColors.colorGrayButton,
-                      value: widget.result.totalResult.score / widget.result.totalResult.maxScore,
+                      value: widget.format == TestFormatEnum.ENT ?
+                          widget.result.entResult!.totalResult.score / widget.result.entResult!.totalResult.maxScore :
+                          widget.result.modoResult!.totalResult.score / widget.result.modoResult!.totalResult.maxScore,
                       strokeWidth: 15.0,
                     ),
                   ),
 
                   Center(
-                    child:Text('${widget.result.totalResult.score}',style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
+                    child:Text(
+                      widget.format == TestFormatEnum.ENT ?
+                        '${widget.result.entResult!.totalResult.score}':
+                        '${widget.result.modoResult!.totalResult.score}',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
                   ),
                 ],
               ),
             ),
 
+            widget.format == TestFormatEnum.ENT ?
             Container(
               margin: const EdgeInsets.symmetric(vertical: 32),
               width: 250,
               height: 250,
               child: ListView.builder(
-                itemCount: widget.result.subjectsResult.length,
+                itemCount: widget.result.entResult!.subjectsResult.length,
                 itemBuilder: (context, index) {
                   return Container(
                     width: double.infinity,
@@ -82,12 +92,39 @@ class _ResultPageState extends State<ResultPage> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(widget.result.subjectsResult[index].subjectName),
-                        Text('${widget.result.subjectsResult[index].score}')
+                        Text(widget.result.entResult!.subjectsResult[index].subjectName),
+                        Text('${widget.result.entResult!.subjectsResult[index].score}')
                       ],
                     ),
                   );
                 },
+              ),
+            ): SingleChildScrollView(
+              child: ExpansionPanelList(
+                elevation: 1,
+                expandedHeaderPadding: const EdgeInsets.all(0),
+                expansionCallback: (int index, bool isExpanded) {
+                  setState(() {
+                    widget.result.modoResult!.typeSubjects[index].isExpanded = !isExpanded;
+                  });
+                },
+                children: widget.result.modoResult!.typeSubjects.map<ExpansionPanel>((TypeSubject typeSubject) {
+                  return ExpansionPanel(
+                    headerBuilder: (BuildContext context, bool isExpanded) {
+                      return ListTile(
+                        title: Text('${typeSubject.type} - Score: ${typeSubject.score}'),
+                      );
+                    },
+                    body: Column(
+                      children: typeSubject.subjectsResult.map((ResultSubject resultSubject) {
+                        return ListTile(
+                          title: Text('${resultSubject.subjectName} - Score: ${resultSubject.score}'),
+                        );
+                      }).toList(),
+                    ),
+                    isExpanded: typeSubject.isExpanded ?? false,
+                  );
+                }).toList(),
               ),
             ),
 

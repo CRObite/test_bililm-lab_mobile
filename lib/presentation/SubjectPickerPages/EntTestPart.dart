@@ -3,6 +3,8 @@ import 'package:test_bilimlab_project/data/service/subject_service.dart';
 import 'package:test_bilimlab_project/data/service/test_service.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
 import 'package:test_bilimlab_project/domain/entSubject.dart';
+import 'package:test_bilimlab_project/domain/entTest.dart';
+import 'package:test_bilimlab_project/domain/test.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/LongButton.dart';
 import 'package:test_bilimlab_project/utils/TestFormatEnum.dart';
 import 'package:test_bilimlab_project/utils/TestTypeEnum.dart';
@@ -60,7 +62,7 @@ class _EntTestPartState extends State<EntTestPart> {
       });
 
       CustomResponse response = await TestService().generateEntTest(TestTypeEnum.SURVIVAL, selectedFirstSub, selectedSecondSub);
-
+      EntTest entTest = response.body as EntTest;
       setState(() {
         isLoading = false;
       });
@@ -70,7 +72,7 @@ class _EntTestPartState extends State<EntTestPart> {
           context,
           '/test',
           arguments: {
-            'entTest': response.body,
+            'test': Test(entTest, null),
             'testFormatEnum': TestFormatEnum.ENT,
           },
         );
@@ -94,7 +96,7 @@ class _EntTestPartState extends State<EntTestPart> {
     });
 
     CustomResponse response = await TestService().generateEntTest(TestTypeEnum.CREATIVE, selectedFirstSub, selectedSecondSub);
-
+    EntTest entTest = response.body as EntTest;
     setState(() {
       isLoading = false;
     });
@@ -104,7 +106,7 @@ class _EntTestPartState extends State<EntTestPart> {
         context,
         '/test',
         arguments: {
-          'entTest': response.body,
+          'test': Test(entTest, null),
           'testFormatEnum': TestFormatEnum.ENT,
         },
       );

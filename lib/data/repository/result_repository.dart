@@ -1,10 +1,11 @@
 
 import 'package:dio/dio.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
+import 'package:test_bilimlab_project/domain/modoResult.dart';
 
 import '../../config/handleErrorResponse.dart';
 import '../../domain/currentUser.dart';
-import '../../domain/result.dart';
+import '../../domain/entResult.dart';
 import '../../utils/AppApiUrls.dart';
 
 class ResultRepository{
@@ -18,7 +19,7 @@ class ResultRepository{
         AppApiUrls.getResult,
       );
 
-      Result result = Result.fromJson(response.data);
+      EntResult result = EntResult.fromJson(response.data);
 
       return CustomResponse(200, '', result);
 
@@ -35,7 +36,7 @@ class ResultRepository{
         AppApiUrls.getSchoolResult,
       );
 
-      Result result = Result.fromJson(response.data);
+      ModoResult result = ModoResult.fromJson(response.data);
 
       return CustomResponse(200, '', result);
 

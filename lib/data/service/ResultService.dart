@@ -1,7 +1,7 @@
 
 import 'package:test_bilimlab_project/domain/customResponse.dart';
 
-import '../../domain/result.dart';
+import '../../domain/entResult.dart';
 import '../repository/result_repository.dart';
 
 class ResultService{

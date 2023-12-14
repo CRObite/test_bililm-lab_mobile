@@ -56,8 +56,16 @@ class _MyAppState extends State<MyApp> {
       }
     },
     '/result': (context) {
-      final result = ModalRoute.of(context)!.settings.arguments as Result;
-      return ResultPage(result: result);
+      final Map<String, dynamic>? arguments = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+
+      if (arguments != null) {
+        final Result result = arguments['result'] as Result;
+        final TestFormatEnum testFormatEnum = arguments['testFormatEnum'] as TestFormatEnum;
+
+        return ResultPage(result: result, format: testFormatEnum);
+      } else {
+        return Container();
+      }
     }
 
   };
