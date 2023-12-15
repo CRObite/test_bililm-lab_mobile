@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:test_bilimlab_project/data/service/login_service.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
+import 'package:test_bilimlab_project/utils/AppColors.dart';
 import '../../utils/AppImages.dart';
 import '../../utils/AppTexts.dart';
 import '../Widgets/CustomTextFields.dart';
@@ -33,6 +34,8 @@ class _LoginPageState extends State<LoginPage> {
     if(currentResponse.code == 200){
       Navigator.pushReplacementNamed(context, '/subject');
     }else{
+      print(currentResponse.code);
+      print(currentResponse.body);
       setState(() {
         isLoading = false;
         errorMassage = currentResponse.title;
@@ -67,10 +70,11 @@ class _LoginPageState extends State<LoginPage> {
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Card(
+                    color: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25.0),
                     ),
-                    elevation: 10,
+                    elevation: 5,
                     child: Padding(
                       padding: const EdgeInsets.all(32.0),
                       child: Column(

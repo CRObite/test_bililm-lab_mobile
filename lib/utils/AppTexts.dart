@@ -23,7 +23,8 @@ class AppText {
   static String selectClass = 'Сыныпты таңдаңыз';
   static String continueENT = 'Сізде аяқталмаған ҰБТ сынағы бар. Оны жалғастырғыңыз келе ме?';
   static String continueSchool = 'Сізде аяқталмаған МОДО сынағы бар. Оны жалғастырғыңыз келе ме?';
-  static String continueExam = 'Сізде аяқталмаған сынақ бар. ';
-
+  static String continueExam = 'Сізде аяқталмаған сынақ бар.';
+  static String analytics = 'Аналитика';
+  static String profile = 'Профиль';
 
 }

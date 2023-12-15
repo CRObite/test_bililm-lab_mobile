@@ -11,6 +11,7 @@ import 'package:test_bilimlab_project/presentation/AuthorizationPages/LoginPage.
 import 'package:test_bilimlab_project/presentation/ResoultPages/ResoultPage.dart';
 import 'package:test_bilimlab_project/presentation/SubjectPickerPages/SubjectPickerPage.dart';
 import 'package:test_bilimlab_project/presentation/TestPages/TestPage.dart';
+import 'package:test_bilimlab_project/presentation/UserPages/UserPage.dart';
 import 'package:test_bilimlab_project/utils/TestFormatEnum.dart';
 
 import 'domain/result.dart';
@@ -66,7 +67,8 @@ class _MyAppState extends State<MyApp> {
       } else {
         return Container();
       }
-    }
+    },
+    '/user': (context) => const UserPage(),
 
   };
 
@@ -74,7 +76,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
+      initialRoute: '/user',
       routes: routes,
     );
   }
