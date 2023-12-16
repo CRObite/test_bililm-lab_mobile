@@ -26,6 +26,8 @@ class AppText {
   static String continueExam = 'Сізде аяқталмаған сынақ бар.';
   static String analytics = 'Аналитика';
   static String profile = 'Профиль';
+  static String errorWork = 'Қатемен жұмыс';
+  static String test = 'Тест';
   static String passedTests = 'Тапсырылған тесттер';
   static String lastPassedTest = 'Соңғы тест балы';
   static String averageScore = 'Орташа бал';

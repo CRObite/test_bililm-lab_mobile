@@ -28,7 +28,7 @@ class _EntTestPartState extends State<EntTestPart> {
 
   @override
   void initState() {
-    getSubjects();
+    // getSubjects();
     super.initState();
   }
 

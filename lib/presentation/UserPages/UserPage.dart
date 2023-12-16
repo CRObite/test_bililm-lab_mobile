@@ -53,10 +53,6 @@ class _UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: PreferredSize(
-      //     preferredSize: const Size.fromHeight(80),
-      //     child: CustomAppBar(user:  CurrentUser.currentTestUser!.testUser)
-      // ),
 
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -80,9 +76,9 @@ class _UserPageState extends State<UserPage> {
                   ),
 
                 if(currentPage == 0)
-                  Text(AppText.analytics, style: const TextStyle(fontSize: 20),),
+                  Text(AppText.analytics, style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                 if(currentPage == 1)
-                  Text(AppText.profile, style: const TextStyle(fontSize: 20),),
+                  Text(AppText.profile, style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
 
 
                   SizedBox(

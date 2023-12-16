@@ -12,6 +12,7 @@ import 'package:test_bilimlab_project/presentation/ResoultPages/ResoultPage.dart
 import 'package:test_bilimlab_project/presentation/SubjectPickerPages/SubjectPickerPage.dart';
 import 'package:test_bilimlab_project/presentation/TestPages/TestPage.dart';
 import 'package:test_bilimlab_project/presentation/UserPages/UserPage.dart';
+import 'package:test_bilimlab_project/presentation/application.dart';
 import 'package:test_bilimlab_project/utils/TestFormatEnum.dart';
 
 import 'domain/result.dart';
@@ -42,7 +43,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
 
   final Map<String, WidgetBuilder> routes = {
+
     '/': (context) => const LoginPage(),
+    '/app': (context) => const Application(),
     '/subject': (context) => const SubjectPickerPage(),
     '/test': (context) {
       final Map<String, dynamic>? arguments = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
@@ -76,7 +79,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/user',
+      initialRoute: '/app',
       routes: routes,
     );
   }

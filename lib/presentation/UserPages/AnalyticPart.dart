@@ -25,40 +25,50 @@ class _AnalyticPartState extends State<AnalyticPart> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('${AppText.passedTests}:  0'),
-          Text('${AppText.lastPassedTest}:  0'),
-          Text('${AppText.averageScore}:  0'),
+
+          Text(AppText.analytics, style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+
+          const SizedBox(height: 16,),
+
+          // Text('${AppText.passedTests}:  0'),
+          // Text('${AppText.lastPassedTest}:  0'),
+          // Text('${AppText.averageScore}:  0'),
       
-          Text(AppText.allTestsScores),
-          SizedBox(height: 16,),
+          Text(AppText.allTestsScores,style: const TextStyle(fontWeight: FontWeight.bold),),
+          const SizedBox(height: 16,),
           CustomBarChart(
               barColor: AppColors.generalBarChartColor,
-              data:  ScoresData(["2023-01-01", "2023-01-02", "2023-01-03","2023-01-04","2023-01-05","2023-01-06"], [85, 92, 78, 50, 75, 68], 100),
+              data:  ScoresData(["01/01/23", "02/01/23", "03/01/23","04/01/23","05/01/23","06/01/23"], [85, 92, 78, 50, 75, 68], 100),
               type: BarTypeEnum.GENERAL),
-          Text(AppText.firstProfileSubject),
+          const SizedBox(height: 16,),
+          Text(AppText.firstProfileSubject,style: const TextStyle(fontWeight: FontWeight.bold),),
           CustomBarChart(
               barColor:  AppColors.firstAndSecondProfileBarChartColor,
-              data:  ScoresData(["2023-01-01", "2023-01-02", "2023-01-03","2023-01-04","2023-01-05","2023-01-06"], [85, 92, 78, 50, 75, 68], 100),
+              data:  ScoresData(["01/01/23", "02/01/23", "03/01/23","04/01/23","05/01/23","06/01/23"], [85, 92, 78, 50, 75, 68], 100),
               type: BarTypeEnum.GENERAL),
-          Text(AppText.secondProfileSubject),
+          const SizedBox(height: 16,),
+          Text(AppText.secondProfileSubject,style: const TextStyle(fontWeight: FontWeight.bold),),
           CustomBarChart(
               barColor: AppColors.firstAndSecondProfileBarChartColor,
-              data:  ScoresData(["2023-01-01", "2023-01-02", "2023-01-03","2023-01-04","2023-01-05","2023-01-06"], [85, 92, 78, 50, 75, 68], 100),
+              data:  ScoresData(["01/01/23", "02/01/23", "03/01/23","04/01/23","05/01/23","06/01/23"], [85, 92, 78, 50, 75, 68], 100),
               type: BarTypeEnum.GENERAL),
-          Text(AppText.kazakhHistory),
+          const SizedBox(height: 16,),
+          Text(AppText.kazakhHistory,style: const TextStyle(fontWeight: FontWeight.bold),),
           CustomBarChart(
               barColor: AppColors.kazakhHistoryBarChartColor,
-              data:  ScoresData(["2023-01-01", "2023-01-02", "2023-01-03","2023-01-04","2023-01-05","2023-01-06"], [85, 92, 78, 50, 75, 68], 100),
+              data:  ScoresData(["01/01/23", "02/01/23", "03/01/23","04/01/23","05/01/23","06/01/23"], [85, 92, 78, 50, 75, 68], 100),
               type: BarTypeEnum.GENERAL),
-          Text(AppText.mathematicalLiteracy),
+          const SizedBox(height: 16,),
+          Text(AppText.mathematicalLiteracy,style: const TextStyle(fontWeight: FontWeight.bold),),
           CustomBarChart(
               barColor: AppColors.mathAndReadingLitBarChartColor,
-              data:  ScoresData(["2023-01-01", "2023-01-02", "2023-01-03","2023-01-04","2023-01-05","2023-01-06"], [85, 92, 78, 50, 75, 68], 100),
+              data:  ScoresData(["01/01/23", "02/01/23", "03/01/23","04/01/23","05/01/23","06/01/23"], [85, 92, 78, 50, 75, 68], 100),
               type: BarTypeEnum.GENERAL),
-          Text(AppText.readingLiteracy),
+          const SizedBox(height: 16,),
+          Text(AppText.readingLiteracy,style: const TextStyle(fontWeight: FontWeight.bold),),
           CustomBarChart(
               barColor: AppColors.mathAndReadingLitBarChartColor,
-              data:  ScoresData(["2023-01-01", "2023-01-02", "2023-01-03","2023-01-04","2023-01-05","2023-01-06"], [85, 92, 78, 50, 75, 68], 100),
+              data:  ScoresData(["01/01/23", "02/01/23", "03/01/23","04/01/23","05/01/23","06/01/23"], [10, 20, 30, 40, 34, 32], 45),
               type: BarTypeEnum.GENERAL),
       
       

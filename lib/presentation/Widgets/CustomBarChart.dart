@@ -39,11 +39,12 @@ class _CustomBarChartState extends State<CustomBarChart> {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Container(
-        height: widget.data.maxScore * 2,
-        width:  dates.length * 100,
+        height: 200,
+        width:  dates.length * 80,
         margin: EdgeInsets.only(top: 40),
         child: BarChart(
           BarChartData(
+            groupsSpace: 4,
             minY: 0,
             maxY: widget.data.maxScore.toDouble(),
             titlesData: FlTitlesData(
@@ -61,7 +62,8 @@ class _CustomBarChartState extends State<CustomBarChart> {
               show: false,
             ),
             gridData:  const FlGridData(
-              show: false,
+              drawHorizontalLine: true,
+              drawVerticalLine: false
             ),
             barGroups: List.generate(
               scores.length,
@@ -70,11 +72,12 @@ class _CustomBarChartState extends State<CustomBarChart> {
                 barRods: [
                   BarChartRodData(
                     borderRadius:const BorderRadius.all(Radius.circular(5)),
-                    width: 50,
+                    width: 40,
                     color: widget.barColor,
                     toY: scores[index].toDouble(),
                   ),
                 ],
+
               ),
             ),
           ),

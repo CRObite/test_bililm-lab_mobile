@@ -28,11 +28,11 @@ class _SubjectPickerPageState extends State<SubjectPickerPage> {
 
   @override
   void initState() {
-    if(CurrentUser.currentTestUser == null){
-      Navigator.pushReplacementNamed(context, '/');
-    }
+    // if(CurrentUser.currentTestUser == null){
+    //   Navigator.pushReplacementNamed(context, '/');
+    // }
 
-    _continueTestPopUp();
+    // _continueTestPopUp();
 
     super.initState();
   }
@@ -126,15 +126,15 @@ class _SubjectPickerPageState extends State<SubjectPickerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(80),
-          child: GestureDetector(
-            onTap: (){
-              Navigator.pushReplacementNamed(context, '/');
-            },
-              child: CustomAppBar(user:  CurrentUser.currentTestUser!.testUser)
-          )
-      ),
+      // appBar: PreferredSize(
+      //     preferredSize: const Size.fromHeight(80),
+      //     child: GestureDetector(
+      //       onTap: (){
+      //         Navigator.pushReplacementNamed(context, '/');
+      //       },
+      //         child: CustomAppBar(user:  CurrentUser.currentTestUser!.testUser)
+      //     )
+      // ),
       body:  Stack(
         children: [
           PageView(
