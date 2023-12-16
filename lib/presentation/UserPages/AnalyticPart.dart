@@ -21,58 +21,61 @@ class _AnalyticPartState extends State<AnalyticPart> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
 
-          Text(AppText.analytics, style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+            Text(AppText.analytics, style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
 
-          const SizedBox(height: 16,),
+            const SizedBox(height: 16,),
 
-          // Text('${AppText.passedTests}:  0'),
-          // Text('${AppText.lastPassedTest}:  0'),
-          // Text('${AppText.averageScore}:  0'),
-      
-          Text(AppText.allTestsScores,style: const TextStyle(fontWeight: FontWeight.bold),),
-          const SizedBox(height: 16,),
-          CustomBarChart(
-              barColor: AppColors.generalBarChartColor,
-              data:  ScoresData(["01/01/23", "02/01/23", "03/01/23","04/01/23","05/01/23","06/01/23"], [85, 92, 78, 50, 75, 68], 100),
-              type: BarTypeEnum.GENERAL),
-          const SizedBox(height: 16,),
-          Text(AppText.firstProfileSubject,style: const TextStyle(fontWeight: FontWeight.bold),),
-          CustomBarChart(
-              barColor:  AppColors.firstAndSecondProfileBarChartColor,
-              data:  ScoresData(["01/01/23", "02/01/23", "03/01/23","04/01/23","05/01/23","06/01/23"], [85, 92, 78, 50, 75, 68], 100),
-              type: BarTypeEnum.GENERAL),
-          const SizedBox(height: 16,),
-          Text(AppText.secondProfileSubject,style: const TextStyle(fontWeight: FontWeight.bold),),
-          CustomBarChart(
-              barColor: AppColors.firstAndSecondProfileBarChartColor,
-              data:  ScoresData(["01/01/23", "02/01/23", "03/01/23","04/01/23","05/01/23","06/01/23"], [85, 92, 78, 50, 75, 68], 100),
-              type: BarTypeEnum.GENERAL),
-          const SizedBox(height: 16,),
-          Text(AppText.kazakhHistory,style: const TextStyle(fontWeight: FontWeight.bold),),
-          CustomBarChart(
-              barColor: AppColors.kazakhHistoryBarChartColor,
-              data:  ScoresData(["01/01/23", "02/01/23", "03/01/23","04/01/23","05/01/23","06/01/23"], [85, 92, 78, 50, 75, 68], 100),
-              type: BarTypeEnum.GENERAL),
-          const SizedBox(height: 16,),
-          Text(AppText.mathematicalLiteracy,style: const TextStyle(fontWeight: FontWeight.bold),),
-          CustomBarChart(
-              barColor: AppColors.mathAndReadingLitBarChartColor,
-              data:  ScoresData(["01/01/23", "02/01/23", "03/01/23","04/01/23","05/01/23","06/01/23"], [85, 92, 78, 50, 75, 68], 100),
-              type: BarTypeEnum.GENERAL),
-          const SizedBox(height: 16,),
-          Text(AppText.readingLiteracy,style: const TextStyle(fontWeight: FontWeight.bold),),
-          CustomBarChart(
-              barColor: AppColors.mathAndReadingLitBarChartColor,
-              data:  ScoresData(["01/01/23", "02/01/23", "03/01/23","04/01/23","05/01/23","06/01/23"], [10, 20, 30, 40, 34, 32], 45),
-              type: BarTypeEnum.GENERAL),
-      
-      
-        ],
+            // Text('${AppText.passedTests}:  0'),
+            // Text('${AppText.lastPassedTest}:  0'),
+            // Text('${AppText.averageScore}:  0'),
+
+            Text(AppText.allTestsScores,style: const TextStyle(fontWeight: FontWeight.bold),),
+            const SizedBox(height: 16,),
+            CustomBarChart(
+                barColor: AppColors.generalBarChartColor,
+                data:  ScoresData(["01/01/23", "02/01/23", "03/01/23","04/01/23","05/01/23","06/01/23"], [85, 92, 78, 50, 75, 68], 100),
+                type: BarTypeEnum.GENERAL),
+            const SizedBox(height: 16,),
+            Text(AppText.firstProfileSubject,style: const TextStyle(fontWeight: FontWeight.bold),),
+            CustomBarChart(
+                barColor:  AppColors.firstAndSecondProfileBarChartColor,
+                data:  ScoresData(["01/01/23", "02/01/23", "03/01/23","04/01/23","05/01/23","06/01/23"], [85, 92, 78, 50, 75, 68], 100),
+                type: BarTypeEnum.GENERAL),
+            const SizedBox(height: 16,),
+            Text(AppText.secondProfileSubject,style: const TextStyle(fontWeight: FontWeight.bold),),
+            CustomBarChart(
+                barColor: AppColors.firstAndSecondProfileBarChartColor,
+                data:  ScoresData(["01/01/23", "02/01/23", "03/01/23","04/01/23","05/01/23","06/01/23"], [85, 92, 78, 50, 75, 68], 100),
+                type: BarTypeEnum.GENERAL),
+            const SizedBox(height: 16,),
+            Text(AppText.kazakhHistory,style: const TextStyle(fontWeight: FontWeight.bold),),
+            CustomBarChart(
+                barColor: AppColors.kazakhHistoryBarChartColor,
+                data:  ScoresData(["01/01/23", "02/01/23", "03/01/23","04/01/23","05/01/23","06/01/23"], [85, 92, 78, 50, 75, 68], 100),
+                type: BarTypeEnum.GENERAL),
+            const SizedBox(height: 16,),
+            Text(AppText.mathematicalLiteracy,style: const TextStyle(fontWeight: FontWeight.bold),),
+            CustomBarChart(
+                barColor: AppColors.mathAndReadingLitBarChartColor,
+                data:  ScoresData(["01/01/23", "02/01/23", "03/01/23","04/01/23","05/01/23","06/01/23"], [85, 92, 78, 50, 75, 68], 100),
+                type: BarTypeEnum.GENERAL),
+            const SizedBox(height: 16,),
+            Text(AppText.readingLiteracy,style: const TextStyle(fontWeight: FontWeight.bold),),
+            CustomBarChart(
+                barColor: AppColors.mathAndReadingLitBarChartColor,
+                data:  ScoresData(["01/01/23", "02/01/23", "03/01/23","04/01/23","05/01/23","06/01/23"], [10, 20, 30, 40, 34, 32], 40),
+                type: BarTypeEnum.GENERAL),
+
+
+          ],
+        ),
       ),
     );
   }

@@ -28,9 +28,6 @@ class _CustomBarChartState extends State<CustomBarChart> {
     super.initState();
   }
 
-  Widget getTitleText(double value,TitleMeta meta){
-    return Text(dates[value.toInt()]);
-  }
 
 
   @override
@@ -41,22 +38,37 @@ class _CustomBarChartState extends State<CustomBarChart> {
       child: Container(
         height: 200,
         width:  dates.length * 80,
-        margin: EdgeInsets.only(top: 40),
+        margin: const EdgeInsets.only(top: 50, bottom: 10),
         child: BarChart(
           BarChartData(
             groupsSpace: 4,
             minY: 0,
             maxY: widget.data.maxScore.toDouble(),
-            titlesData: FlTitlesData(
+            titlesData: const FlTitlesData(
               show: true,
-              topTitles: const AxisTitles( sideTitles: SideTitles( showTitles: false,),),
-              rightTitles: const AxisTitles( sideTitles: SideTitles( showTitles: false,),),
+              topTitles: AxisTitles( sideTitles: SideTitles( showTitles: false,),),
+              rightTitles: AxisTitles( sideTitles: SideTitles( showTitles: false,),),
               bottomTitles: AxisTitles(
                 sideTitles: SideTitles(
-                  showTitles: true,
-                  getTitlesWidget: getTitleText
+                  showTitles: false,
                 ),
               ),
+            ),
+            barTouchData: BarTouchData(
+                touchTooltipData: BarTouchTooltipData(
+                    getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                      String date;
+                      date = dates[groupIndex];
+                      return BarTooltipItem(
+                        date,
+                        const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 10,
+                        ),
+                      );
+                    },
+                )
             ),
             borderData: FlBorderData(
               show: false,
@@ -77,9 +89,9 @@ class _CustomBarChartState extends State<CustomBarChart> {
                     toY: scores[index].toDouble(),
                   ),
                 ],
-
               ),
             ),
+
           ),
         ),
       ),

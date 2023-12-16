@@ -226,7 +226,7 @@ class _TestPageState extends State<TestPage> {
 
 
 
-  Future<bool> _onWillPop() async {
+  void _onWillPop(bool i) async {
 
     QuickAlert.show(
         context: context,
@@ -243,7 +243,6 @@ class _TestPageState extends State<TestPage> {
           _entTest();
         }
     );
-    return false;
   }
 
   Future<void> _entTest() async {
@@ -318,8 +317,8 @@ class _TestPageState extends State<TestPage> {
           ),
         ),
       ),
-      body: WillPopScope(
-        onWillPop: _onWillPop,
+      body: PopScope(
+        onPopInvoked: _onWillPop,
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 16),
           child: Column(
@@ -672,7 +671,7 @@ class _TestPageState extends State<TestPage> {
                         ),
 
                         SmallButton(onPressed: (){
-                           _onWillPop();
+                           _onWillPop(true);
                           }, innerElement: Text(AppText.endTest, style: const TextStyle(color: Colors.white)), buttonColors: Colors.red, isDisabled: false,)
                       ],
                     )

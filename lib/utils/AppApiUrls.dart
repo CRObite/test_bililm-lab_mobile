@@ -14,6 +14,7 @@ class AppApiUrls{
   static String saveAnswerEntTest = '$mainApi/ent-test/answer';
   static String deleteAnswerEntTest = '$mainApi/ent-test/answer';
   static String getLastEntTest = '$mainApi/ent-test/get-last';
+  static String getAllByUser = '$mainApi/ent-test/get-all-by-user';
 
 
   static String generateSchoolTest = '$mainApi/school-test/generate';

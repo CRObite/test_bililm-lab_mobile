@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:test_bilimlab_project/config/handleErrorResponse.dart';
+import 'package:test_bilimlab_project/domain/barData.dart';
 import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
 import 'package:test_bilimlab_project/utils/TestTypeEnum.dart';
@@ -106,6 +107,25 @@ class TestRepository {
       EntTest test = EntTest.fromJson(response.data);
 
       return CustomResponse(200, '', test);
+
+    } catch (e) {
+      print(e);
+      return HandleErrorResponse.handleErrorResponse(e);
+    }
+  }
+
+  Future<CustomResponse> getAllByUser() async {
+    try {
+      dio.options.headers['Authorization'] = 'Bearer ${CurrentUser.currentTestUser?.accessToken}';
+      final response = await dio.get(
+        AppApiUrls.getAllByUser,
+      );
+
+      print(response.data);
+
+      BarData data = BarData.fromJson(response.data);
+
+      return CustomResponse(200, '', data);
 
     } catch (e) {
       print(e);
