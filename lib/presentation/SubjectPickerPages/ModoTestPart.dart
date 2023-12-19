@@ -31,7 +31,7 @@ class _ModoTestPartState extends State<ModoTestPart> {
   @override
   void initState() {
     _mounted = true;
-    // getClass();
+    getClass();
     super.initState();
   }
 
@@ -66,13 +66,14 @@ class _ModoTestPartState extends State<ModoTestPart> {
       });
 
       CustomResponse response = await TestService().generateSchoolTest(schoolClass!);
-      ModoTest modoTest = response.body as ModoTest;
+
 
       setState(() {
         isLoading = false;
       });
 
       if(response.code == 200){
+        ModoTest modoTest = response.body as ModoTest;
         Navigator.pushNamed(
           context,
           '/test',

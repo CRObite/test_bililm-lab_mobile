@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import '../../utils/AppColors.dart';
 
 class QuestionCircle extends StatefulWidget {
-  const QuestionCircle({super.key, required this.qusetionNuber, required this.itsCurrentQuestion});
+  const QuestionCircle({super.key, required this.qusetionNuber, required this.roundColor, required this.itsFocusedQuestion});
 
   final int qusetionNuber;
-  final bool itsCurrentQuestion;
-
+  final Color roundColor;
+  final bool itsFocusedQuestion;
+  
   @override
   State<QuestionCircle> createState() => _QuestionCircleState();
 }
@@ -21,7 +22,7 @@ class _QuestionCircleState extends State<QuestionCircle> {
       height: 40,
 
       decoration: BoxDecoration(
-        color: widget.itsCurrentQuestion ? AppColors.colorButton:AppColors.colorLighterBlue,
+        color: widget.itsFocusedQuestion ?  widget.roundColor : widget.roundColor.withOpacity(0.5),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Center(

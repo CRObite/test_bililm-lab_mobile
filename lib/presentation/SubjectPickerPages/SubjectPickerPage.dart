@@ -28,11 +28,11 @@ class _SubjectPickerPageState extends State<SubjectPickerPage> {
 
   @override
   void initState() {
-    // if(CurrentUser.currentTestUser == null){
-    //   Navigator.pushReplacementNamed(context, '/');
-    // }
+    if(CurrentUser.currentTestUser == null){
+      Navigator.pushReplacementNamed(context, '/');
+    }
 
-    // _continueTestPopUp();
+    _continueTestPopUp();
 
     super.initState();
   }

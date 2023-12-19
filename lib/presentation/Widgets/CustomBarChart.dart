@@ -133,8 +133,8 @@ class _CustomBarChartState extends State<CustomBarChart> {
                       width: 40,
 
                       gradient: LinearGradient(
-                        colors: [widget.barColor, Colors.black12],
-                        stops: const [0.5, 3.0],
+                        colors: [widget.barColor,widget.barColor.withOpacity(0.1)],
+                        stops: const [0.1, 1.0],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                       ),

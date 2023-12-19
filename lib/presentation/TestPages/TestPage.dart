@@ -226,8 +226,7 @@ class _TestPageState extends State<TestPage> {
 
 
 
-  void _onWillPop(bool i) async {
-
+  Future<bool> _onWillPop() async {
     QuickAlert.show(
         context: context,
         type:QuickAlertType.confirm,
@@ -243,6 +242,7 @@ class _TestPageState extends State<TestPage> {
           _entTest();
         }
     );
+    return false;
   }
 
   Future<void> _entTest() async {
@@ -317,8 +317,8 @@ class _TestPageState extends State<TestPage> {
           ),
         ),
       ),
-      body: PopScope(
-        onPopInvoked: _onWillPop,
+      body: WillPopScope(
+        onWillPop: _onWillPop,
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 16),
           child: Column(
@@ -335,11 +335,14 @@ class _TestPageState extends State<TestPage> {
                         margin: const EdgeInsets.only(right: 8),
                         child: GestureDetector(
                             onTap: (){
+                              currentQuestion = index;
+                              checkContext();
+                              setBytes();
                               setState(() {
-                                currentQuestion = index;
+
                               });
                             },
-                            child: QuestionCircle(qusetionNuber: index+1, itsCurrentQuestion: index == currentQuestion)
+                            child: QuestionCircle(qusetionNuber: index+1, roundColor: AppColors.colorButton , itsFocusedQuestion: index == currentQuestion,)
                         ),
                     );
                   },
@@ -397,7 +400,7 @@ class _TestPageState extends State<TestPage> {
                           scrollDirection: Axis.vertical,
                           itemCount: widget.format == TestFormatEnum.ENT ?
                             currentQuestions[currentQuestion].options.length :
-                            currentQuestions[currentQuestion].options.length,
+                            currentSchoolQuestions[currentQuestion].schoolOptions.length,
                           itemBuilder: (context, index) {
                             if(widget.format == TestFormatEnum.ENT){
                               if(!currentQuestions[currentQuestion].multipleAnswers){
@@ -671,7 +674,7 @@ class _TestPageState extends State<TestPage> {
                         ),
 
                         SmallButton(onPressed: (){
-                           _onWillPop(true);
+                           _onWillPop();
                           }, innerElement: Text(AppText.endTest, style: const TextStyle(color: Colors.white)), buttonColors: Colors.red, isDisabled: false,)
                       ],
                     )

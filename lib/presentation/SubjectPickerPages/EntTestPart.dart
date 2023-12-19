@@ -28,7 +28,7 @@ class _EntTestPartState extends State<EntTestPart> {
 
   @override
   void initState() {
-    // getSubjects();
+    getSubjects();
     super.initState();
   }
 
@@ -62,12 +62,13 @@ class _EntTestPartState extends State<EntTestPart> {
       });
 
       CustomResponse response = await TestService().generateEntTest(TestTypeEnum.SURVIVAL, selectedFirstSub, selectedSecondSub);
-      EntTest entTest = response.body as EntTest;
+
       setState(() {
         isLoading = false;
       });
 
       if(response.code == 200){
+        EntTest entTest = response.body as EntTest;
         Navigator.pushNamed(
           context,
           '/test',
@@ -96,12 +97,13 @@ class _EntTestPartState extends State<EntTestPart> {
     });
 
     CustomResponse response = await TestService().generateEntTest(TestTypeEnum.CREATIVE, selectedFirstSub, selectedSecondSub);
-    EntTest entTest = response.body as EntTest;
+
     setState(() {
       isLoading = false;
     });
 
     if(response.code == 200){
+      EntTest entTest = response.body as EntTest;
       Navigator.pushNamed(
         context,
         '/test',

@@ -10,8 +10,9 @@ class ProfilePart extends StatefulWidget {
 class _ProfilePartState extends State<ProfilePart> {
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('ProfilePart'),
+    return const Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Text('dsfsdfsdfsdfs'),
     );
   }
 }

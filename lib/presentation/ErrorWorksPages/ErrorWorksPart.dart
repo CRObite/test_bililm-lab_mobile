@@ -47,49 +47,54 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
                 ),
                 itemCount: scores.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return Card(
-                    color: Colors.white,
-                    elevation: 5,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0), // Adjust the radius as needed
-                    ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15.0),
-                        gradient: const LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [Colors.white,Colors.lightBlueAccent,Colors.blue ],
-                        ),
+                  return GestureDetector(
+                    onTap: (){
+
+                    },
+                    child: Card(
+                      color: Colors.white,
+                      elevation: 5,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0), // Adjust the radius as needed
                       ),
-                      child: Center(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              '${scores[index]}/140',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 25,
-                                color: Colors.white,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.0),
+                          gradient: const LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [Colors.white,Colors.lightBlueAccent,Colors.blue ],
+                          ),
+                        ),
+                        child: Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                '${scores[index]}/140',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              subjects[index],
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
+                              const SizedBox(height: 8),
+                              Text(
+                                subjects[index],
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              time[index],
-                              style: const TextStyle(
-                                color: Colors.white,
+                              const SizedBox(height: 8),
+                              Text(
+                                time[index],
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),

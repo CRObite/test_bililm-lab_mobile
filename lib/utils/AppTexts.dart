@@ -37,4 +37,5 @@ class AppText {
   static String kazakhHistory = 'Қазақстан тарихы';
   static String mathematicalLiteracy = 'Математикалық сауаттылық';
   static String readingLiteracy = 'Оқу сауаттылығы';
+  static String recommendation = 'Ұсыныс';
 }
