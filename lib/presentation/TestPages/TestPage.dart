@@ -612,6 +612,7 @@ class _TestPageState extends State<TestPage> {
                                   currentContext = 0;
                                   setState(() {
                                     currentTypeSubject -= 1;
+                                    currentSubjects = getAllCategoryNames();
                                     currentSubject=0;
                                     currentQuestion = 0;
                                   });
@@ -659,6 +660,7 @@ class _TestPageState extends State<TestPage> {
                                   currentContext = 0;
                                   setState(() {
                                     currentTypeSubject += 1;
+                                    currentSubjects = getAllCategoryNames();
                                     currentSubject=0;
                                     currentQuestion = 0;
                                   });
