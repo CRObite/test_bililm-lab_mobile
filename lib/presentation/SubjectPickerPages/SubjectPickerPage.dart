@@ -28,11 +28,11 @@ class _SubjectPickerPageState extends State<SubjectPickerPage> {
 
   @override
   void initState() {
-    if(CurrentUser.currentTestUser == null){
-      Navigator.pushReplacementNamed(context, '/');
-    }
+    // if(CurrentUser.currentTestUser == null){
+    //   Navigator.pushReplacementNamed(context, '/');
+    // }
 
-    _continueTestPopUp();
+    // _continueTestPopUp();
 
     super.initState();
   }
@@ -135,23 +135,26 @@ class _SubjectPickerPageState extends State<SubjectPickerPage> {
       //         child: CustomAppBar(user:  CurrentUser.currentTestUser!.testUser)
       //     )
       // ),
-      body:  Stack(
-        children: [
-          PageView(
-            controller: _pageController,
-            children: [
-              EntTestPart(onPressed: changeChosen),
-              ModoTestPart(onPressed: changeChosen),
-            ],
-          ),
-          if (isLoading)
-            Container(
-              color: Colors.black.withOpacity(0.5),
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
+      body:  Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Stack(
+          children: [
+            PageView(
+              controller: _pageController,
+              children: [
+                EntTestPart(onPressed: changeChosen),
+                ModoTestPart(onPressed: changeChosen),
+              ],
             ),
-        ],
+            if (isLoading)
+              Container(
+                color: Colors.black.withOpacity(0.5),
+                child: const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

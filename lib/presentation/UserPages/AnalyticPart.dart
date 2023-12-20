@@ -23,7 +23,7 @@ class _AnalyticPartState extends State<AnalyticPart> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,15 +41,15 @@ class _AnalyticPartState extends State<AnalyticPart> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CustomGreyRoundedContainer(title: AppText.passedTests,num: 6,),
+                  CustomGreyRoundedContainer(title: AppText.passedTests,num: 6,icon: const Icon(Icons.all_inbox_rounded),),
                   const SizedBox(width: 8,),
-                  CustomGreyRoundedContainer(title: AppText.lastPassedTest,num: 6,),
+                  CustomGreyRoundedContainer(title: AppText.lastPassedTest,num: 6,icon: const Icon(Icons.hourglass_top_rounded),),
                   const SizedBox(width: 8,),
-                  CustomGreyRoundedContainer(title: AppText.averageScore,num: 6,),
+                  CustomGreyRoundedContainer(title: AppText.averageScore,num: 6,icon: const Icon(Icons.align_vertical_bottom_rounded),),
                 ],
               ),
             ),
-            const SizedBox(height: 16,),
+            const SizedBox(height: 28,),
 
             Text(AppText.allTestsScores,style: const TextStyle(fontWeight: FontWeight.bold),),
             CustomBarChart(

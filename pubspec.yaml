@@ -45,6 +45,7 @@ dependencies:
   get: ^4.6.6
   flutter_html: ^3.0.0-beta.2
   fl_chart: ^0.65.0
+  flutter_svg: ^2.0.9
 
 flutter_native_splash:
   color: "#ffffff"
@@ -75,6 +76,8 @@ flutter:
     - assets/full_logo.png
     - assets/logo.png
     - assets/pie_chart.png
+    - assets/profile_image.png
+    - assets/error_work.png
     - certificates/bilim-lab_kz.crt
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
 
     CustomResponse currentResponse = await LoginService().logIn(_iinController.text, _passwordController.text);
     if(currentResponse.code == 200){
-      Navigator.pushReplacementNamed(context, '/subject');
+      Navigator.pushReplacementNamed(context, '/app');
     }else{
       print(currentResponse.code);
       print(currentResponse.body);

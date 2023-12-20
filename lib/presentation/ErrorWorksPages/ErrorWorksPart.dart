@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../utils/AppColors.dart';
+import '../../utils/AppImages.dart';
 import '../../utils/AppTexts.dart';
 
 class ErrorWorksPart extends StatefulWidget {
@@ -12,33 +14,67 @@ class ErrorWorksPart extends StatefulWidget {
 class _ErrorWorksPartState extends State<ErrorWorksPart> {
 
   List<int> scores = [15,20,48,59,23,45,99,98,105,140];
-  List<String> subjects = ['a','b','c','d','e','f','g','h','i','j'];
+  List<String> subjects = ['Математика Физика','Математика Физика','Математика Физика','Математика Физика','Математика Физика','Математика Физика','Математика Физика','Математика Физика','Математика Физика','Математика Физика'];
   List<String> time = [
-    '03.05.2023 17:12:51',
-    '04.05.2023 17:13:51',
-    '05.05.2023 17:12:51',
-    '06.05.2023 17:12:51',
-    '07.05.2023 17:12:51',
-    '08.05.2023 17:12:51',
-    '09.05.2023 17:12:51',
-    '10.05.2023 17:12:51',
-    '11.05.2023 17:12:51',
-    '12.05.2023 17:12:51'];
+    '03.05.2023',
+    '04.05.2023',
+    '05.05.2023',
+    '06.05.2023',
+    '07.05.2023',
+    '08.05.2023',
+    '09.05.2023',
+    '10.05.2023',
+    '11.05.2023',
+    '12.05.2023'];
 
   int pageNum = 5;
 
 
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding:  const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(AppText.errorWork, style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-            const SizedBox(height: 8,),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
 
-            Expanded(
+
+        Container(
+          width: double.infinity,
+          height: 150,
+
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            child: Row(
+              mainAxisAlignment:MainAxisAlignment.spaceBetween,
+              children: [
+                Text(AppText.errorWork, style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                const SizedBox(width: 8,),
+                SizedBox(
+                    width: 150,
+                    child: Image.asset(AppImages.error_work)
+                ),
+              ],
+            ),
+          ),
+        ),
+
+
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                colors: [Colors.white, Colors.cyanAccent, AppColors.colorButton],
+              ),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                topRight: Radius.circular(20.0),
+              ),
+            ),
+            width: double.infinity,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8,left: 8,right: 8),
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
@@ -60,38 +96,32 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15.0),
-                          gradient: const LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [Colors.white,Colors.lightBlueAccent,Colors.blue ],
-                          ),
+                          color: Colors.white
                         ),
                         child: Center(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
+
                               Text(
                                 '${scores[index]}/140',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 25,
-                                  color: Colors.white,
                                 ),
                               ),
+
                               const SizedBox(height: 8),
                               Text(
                                 subjects[index],
                                 style: const TextStyle(
                                   fontSize: 16,
-                                  color: Colors.white,
                                 ),
                               ),
                               const SizedBox(height: 8),
                               Text(
                                 time[index],
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                ),
+
                               ),
                             ],
                           ),
@@ -102,8 +132,9 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
                 },
               ),
             ),
-          ],
+          ),
         ),
+      ],
     );
   }
 }
