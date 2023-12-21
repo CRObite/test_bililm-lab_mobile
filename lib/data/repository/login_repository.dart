@@ -24,7 +24,24 @@ class LoginRepository {
       return CustomResponse(200, '', null);
 
     } catch (e) {
+      print('asdasdadas');
       return HandleErrorResponse.handleErrorResponse(e);
+    }
+  }
+
+  Future<TestUser?> userGetMe() async {
+    try {
+      dio.options.headers['Authorization'] = 'Bearer ${CurrentUser.currentTestUser?.accessToken}';
+
+      final response = await dio.get(
+        AppApiUrls.getMe,
+      );
+
+      TestUser user = TestUser.fromJson(response.data['testUser']);
+      return user;
+    } catch (e) {
+      print('asdasdadas');
+      return null;
     }
   }
 

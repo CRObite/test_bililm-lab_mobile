@@ -133,6 +133,24 @@ class TestRepository {
     }
   }
 
+  Future<CustomResponse> getStatistics() async {
+    try {
+      dio.options.headers['Authorization'] = 'Bearer ${CurrentUser.currentTestUser?.accessToken}';
+      final response = await dio.get(
+        AppApiUrls.getStatisticByUser,
+      );
+
+      print(response.data);
+
+      BarData data = BarData.fromJson(response.data);
+
+      return CustomResponse(200, '', data);
+
+    } catch (e) {
+      print(e);
+      return HandleErrorResponse.handleErrorResponse(e);
+    }
+  }
 
 
   Future<CustomResponse> generateSchoolTest(int schoolClassId) async {
@@ -234,5 +252,7 @@ class TestRepository {
       return HandleErrorResponse.handleErrorResponse(e);
     }
   }
+
+
 
 }

@@ -1,8 +1,8 @@
 class AppApiUrls{
-  static String url = 'https://api.bilim-lab.kz';
+  static String url = 'https://api.oquway.kz';
   static String mainApi = '$url/api';
   static String userLogin = '$mainApi/user-login';
-
+  static String getMe = '$mainApi/universal-get-me';
 
   static String getAllSub = '$mainApi/ent-test/subjects';
   static String getAllSubInMSS = '$mainApi/ent-test/subjects-in-mss';
@@ -15,6 +15,8 @@ class AppApiUrls{
   static String deleteAnswerEntTest = '$mainApi/ent-test/answer';
   static String getLastEntTest = '$mainApi/ent-test/get-last';
   static String getAllByUser = '$mainApi/ent-test/get-all-by-user';
+  static String getStatisticByUser = '$mainApi/ent-test/get-statistic-by-user';
+  static String getTestMistakes = '$mainApi/ent-test/get-mistakes/';
 
 
   static String generateSchoolTest = '$mainApi/school-test/generate';

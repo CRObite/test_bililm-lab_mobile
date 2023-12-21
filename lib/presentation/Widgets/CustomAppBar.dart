@@ -36,31 +36,36 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 height: 30,
                 child: Image.asset(AppImages.full_logo)
             ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: AppColors.colorGrayButton,
-                    borderRadius: BorderRadius.circular(20),
+            GestureDetector(
+              onTap: (){
+                Navigator.pushReplacementNamed(context, '/');
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: AppColors.colorGrayButton,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Center(child: Text('${widget.user.lastName[0]}${widget.user.firstName[0]}',style: const TextStyle(fontSize: 16),)),
                   ),
-                  child: Center(child: Text('${widget.user.lastName[0]}${widget.user.firstName[0]}',style: const TextStyle(fontSize: 16),)),
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("${widget.user.lastName} ${widget.user.firstName[0]}.", style: const TextStyle(fontWeight: FontWeight.bold),),
-                    Text(widget.user.iin),
-                  ],
-                )
-              ],
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("${widget.user.lastName} ${widget.user.firstName[0]}.", style: const TextStyle(fontWeight: FontWeight.bold),),
+                      Text(widget.user.iin),
+                    ],
+                  )
+                ],
+              ),
             ),
           ],
         ),

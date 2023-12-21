@@ -26,8 +26,13 @@ class TestService{
     return await TestRepository().getLastEntTest();
   }
 
+
   Future<CustomResponse> getAllByUser() async {
     return await TestRepository().getAllByUser();
+  }
+
+  Future<CustomResponse> getStatistics() async {
+    return await TestRepository().getStatistics();
   }
 
   Future<CustomResponse> generateSchoolTest(int schoolClassId) async {

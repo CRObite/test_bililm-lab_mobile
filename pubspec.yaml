@@ -78,7 +78,8 @@ flutter:
     - assets/pie_chart.png
     - assets/profile_image.png
     - assets/error_work.png
-    - certificates/bilim-lab_kz.crt
+    - certificates/oqutest_kz.crt
+    - certificates/_oquway_kz.crt
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

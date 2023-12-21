@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
 import 'package:test_bilimlab_project/utils/AppImages.dart';
 
+import '../../data/service/login_service.dart';
+import '../../domain/currentUser.dart';
+import '../../domain/testUser.dart';
 import '../../utils/AppTexts.dart';
 
 class ProfilePart extends StatefulWidget {
@@ -12,6 +15,44 @@ class ProfilePart extends StatefulWidget {
 }
 
 class _ProfilePartState extends State<ProfilePart> {
+
+  bool isLoading = true;
+  TestUser? user;
+
+  @override
+  void initState() {
+    if(CurrentUser.currentTestUser == null){
+      Navigator.pushReplacementNamed(context, '/');
+    }
+
+
+    getUserInfo();
+
+    super.initState();
+  }
+
+
+  void getUserInfo() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      TestUser? testUser = await LoginService().userGetMe();
+
+      if(user != null){
+        setState(() {
+          user = testUser;
+        });
+      }
+
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -51,9 +92,9 @@ class _ProfilePartState extends State<ProfilePart> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text('Abdramanov Kuanysh', style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
+                  Text('${CurrentUser.currentTestUser!.testUser.lastName} ${CurrentUser.currentTestUser!.testUser.firstName }', style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
                   const SizedBox(height: 8,),
-                  const Text('000000000000' , style: TextStyle(fontWeight: FontWeight.bold,),),
+                  Text(CurrentUser.currentTestUser!.testUser.iin , style: const TextStyle(fontWeight: FontWeight.bold,),),
                   const SizedBox(height: 16,),
                   Row(
                     mainAxisSize: MainAxisSize.min,
@@ -81,8 +122,8 @@ class _ProfilePartState extends State<ProfilePart> {
                                     Radius.circular(20.0),
                                   ),
                                 ),
-                                child: const Center(
-                                    child: Icon(Icons.check_circle_outline_rounded, color: Colors.green,size: 40,),),
+                                child: Center(
+                                    child: Icon(CurrentUser.currentTestUser!.testUser.permissionForTest?  Icons.check_circle_outline_rounded: Icons.cancel_outlined, color: Colors.green,size: 40,),),
                               ),
                             ],
                           ),
@@ -114,8 +155,8 @@ class _ProfilePartState extends State<ProfilePart> {
                                     Radius.circular(20.0),
                                   ),
                                 ),
-                                child: const Center(
-                                  child: Icon(Icons.cancel_outlined, color: Colors.red,  size: 40,),),
+                                child:  Center(
+                                  child: Icon(CurrentUser.currentTestUser!.testUser.permissionForModo?  Icons.check_circle_outline_rounded: Icons.cancel_outlined, color: Colors.red,  size: 40,),),
                               ),
                             ],
                           ),

@@ -25,8 +25,12 @@ Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  ByteData data = await PlatformAssetBundle().load('certificates/bilim-lab_kz.crt');
+  ByteData data = await PlatformAssetBundle().load('certificates/oqutest_kz.crt');
   SecurityContext.defaultContext.setTrustedCertificatesBytes(data.buffer.asUint8List());
+  ByteData secondCertData = await PlatformAssetBundle().load('certificates/_oquway_kz.crt');
+  SecurityContext.defaultContext.setTrustedCertificatesBytes(secondCertData.buffer.asUint8List());
+
+
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp,]);
   runApp(const MyApp());
 
@@ -79,7 +83,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/app',
+      initialRoute: '/',
       routes: routes,
     );
   }

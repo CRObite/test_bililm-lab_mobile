@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/presentation/ErrorWorksPages/ErrorWorksPart.dart';
 import 'package:test_bilimlab_project/presentation/SubjectPickerPages/SubjectPickerPage.dart';
 
@@ -8,6 +9,7 @@ import 'package:test_bilimlab_project/presentation/UserPages/ProfilePart.dart';
 import '../utils/AppColors.dart';
 import '../utils/AppImages.dart';
 import '../utils/AppTexts.dart';
+import 'Widgets/CustomAppBar.dart';
 
 class Application extends StatefulWidget {
   const Application({super.key});
@@ -20,6 +22,15 @@ class _ApplicationState extends State<Application> {
 
   int _currentIndex = 0;
 
+  @override
+  void initState() {
+    if(CurrentUser.currentTestUser == null){
+      Navigator.pushReplacementNamed(context, '/');
+    }
+    super.initState();
+  }
+
+
   final List<Widget> _parts = [
       const AnalyticPart(),
       const SubjectPickerPage(),
@@ -31,56 +42,12 @@ class _ApplicationState extends State<Application> {
   Widget build(BuildContext context) {
     return Scaffold(
 
-      // appBar: PreferredSize(
-      //     preferredSize: const Size.fromHeight(80),
-      //     child: CustomAppBar(user:  CurrentUser.currentTestUser!.testUser)
-      // ),
-
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        toolbarHeight: 60,
-        flexibleSpace: Container(
-          height: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                  height: 30,
-                  child: Image.asset(AppImages.full_logo)
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: AppColors.colorGrayButton,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Center(child: Text('AK',style: TextStyle(fontSize: 16),)),
-                  ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Abdramanov K.A.", style: TextStyle(fontWeight: FontWeight.bold),),
-                      Text('000000000000'),
-                    ],
-                  )
-                ],
-              ),
-            ],
-          ),
-        ),
+      appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(80),
+          child: CustomAppBar(user:  CurrentUser.currentTestUser!.testUser)
       ),
+
+
       body: _parts[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,

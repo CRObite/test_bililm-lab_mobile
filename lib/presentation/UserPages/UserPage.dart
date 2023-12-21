@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:test_bilimlab_project/data/service/login_service.dart';
+import 'package:test_bilimlab_project/domain/testUser.dart';
 import 'package:test_bilimlab_project/presentation/UserPages/AnalyticPart.dart';
 import 'package:test_bilimlab_project/presentation/UserPages/ProfilePart.dart';
 
 import '../../domain/currentUser.dart';
+import '../../domain/customResponse.dart';
 import '../../utils/AppTexts.dart';
 import '../Widgets/CustomAppBar.dart';
 
@@ -20,13 +23,20 @@ class _UserPageState extends State<UserPage> {
 
   final PageController _pageController = PageController(initialPage: 0);
 
+
+
   @override
   void initState() {
     // if(CurrentUser.currentTestUser == null){
     //   Navigator.pushReplacementNamed(context, '/');
     // }
+
+
+
     super.initState();
   }
+
+
 
   @override
   void dispose() {
