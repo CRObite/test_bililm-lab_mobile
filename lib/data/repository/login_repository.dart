@@ -37,10 +37,12 @@ class LoginRepository {
         AppApiUrls.getMe,
       );
 
-      TestUser user = TestUser.fromJson(response.data['testUser']);
+      print(response.data);
+
+      TestUser user = TestUser.fromJson(response.data);
       return user;
     } catch (e) {
-      print('asdasdadas');
+      print(e);
       return null;
     }
   }

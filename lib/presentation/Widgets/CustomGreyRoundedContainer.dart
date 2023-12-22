@@ -28,7 +28,7 @@ class CustomGreyRoundedContainer extends StatelessWidget {
                   '$num',style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 34),),
               ],
             ),
-            Text(title,style: const TextStyle( fontSize: 12),),
+            Text(title,style: const TextStyle( fontSize: 8),),
           ],
         ),
       ),

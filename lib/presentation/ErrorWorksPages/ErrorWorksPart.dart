@@ -115,7 +115,7 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
                               Text(
                                 subjects[index],
                                 style: const TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 10,
                                 ),
                               ),
                               const SizedBox(height: 8),

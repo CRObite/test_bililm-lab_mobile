@@ -308,7 +308,14 @@ class _TestPageState extends State<TestPage> {
             children: [
               widget.format == TestFormatEnum.ENT ?
               Text(currentSubjects[currentSubject],style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),):
-              Text('${currentTypeSubjects[currentTypeSubject]}:  ${currentSubjects[currentSubject]}',style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+              Column(
+                children: [
+                  Text(currentTypeSubjects[currentTypeSubject],style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),),
+                  const SizedBox(height: 5,),
+                  Text(currentSubjects[currentSubject],style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),),
+                ],
+              ),
+
               Text(
                 formattedTime,
                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -675,9 +682,15 @@ class _TestPageState extends State<TestPage> {
                           ],
                         ),
 
+                      ],
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
                         SmallButton(onPressed: (){
-                           _onWillPop();
-                          }, innerElement: Text(AppText.endTest, style: const TextStyle(color: Colors.white)), buttonColors: Colors.red, isDisabled: false,)
+                          _onWillPop();
+                        }, innerElement: Text(AppText.endTest, style: const TextStyle(color: Colors.white)), buttonColors: Colors.red, isDisabled: false,),
                       ],
                     )
                   ],

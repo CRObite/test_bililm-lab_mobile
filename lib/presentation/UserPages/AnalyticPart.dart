@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:test_bilimlab_project/data/service/test_service.dart';
 import 'package:test_bilimlab_project/domain/barData.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
@@ -38,11 +39,14 @@ class _AnalyticPartState extends State<AnalyticPart> {
 
       CustomResponse response = await TestService().getStatistics();
 
-      if (response.code == 200) {
+
+
+      if (response.code == 200 && mounted) {
         setState(() {
           datas = response.body;
         });
       }
+
     } finally {
       setState(() {
         isLoading = false;
@@ -63,6 +67,19 @@ class _AnalyticPartState extends State<AnalyticPart> {
        return 0;
      }
   }
+
+  List<String> formatDates(List<String> dates) {
+    List<String> formattedDates = [];
+
+    for (String dateStr in dates) {
+      DateTime date = DateFormat('dd.MM.yyyy HH:mm:ss').parse(dateStr);
+      String formattedDate = DateFormat('dd/MM/yy').format(date);
+      formattedDates.add(formattedDate);
+    }
+
+    return formattedDates;
+  }
+
 
 
   @override
@@ -96,11 +113,15 @@ class _AnalyticPartState extends State<AnalyticPart> {
               ),
               const SizedBox(height: 28,),
 
+
+
               Text(AppText.allTestsScores,style: const TextStyle(fontWeight: FontWeight.bold),),
-              CustomBarChart(
-                  barColor: AppColors.generalBarChartColor,
-                  data:  ScoresData(datas!=null ?  datas!.general.dates : [], datas!=null ?  datas!.general.scores : [], datas!=null ?  datas!.general.maxScore: 140),
-                  type: BarTypeEnum.GENERAL),
+              if(datas != null)
+                CustomBarChart(
+                    barColor: AppColors.generalBarChartColor,
+                    data:  ScoresData(datas != null ? formatDates(datas!.general.dates): ['1','2','3','4'], datas!=null ? datas!.general.scores: [0,0,0,0], datas!=null? datas !.general.maxScore: 40),
+                    type: BarTypeEnum.GENERAL),
+
               Text(AppText.firstProfileSubject,style: const TextStyle(fontWeight: FontWeight.bold),),
 
               CustomBarChart(

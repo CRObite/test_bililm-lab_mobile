@@ -34,19 +34,25 @@ class _ProfilePartState extends State<ProfilePart> {
 
   void getUserInfo() async {
     try {
+
+
+
       setState(() {
         isLoading = true;
       });
 
       TestUser? testUser = await LoginService().userGetMe();
 
-      if(user != null){
+      if(user != null && mounted){
         setState(() {
           user = testUser;
         });
       }
 
     } finally {
+
+
+
       setState(() {
         isLoading = false;
       });
@@ -96,6 +102,8 @@ class _ProfilePartState extends State<ProfilePart> {
                   const SizedBox(height: 8,),
                   Text(CurrentUser.currentTestUser!.testUser.iin , style: const TextStyle(fontWeight: FontWeight.bold,),),
                   const SizedBox(height: 16,),
+
+
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -111,7 +119,7 @@ class _ProfilePartState extends State<ProfilePart> {
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
                             children: [
-                              Text(AppText.entPermission, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
+                              Text(AppText.entPermission, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 10),),
                               const SizedBox(height: 8,),
                               Container(
                                 height: 40,
@@ -144,7 +152,7 @@ class _ProfilePartState extends State<ProfilePart> {
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
                             children: [
-                              Text(AppText.modoPermission, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
+                              Text(AppText.modoPermission, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 10),),
                               const SizedBox(height: 8,),
                               Container(
                                 height: 40,

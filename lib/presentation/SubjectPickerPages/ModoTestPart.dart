@@ -31,7 +31,7 @@ class _ModoTestPartState extends State<ModoTestPart> {
   @override
   void initState() {
     _mounted = true;
-    // getClass();
+    getClass();
     super.initState();
   }
 
