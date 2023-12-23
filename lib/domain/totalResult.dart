@@ -8,8 +8,9 @@ part 'totalResult.g.dart';
 class TotalResult {
   int maxScore;
   int score;
+  List<String>? subjectNames;
 
-  TotalResult(this.maxScore, this.score);
+  TotalResult(this.maxScore, this.score, this.subjectNames);
 
   factory TotalResult.fromJson(Map<String, dynamic> json) => _$TotalResultFromJson(json);
   Map<String, dynamic> toJson() => _$TotalResultToJson(this);

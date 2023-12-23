@@ -51,13 +51,13 @@ class _SubjectPickerPageState extends State<SubjectPickerPage> {
       if(!entTest.passed){
         _onWillPop(TestFormatEnum.ENT , Test(entTest, null));
       }
-    }else{
-      CustomResponse response = await TestService().getLastSchoolTest();
-      if(response.code == 200){
-        ModoTest modoTest = response.body;
-        if(!modoTest.passed){
-          _onWillPop(TestFormatEnum.SCHOOL , Test(null, modoTest));
-        }
+    }
+
+    CustomResponse responseSchool = await TestService().getLastSchoolTest();
+    if(responseSchool.code == 200){
+      ModoTest modoTest = responseSchool.body;
+      if(!modoTest.passed){
+        _onWillPop(TestFormatEnum.SCHOOL , Test(null, modoTest));
       }
     }
 

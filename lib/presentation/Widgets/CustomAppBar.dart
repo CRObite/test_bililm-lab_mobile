@@ -23,6 +23,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
 
     return AppBar(
+      automaticallyImplyLeading: false,
       backgroundColor: Colors.transparent,
       elevation: 0,
       toolbarHeight: 80,

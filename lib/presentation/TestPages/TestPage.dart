@@ -303,16 +303,17 @@ class _TestPageState extends State<TestPage> {
           height: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               widget.format == TestFormatEnum.ENT ?
               Text(currentSubjects[currentSubject],style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),):
               Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(currentTypeSubjects[currentTypeSubject],style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),),
+                  Text(currentTypeSubjects[currentTypeSubject],style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),),
                   const SizedBox(height: 5,),
-                  Text(currentSubjects[currentSubject],style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),),
+                  Text(currentSubjects[currentSubject],style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),),
                 ],
               ),
 

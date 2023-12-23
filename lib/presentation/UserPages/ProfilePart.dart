@@ -32,6 +32,15 @@ class _ProfilePartState extends State<ProfilePart> {
   }
 
 
+  IconData getPermissionIcon(bool permission){
+    if(permission){
+      return Icons.check_circle_outline_rounded;
+    }else{
+      return Icons.cancel_outlined;
+    }
+  }
+
+
   void getUserInfo() async {
     try {
 
@@ -43,7 +52,9 @@ class _ProfilePartState extends State<ProfilePart> {
 
       TestUser? testUser = await LoginService().userGetMe();
 
-      if(user != null && mounted){
+      if(testUser != null && mounted){
+
+        print('${testUser.permissionForTest}   ${testUser.permissionForModo}');
         setState(() {
           user = testUser;
         });
@@ -131,7 +142,7 @@ class _ProfilePartState extends State<ProfilePart> {
                                   ),
                                 ),
                                 child: Center(
-                                    child: Icon(CurrentUser.currentTestUser!.testUser.permissionForTest?  Icons.check_circle_outline_rounded: Icons.cancel_outlined, color: Colors.green,size: 40,),),
+                                    child: Icon(user!= null ? getPermissionIcon(user!.permissionForTest): getPermissionIcon(false), color: Colors.green,size: 40,),),
                               ),
                             ],
                           ),
@@ -164,7 +175,7 @@ class _ProfilePartState extends State<ProfilePart> {
                                   ),
                                 ),
                                 child:  Center(
-                                  child: Icon(CurrentUser.currentTestUser!.testUser.permissionForModo?  Icons.check_circle_outline_rounded: Icons.cancel_outlined, color: Colors.red,  size: 40,),),
+                                    child: Icon(user!= null ? getPermissionIcon(user!.permissionForModo): getPermissionIcon(false), color: Colors.green,  size: 40,),),
                               ),
                             ],
                           ),
