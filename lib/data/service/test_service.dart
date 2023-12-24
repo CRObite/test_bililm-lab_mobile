@@ -53,6 +53,6 @@ class TestService{
   }
 
   Future<CustomResponse> getLastSchoolTest() async {
-    return await TestRepository().getLastEntTest();
+    return await TestRepository().getLastSchoolTest();
   }
 }

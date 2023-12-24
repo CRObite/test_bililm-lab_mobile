@@ -25,7 +25,6 @@ import '../../domain/test.dart';
 import '../../domain/testQuestion.dart';
 
 
-
 class TestPage extends StatefulWidget {
   const TestPage({super.key,  required this.test, required this.format});
 
@@ -121,7 +120,7 @@ class _TestPageState extends State<TestPage> {
     } else {
 
       _timer.cancel();
-      _entTest();
+      _endTest();
     }
   }
 
@@ -190,12 +189,20 @@ class _TestPageState extends State<TestPage> {
     return categoryNames;
   }
 
+  int getSum(List<int> list){
+    int sum = 0;
+    list.forEach((element) {
+      sum+=element;
+    });
+    return sum;
+  }
+
   void checkContext(){
 
     int sum = 0;
 
-    if(startedIndex != null){
-      if(currentQuestion < startedIndex! || allContents.isEmpty){
+    if(startedIndex != null && allContents.isNotEmpty && allLength.isNotEmpty){
+      if(currentQuestion < startedIndex! || currentTypeSubject > getSum(allLength) - 1){
         currentContext = 0;
         content = null;
       }else{
@@ -206,18 +213,8 @@ class _TestPageState extends State<TestPage> {
           }else if(currentQuestion >= startedIndex! + sum && currentQuestion < startedIndex! + allLength[i] + sum){
             content = allContents[i];
             break;
-          }else if(currentQuestion >= startedIndex! + sum && currentQuestion == currentQuestions.length-1){
-            content = allContents.last;
-            break;
           }else {
-            if(allLength.length > 1){
-              sum += allLength[i];
-            }
-            if(currentQuestion > startedIndex! + allLength[i] + sum){
-              currentContext = 0;
-              content = null;
-              break;
-            }
+            sum += allLength[i];
           }
         }
       }
@@ -239,16 +236,16 @@ class _TestPageState extends State<TestPage> {
         },
         onConfirmBtnTap: () {
           Navigator.pop(context);
-          _entTest();
+          _endTest();
         }
     );
     return false;
   }
 
-  Future<void> _entTest() async {
+  Future<void> _endTest() async {
     widget.format == TestFormatEnum.ENT ?
-    TestService().endEntTest(widget.test.entTest!.id):
-    TestService().endSchoolTest(widget.test.modoTest!.id);
+    await TestService().endEntTest(widget.test.entTest!.id):
+    await TestService().endSchoolTest(widget.test.modoTest!.id);
 
     CustomResponse response;
     widget.format == TestFormatEnum.ENT ?
@@ -287,6 +284,20 @@ class _TestPageState extends State<TestPage> {
     );
   }
 
+  String getTypeText(String typeString) {
+    switch (typeString) {
+      case 'READING_LITERACY':
+        return "Оқу сауаттылығы";
+      case 'MATHEMATICAL_LITERACY':
+        return "Математикалық сауаттылық";
+      case 'NATURAL_SCIENCE_LITERACY':
+        return "Жаратылыстану сауаттылығы";
+      default:
+        return typeString;
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -311,7 +322,7 @@ class _TestPageState extends State<TestPage> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(currentTypeSubjects[currentTypeSubject],style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),),
+                  Text(getTypeText(currentTypeSubjects[currentTypeSubject]),style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),),
                   const SizedBox(height: 5,),
                   Text(currentSubjects[currentSubject],style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),),
                 ],
@@ -460,12 +471,12 @@ class _TestPageState extends State<TestPage> {
                                   onChanged: (bool? value) {
                                     setState(() {
                                       if(value != null && value){
-
+                                        print(value);
                                         TestService().answerEntTest(widget.test.entTest!.id, currentQuestions[currentQuestion].id, currentQuestions[currentQuestion].options[index].id);
                                         currentQuestions[currentQuestion].checkedAnswers?.add(currentQuestions[currentQuestion].options[index].id);
 
                                       }else if(value != null && !value){
-
+                                        print(value);
                                         TestService().deleteAnswerEntTest(widget.test.entTest!.id, currentQuestions[currentQuestion].id, currentQuestions[currentQuestion].options[index].id);
                                         currentQuestions[currentQuestion].checkedAnswers?.remove(currentQuestions[currentQuestion].options[index].id);
                                       }
@@ -553,7 +564,7 @@ class _TestPageState extends State<TestPage> {
                             ), isDisabled: currentQuestion != 0 ? false: true,
                         ),
                         const SizedBox(width: 8,),
-                        SmallButton(
+                        widget.format == TestFormatEnum.ENT ? SmallButton(
                             onPressed: (){
                               if(currentQuestion != currentQuestions.length-1){
 
@@ -570,6 +581,23 @@ class _TestPageState extends State<TestPage> {
                                 Icons.arrow_forward_ios_rounded,
                                 color: currentQuestion !=currentQuestions.length-1 ? Colors.grey: Colors.greenAccent
                             ), isDisabled: currentQuestion != currentQuestions.length-1 ? false: true,
+                        ):
+                        SmallButton(
+                          onPressed: (){
+                            if(currentQuestion != currentSchoolQuestions.length-1){
+                              currentQuestion+=1;
+                              checkContext();
+                              setBytes();
+                              setState(() {
+                              });
+                              _scrollToElement(currentQuestion);
+                            }
+                          },
+                          buttonColors: AppColors.colorGrayButton,
+                          innerElement:  Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              color: currentQuestion !=currentSchoolQuestions.length-1 ? Colors.grey: Colors.greenAccent
+                          ), isDisabled: currentQuestion != currentSchoolQuestions.length-1 ? false: true,
                         ),
 
                       ],
@@ -588,14 +616,15 @@ class _TestPageState extends State<TestPage> {
                             widget.format == TestFormatEnum.ENT ? SmallButton(
                               onPressed: (){
                                 if(currentSubject != 0){
-                                  content = null;
-                                  currentContext = 0;
+
                                   setState(() {
                                     currentSubject -= 1;
                                     currentQuestion = 0;
+
+                                    ComplexCheck();
                                   });
 
-                                  ComplexCheck();
+
                                 }
 
                               },
@@ -607,8 +636,7 @@ class _TestPageState extends State<TestPage> {
                             ) : SmallButton(
                               onPressed: (){
                                 if(currentSubject != 0){
-                                  content = null;
-                                  currentContext = 0;
+
                                   setState(() {
                                     currentSubject-=1;
                                     currentQuestion = 0;
@@ -616,14 +644,17 @@ class _TestPageState extends State<TestPage> {
 
                                   ComplexCheck();
                                 }else if(currentTypeSubject != 0){
-                                  content = null;
-                                  currentContext = 0;
+
                                   setState(() {
                                     currentTypeSubject -= 1;
                                     currentSubjects = getAllCategoryNames();
                                     currentSubject=0;
                                     currentQuestion = 0;
+
+                                    ComplexCheck();
                                   });
+
+
                                 }
 
                               },
@@ -637,8 +668,7 @@ class _TestPageState extends State<TestPage> {
                             widget.format == TestFormatEnum.ENT ? SmallButton(
                               onPressed: (){
                                 if(currentSubject != currentSubjects.length-1){
-                                  content = null;
-                                  currentContext = 0;
+
                                   setState(() {
                                     currentSubject += 1;
                                     currentQuestion = 0;
@@ -655,8 +685,7 @@ class _TestPageState extends State<TestPage> {
                             ): SmallButton(
                               onPressed: (){
                                 if(currentSubject != currentSubjects.length-1){
-                                  content = null;
-                                  currentContext = 0;
+
                                   setState(() {
                                     currentSubject +=1;
                                     currentQuestion = 0;
@@ -664,13 +693,14 @@ class _TestPageState extends State<TestPage> {
                                     ComplexCheck();
                                   });
                                 }else if(currentTypeSubject != currentTypeSubjects.length-1){
-                                  content = null;
-                                  currentContext = 0;
+
                                   setState(() {
                                     currentTypeSubject += 1;
                                     currentSubjects = getAllCategoryNames();
                                     currentSubject=0;
                                     currentQuestion = 0;
+
+                                    ComplexCheck();
                                   });
                                 }
                               },

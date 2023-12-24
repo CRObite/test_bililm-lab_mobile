@@ -134,19 +134,23 @@ class _AnalyticPartState extends State<AnalyticPart> {
                   data:  ScoresData(["01/01/23", "02/01/23", "03/01/23","04/01/23","05/01/23","06/01/23"], [85, 92, 78, 50, 75, 68], 100),
                   type: BarTypeEnum.GENERAL),
               Text(AppText.kazakhHistory,style: const TextStyle(fontWeight: FontWeight.bold),),
+
+              if(datas != null)
               CustomBarChart(
                   barColor: AppColors.kazakhHistoryBarChartColor,
-                  data:  ScoresData(["01/01/23", "02/01/23", "03/01/23","04/01/23","05/01/23","06/01/23"], [85, 92, 78, 50, 75, 68], 100),
+                  data:  ScoresData(datas != null ? formatDates(datas!.subjects['Қазақстан Тарихы']!.dates): [], datas != null ? datas!.subjects['Қазақстан Тарихы']!.scores: [], datas != null ? datas!.subjects['Қазақстан Тарихы']!.maxScore: 20),
                   type: BarTypeEnum.GENERAL),
               Text(AppText.mathematicalLiteracy,style: const TextStyle(fontWeight: FontWeight.bold),),
+              if(datas != null)
               CustomBarChart(
                   barColor: AppColors.mathAndReadingLitBarChartColor,
-                  data:  ScoresData(["01/01/23", "02/01/23", "03/01/23","04/01/23","05/01/23","06/01/23"], [85, 92, 78, 50, 75, 68], 100),
+                  data:  ScoresData(datas != null ? formatDates(datas!.subjects['Математикалық сауаттылық']!.dates): [],datas != null ?  datas!.subjects['Математикалық сауаттылық']!.scores: [], datas != null ? datas!.subjects['Математикалық сауаттылық']!.maxScore:20),
                   type: BarTypeEnum.GENERAL),
               Text(AppText.readingLiteracy,style: const TextStyle(fontWeight: FontWeight.bold),),
+              if(datas!= null)
               CustomBarChart(
                   barColor: AppColors.mathAndReadingLitBarChartColor,
-                  data:  ScoresData(["01/01/23", "02/01/23", "03/01/23","04/01/23","05/01/23","06/01/23"], [10, 20, 30, 40, 34, 32], 40),
+                  data:  ScoresData(datas != null ? formatDates(datas!.subjects['Оқу сауаттылығы']!.dates):[], datas != null ? datas!.subjects['Оқу сауаттылығы']!.scores:[], datas != null ? datas!.subjects['Оқу сауаттылығы']!.maxScore:20),
                   type: BarTypeEnum.GENERAL),
 
           ],

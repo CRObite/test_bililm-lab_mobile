@@ -65,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(
-                  height: 70,
+                    height: 70,
                     child: Image.asset(AppImages.full_logo)),
                 Padding(
                   padding: const EdgeInsets.all(16.0),

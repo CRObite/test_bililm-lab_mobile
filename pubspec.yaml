@@ -49,7 +49,7 @@ dependencies:
 
 flutter_native_splash:
   color: "#ffffff"
-  image: assets/logo.png
+  image: assets/oqu_way.png
 
 
 
@@ -73,11 +73,11 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
-    - assets/full_logo.png
-    - assets/logo.png
+
     - assets/pie_chart.png
     - assets/profile_image.png
     - assets/error_work.png
+    - assets/oqu_way.png
     - certificates/oqutest_kz.crt
     - certificates/_oquway_kz.crt
   # The following line ensures that the Material Icons font is

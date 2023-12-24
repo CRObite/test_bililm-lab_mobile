@@ -25,7 +25,18 @@ class ResultPage extends StatefulWidget {
 class _ResultPageState extends State<ResultPage> {
 
 
-
+  String getTypeText(String typeString) {
+    switch (typeString) {
+      case 'READING_LITERACY':
+        return "Оқу сауаттылығы";
+      case 'MATHEMATICAL_LITERACY':
+        return "Математикалық сауаттылық";
+      case 'NATURAL_SCIENCE_LITERACY':
+        return "Жаратылыстану сауаттылығы";
+      default:
+        return typeString;
+    }
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -72,8 +83,8 @@ class _ResultPageState extends State<ResultPage> {
             widget.format == TestFormatEnum.ENT ?
             Container(
               margin: const EdgeInsets.symmetric(vertical: 32),
-              width: 250,
-              height: 250,
+              width: 300,
+              height: 300,
               child: ListView.builder(
                 itemCount: widget.result.entResult!.subjectsResult.length,
                 itemBuilder: (context, index) {
@@ -99,32 +110,67 @@ class _ResultPageState extends State<ResultPage> {
                   );
                 },
               ),
-            ): SingleChildScrollView(
-              child: ExpansionPanelList(
-                elevation: 1,
-                expandedHeaderPadding: const EdgeInsets.all(0),
-                expansionCallback: (int index, bool isExpanded) {
-                  setState(() {
-                    widget.result.modoResult!.typeSubjects[index].isExpanded = !isExpanded;
-                  });
-                },
-                children: widget.result.modoResult!.typeSubjects.map<ExpansionPanel>((TypeSubject typeSubject) {
-                  return ExpansionPanel(
-                    headerBuilder: (BuildContext context, bool isExpanded) {
-                      return ListTile(
-                        title: Text('${typeSubject.type} - Score: ${typeSubject.score}'),
-                      );
-                    },
-                    body: Column(
-                      children: typeSubject.subjectsResult.map((ResultSubject resultSubject) {
-                        return ListTile(
-                          title: Text('${resultSubject.subjectName} - Score: ${resultSubject.score}'),
+            ): Container(
+              margin: const EdgeInsets.symmetric(vertical: 32),
+              width: 300,
+              child: SingleChildScrollView(
+                child: ExpansionPanelList(
+                  elevation: 1,
+                  expandedHeaderPadding: const EdgeInsets.all(0),
+                  expansionCallback: (int index, bool isExpanded) {
+
+                    setState(() {
+                      widget.result.modoResult!.typeSubjects[index].isExpanded = !isExpanded;
+                    });
+
+                    print(widget.result.modoResult!.typeSubjects[index].isExpanded);
+                  },
+                  children: widget.result.modoResult!.typeSubjects.map<ExpansionPanel>((TypeSubject typeSubject) {
+                    return ExpansionPanel(
+                      headerBuilder: (BuildContext context, bool isExpanded) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox( width: 200, child: Text(getTypeText(typeSubject.type))),
+                              Text('${typeSubject.score}')
+                            ],
+                          ),
                         );
-                      }).toList(),
-                    ),
-                    isExpanded: typeSubject.isExpanded ?? false,
-                  );
-                }).toList(),
+                      },
+                      body: Container(
+                        width: 300,
+                        height: 300,
+                        child: ListView.builder(
+                          itemCount: typeSubject.subjectsResult.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              width: double.infinity,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: AppColors.colorGrayButton,
+                                    width: 1.0,
+                                  ),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(typeSubject.subjectsResult[index].subjectName),
+                                  Text('${typeSubject.subjectsResult[index].score}')
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
               ),
             ),
 
