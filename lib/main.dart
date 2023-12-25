@@ -8,6 +8,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:test_bilimlab_project/config/dependency_injection.dart';
 
 import 'package:test_bilimlab_project/presentation/AuthorizationPages/LoginPage.dart';
+import 'package:test_bilimlab_project/presentation/ErrorWorksPages/ErrorWorkTestPage.dart';
 import 'package:test_bilimlab_project/presentation/ResoultPages/ResoultPage.dart';
 import 'package:test_bilimlab_project/presentation/SubjectPickerPages/SubjectPickerPage.dart';
 import 'package:test_bilimlab_project/presentation/TestPages/TestPage.dart';
@@ -63,6 +64,19 @@ class _MyAppState extends State<MyApp> {
         return Container();
       }
     },
+    '/mistake': (context) {
+      final Map<String, dynamic>? arguments = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+
+      if (arguments != null) {
+        final Test test = arguments['test'] as Test;
+        final TestFormatEnum testFormatEnum = arguments['testFormatEnum'] as TestFormatEnum;
+
+        return ErrorWorkTestPage(test: test, format: testFormatEnum);
+      } else {
+        return Container();
+      }
+    },
+
     '/result': (context) {
       final Map<String, dynamic>? arguments = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
 

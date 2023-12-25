@@ -8,7 +8,7 @@ part 'revisionItem.g.dart';
 @JsonSerializable()
 
 class RevisionItem{
-  int id;
+  String id;
   TestUser? testUser;
   TotalResult totalResult;
   List<String> subjects;

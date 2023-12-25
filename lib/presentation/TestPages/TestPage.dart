@@ -218,6 +218,9 @@ class _TestPageState extends State<TestPage> {
           }
         }
       }
+    }else if(content != null){
+      currentContext = 0;
+      content = null;
     }
   }
 
@@ -427,6 +430,8 @@ class _TestPageState extends State<TestPage> {
                                   currentQuestions[currentQuestion].checkedAnswers!.isNotEmpty ?
                                   selectedAnswerIndex = currentQuestions[currentQuestion].checkedAnswers![0]:
                                   selectedAnswerIndex = null;
+                                }else{
+                                  currentQuestions[currentQuestion].checkedAnswers = [];
                                 }
                               }else{
                                 selectedMultipleAnswerIndex = currentQuestions[currentQuestion].checkedAnswers;
@@ -437,6 +442,8 @@ class _TestPageState extends State<TestPage> {
                                   currentSchoolQuestions[currentQuestion].checkedAnswers!.isNotEmpty ?
                                   selectedAnswerIndex = currentSchoolQuestions[currentQuestion].checkedAnswers![0]:
                                   selectedAnswerIndex = null;
+                                }else{
+                                  currentQuestions[currentQuestion].checkedAnswers = [];
                                 }
                               }else{
                                 selectedMultipleAnswerIndex = currentSchoolQuestions[currentQuestion].checkedAnswers;
@@ -475,10 +482,13 @@ class _TestPageState extends State<TestPage> {
                                         TestService().answerEntTest(widget.test.entTest!.id, currentQuestions[currentQuestion].id, currentQuestions[currentQuestion].options[index].id);
                                         currentQuestions[currentQuestion].checkedAnswers?.add(currentQuestions[currentQuestion].options[index].id);
 
+                                        print(currentQuestions[currentQuestion].checkedAnswers);
                                       }else if(value != null && !value){
                                         print(value);
                                         TestService().deleteAnswerEntTest(widget.test.entTest!.id, currentQuestions[currentQuestion].id, currentQuestions[currentQuestion].options[index].id);
                                         currentQuestions[currentQuestion].checkedAnswers?.remove(currentQuestions[currentQuestion].options[index].id);
+
+                                        print(currentQuestions[currentQuestion].checkedAnswers);
                                       }
                                     });
                                   },

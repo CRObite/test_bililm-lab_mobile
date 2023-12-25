@@ -62,11 +62,11 @@ class _ProfilePartState extends State<ProfilePart> {
 
     } finally {
 
-
-
-      setState(() {
-        isLoading = false;
-      });
+      if(mounted){
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 

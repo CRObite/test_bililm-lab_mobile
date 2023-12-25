@@ -43,9 +43,11 @@ class _EntTestPartState extends State<EntTestPart> {
 
   Future<void> getSubjects() async {
     List<EntSubject> listOfSub = await SubjectService().getEntAllSubject();
-    setState(() {
-      dropItems = listOfSub;
-    });
+    if(mounted){
+      setState(() {
+        dropItems = listOfSub;
+      });
+    }
   }
 
 

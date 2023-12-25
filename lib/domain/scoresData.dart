@@ -5,7 +5,7 @@ part 'scoresData.g.dart';
 
 @JsonSerializable()
 class ScoresData {
-  List<String> dates;
+  List<String?> dates;
   List<int> scores;
   int maxScore;
 

@@ -39,8 +39,6 @@ class _AnalyticPartState extends State<AnalyticPart> {
 
       CustomResponse response = await TestService().getStatistics();
 
-
-
       if (response.code == 200 && mounted) {
         setState(() {
           datas = response.body;
@@ -48,9 +46,11 @@ class _AnalyticPartState extends State<AnalyticPart> {
       }
 
     } finally {
-      setState(() {
-        isLoading = false;
-      });
+      if(mounted){
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
@@ -68,17 +68,31 @@ class _AnalyticPartState extends State<AnalyticPart> {
      }
   }
 
-  List<String> formatDates(List<String> dates) {
+  List<String> formatDates(List<String?> dates) {
     List<String> formattedDates = [];
 
-    for (String dateStr in dates) {
-      DateTime date = DateFormat('dd.MM.yyyy HH:mm:ss').parse(dateStr);
-      String formattedDate = DateFormat('dd/MM/yy').format(date);
-      formattedDates.add(formattedDate);
+
+    for (String? dateStr in dates) {
+      if(dateStr!=null){
+        DateTime date = DateFormat('dd.MM.yyyy HH:mm:ss').parse(dateStr);
+        String formattedDate = DateFormat('dd/MM/yy').format(date);
+        formattedDates.add(formattedDate);
+      }
+
     }
 
     return formattedDates;
   }
+
+
+  Color getColorForBar(int index){
+    if(index % 2 != 0){
+      return AppColors.firstAndSecondProfileBarChartColor;
+    }else{
+      return  AppColors.mathAndReadingLitBarChartColor;
+    }
+  }
+
 
 
 
@@ -119,39 +133,37 @@ class _AnalyticPartState extends State<AnalyticPart> {
               if(datas != null)
                 CustomBarChart(
                     barColor: AppColors.generalBarChartColor,
-                    data:  ScoresData(datas != null ? formatDates(datas!.general.dates): ['1','2','3','4'], datas!=null ? datas!.general.scores: [0,0,0,0], datas!=null? datas !.general.maxScore: 40),
+                    data:  ScoresData(datas != null ? formatDates(datas!.general.dates): [], datas!=null ? datas!.general.scores: [], datas!=null? datas !.general.maxScore: 40),
                     type: BarTypeEnum.GENERAL),
-
-              Text(AppText.firstProfileSubject,style: const TextStyle(fontWeight: FontWeight.bold),),
-
-              CustomBarChart(
-                  barColor:  AppColors.firstAndSecondProfileBarChartColor,
-                  data:  ScoresData(["01/01/23", "02/01/23", "03/01/23","04/01/23","05/01/23","06/01/23"], [85, 92, 78, 50, 75, 68], 100),
-                  type: BarTypeEnum.GENERAL),
-              Text(AppText.secondProfileSubject,style: const TextStyle(fontWeight: FontWeight.bold),),
-              CustomBarChart(
-                  barColor: AppColors.firstAndSecondProfileBarChartColor,
-                  data:  ScoresData(["01/01/23", "02/01/23", "03/01/23","04/01/23","05/01/23","06/01/23"], [85, 92, 78, 50, 75, 68], 100),
-                  type: BarTypeEnum.GENERAL),
-              Text(AppText.kazakhHistory,style: const TextStyle(fontWeight: FontWeight.bold),),
-
+              
               if(datas != null)
-              CustomBarChart(
-                  barColor: AppColors.kazakhHistoryBarChartColor,
-                  data:  ScoresData(datas != null ? formatDates(datas!.subjects['Қазақстан Тарихы']!.dates): [], datas != null ? datas!.subjects['Қазақстан Тарихы']!.scores: [], datas != null ? datas!.subjects['Қазақстан Тарихы']!.maxScore: 20),
-                  type: BarTypeEnum.GENERAL),
-              Text(AppText.mathematicalLiteracy,style: const TextStyle(fontWeight: FontWeight.bold),),
-              if(datas != null)
-              CustomBarChart(
-                  barColor: AppColors.mathAndReadingLitBarChartColor,
-                  data:  ScoresData(datas != null ? formatDates(datas!.subjects['Математикалық сауаттылық']!.dates): [],datas != null ?  datas!.subjects['Математикалық сауаттылық']!.scores: [], datas != null ? datas!.subjects['Математикалық сауаттылық']!.maxScore:20),
-                  type: BarTypeEnum.GENERAL),
-              Text(AppText.readingLiteracy,style: const TextStyle(fontWeight: FontWeight.bold),),
-              if(datas!= null)
-              CustomBarChart(
-                  barColor: AppColors.mathAndReadingLitBarChartColor,
-                  data:  ScoresData(datas != null ? formatDates(datas!.subjects['Оқу сауаттылығы']!.dates):[], datas != null ? datas!.subjects['Оқу сауаттылығы']!.scores:[], datas != null ? datas!.subjects['Оқу сауаттылығы']!.maxScore:20),
-                  type: BarTypeEnum.GENERAL),
+              Container(
+                width: double.infinity,
+                height: datas!.subjects.length* 365,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: datas!.subjects.length,
+                  itemBuilder: (BuildContext context, int index) {
+
+                    List<String> list = datas!.subjects.keys.toList();
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(list[index],style: const TextStyle(fontWeight: FontWeight.bold),),
+                        const SizedBox(height: 8,),
+                        CustomBarChart(
+                            barColor:  getColorForBar(index),
+                            data:  datas!.subjects[list[index]] ?? ScoresData( [], [], 40),
+                            type: BarTypeEnum.GENERAL),
+                      ],
+                    );
+                  },
+                ),
+              ),
+
+
 
           ],
         ),

@@ -61,9 +61,11 @@ class _SubjectPickerPageState extends State<SubjectPickerPage> {
       }
     }
 
-    setState(() {
-      isLoading = false;
-    });
+    if(mounted){
+      setState(() {
+        isLoading = false;
+      });
+    }
 
   }
 

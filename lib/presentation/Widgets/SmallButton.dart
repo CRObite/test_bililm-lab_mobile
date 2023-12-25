@@ -17,6 +17,9 @@ class SmallButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
           backgroundColor: isDisabled?  AppColors.colorGrayButtonDisabled : buttonColors,
         ),
         child: innerElement,

@@ -16,6 +16,9 @@ class LongButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.colorButton,
           minimumSize: const Size(double.infinity, 40),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
         ),
         child: Text(title, style: TextStyle(color: Colors.white),),
       ),

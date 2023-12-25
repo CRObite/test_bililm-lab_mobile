@@ -11,13 +11,15 @@ import '../../data/service/test_service.dart';
 import '../../domain/test.dart';
 import '../../domain/testQuestion.dart';
 import '../../utils/AppTexts.dart';
+import '../../utils/TestFormatEnum.dart';
 import '../Widgets/QuestionCircle.dart';
 import '../Widgets/SmallButton.dart';
 
 class ErrorWorkTestPage extends StatefulWidget {
-  const ErrorWorkTestPage({super.key, required this.test});
+  const ErrorWorkTestPage({super.key, required this.test, required this.format});
 
   final Test test;
+  final TestFormatEnum format;
 
   @override
   State<ErrorWorkTestPage> createState() => _ErrorWorkTestPageState();
@@ -43,6 +45,7 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
     currentSubjects = getAllCategoryNames();
     ComplexCheck();
   }
@@ -231,7 +234,7 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
 
                     Container(
                       width: double.infinity,
-                      height: 350,
+                      height: currentQuestions[currentQuestion].options.length * 70,
                       child: ListView.builder(
                         scrollDirection: Axis.vertical,
                         itemCount: currentQuestions[currentQuestion].options.length,
@@ -274,6 +277,33 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
                         },
                       ),
                     ),
+
+                    Row(
+                      children: [
+                        Text(AppText.recommendation,
+                            style: const TextStyle(
+                              fontSize: 16,
+                            )
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: 8,),
+                    Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: AppColors.colorGrayButton,
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: currentQuestions[currentQuestion].recommendation != null ?
+                          Text(currentQuestions[currentQuestion].recommendation!) :
+                          Text('${AppText.recommendation} жоқ'),
+                        )
+                    ),
+                    SizedBox(height: 16,)
+
                   ],
                 ),
               ),
@@ -331,25 +361,6 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
                     height: 8,
                   ),
 
-                  Text(AppText.recommendation,
-                      style: const TextStyle(
-                        fontSize: 16,
-                      )
-                  ),
-
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: AppColors.colorGrayButton,
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: currentQuestions[currentQuestion].recommendation != null ?
-                        Text(currentQuestions[currentQuestion].recommendation!) :
-                        Text('${AppText.recommendation} жоқ'),
-                    )
-                  ),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -402,7 +413,7 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
                       ),
 
                       SmallButton(onPressed: (){
-                          Navigator.pop;
+                          Navigator.pop(context);
                       }, innerElement: Text(AppText.endTest, style: const TextStyle(color: Colors.white)), buttonColors: Colors.red, isDisabled: false,)
                     ],
                   )

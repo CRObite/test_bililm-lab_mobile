@@ -3,6 +3,7 @@ import 'package:test_bilimlab_project/config/handleErrorResponse.dart';
 import 'package:test_bilimlab_project/domain/barData.dart';
 import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
+import 'package:test_bilimlab_project/domain/revision.dart';
 import 'package:test_bilimlab_project/utils/TestTypeEnum.dart';
 import '../../domain/entTest.dart';
 
@@ -114,18 +115,22 @@ class TestRepository {
     }
   }
 
-  Future<CustomResponse> getAllByUser() async {
+  Future<CustomResponse> getAllByUser(int page, int size) async {
     try {
       dio.options.headers['Authorization'] = 'Bearer ${CurrentUser.currentTestUser?.accessToken}';
       final response = await dio.get(
         AppApiUrls.getAllByUser,
+        queryParameters: {
+          'page': page,
+          'size': size,
+        },
       );
 
       print(response.data);
 
-      BarData data = BarData.fromJson(response.data);
+      Revision revision = Revision.fromJson(response.data);
 
-      return CustomResponse(200, '', data);
+      return CustomResponse(200, '', revision);
 
     } catch (e) {
       print(e);
@@ -145,6 +150,25 @@ class TestRepository {
       BarData data = BarData.fromJson(response.data);
 
       return CustomResponse(200, '', data);
+
+    } catch (e) {
+      print(e);
+      return HandleErrorResponse.handleErrorResponse(e);
+    }
+  }
+
+  Future<CustomResponse> getMistakes(String testId) async {
+    try {
+      dio.options.headers['Authorization'] = 'Bearer ${CurrentUser.currentTestUser?.accessToken}';
+      final response = await dio.get(
+        '${AppApiUrls.getTestMistakes}$testId',
+      );
+
+      print(response.data);
+
+      EntTest entTest = EntTest.fromJson(response.data);
+
+      return CustomResponse(200, '', entTest);
 
     } catch (e) {
       print(e);

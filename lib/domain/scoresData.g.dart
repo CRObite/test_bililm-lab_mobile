@@ -7,7 +7,7 @@ part of 'scoresData.dart';
 // **************************************************************************
 
 ScoresData _$ScoresDataFromJson(Map<String, dynamic> json) => ScoresData(
-      (json['dates'] as List<dynamic>).map((e) => e as String).toList(),
+      (json['dates'] as List<dynamic>).map((e) => e as String?).toList(),
       (json['scores'] as List<dynamic>).map((e) => e as int).toList(),
       json['maxScore'] as int,
     );

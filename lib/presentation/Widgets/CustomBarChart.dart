@@ -1,6 +1,7 @@
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'package:test_bilimlab_project/domain/scoresData.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
@@ -20,10 +21,25 @@ class CustomBarChart extends StatefulWidget {
 
 class _CustomBarChartState extends State<CustomBarChart> {
 
-  late List<String> dates;
+  late List<String?> dates;
   late List<int> scores;
   final ScrollController _scrollController = ScrollController();
 
+  List<String> formatDates(List<String?> dates) {
+    List<String> formattedDates = [];
+
+
+    for (String? dateStr in dates) {
+      if(dateStr!=null){
+        DateTime date = DateFormat('dd.MM.yyyy HH:mm:ss').parse(dateStr);
+        String formattedDate = DateFormat('dd/MM/yy').format(date);
+        formattedDates.add(formattedDate);
+      }
+
+    }
+
+    return formattedDates;
+  }
 
 
 

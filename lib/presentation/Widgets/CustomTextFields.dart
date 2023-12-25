@@ -27,9 +27,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
       keyboardType: widget.suffix == true ?  TextInputType.visiblePassword: TextInputType.number,
       controller: widget.controller,
       obscureText: widget.suffix == true ? !_passwordVisible: false,
-      style: TextStyle(color: Colors.black),
+      style: const TextStyle(color: Colors.black),
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         hintText: widget.title,
         hintStyle: TextStyle(color: AppColors.colorTextFiledStoke),
         enabledBorder: OutlineInputBorder(

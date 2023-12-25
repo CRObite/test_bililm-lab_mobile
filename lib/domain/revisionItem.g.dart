@@ -7,7 +7,7 @@ part of 'revisionItem.dart';
 // **************************************************************************
 
 RevisionItem _$RevisionItemFromJson(Map<String, dynamic> json) => RevisionItem(
-      json['id'] as int,
+      json['id'] as String,
       json['testUser'] == null
           ? null
           : TestUser.fromJson(json['testUser'] as Map<String, dynamic>),
