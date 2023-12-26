@@ -41,6 +41,7 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
   Revision? revisions;
 
   bool isLoading = false;
+  bool firstLoading = true;
   bool hasNextPage = true;
 
   @override
@@ -63,7 +64,7 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
   void getRevision() async {
     try {
       setState(() {
-        isLoading = true;
+        firstLoading = true;
       });
 
       CustomResponse response = await TestService().getAllByUser(pageNum,8);
@@ -77,7 +78,7 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
     } finally {
       if(mounted){
         setState(() {
-          isLoading = false;
+          firstLoading = false;
         });
 
         if(pageNum == revisions!.totalPages){
@@ -136,12 +137,17 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
 
   void goToMistakes(String id) async {
 
-    CustomResponse response = await TestService().getMistakes(id);
 
     setState(() {
-      isLoading = true;
+      firstLoading = true;
     });
 
+    CustomResponse response = await TestService().getMistakes(id);
+
+
+    setState(() {
+      firstLoading = false;
+    });
     if(response.code == 200){
       EntTest entTest = response.body as EntTest;
       Navigator.pushNamed(
@@ -199,18 +205,14 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
         Expanded(
           child: Container(
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
-                colors: [Colors.white, Colors.cyanAccent, AppColors.colorButton],
-              ),
+              color: AppColors.colorButton,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(20.0),
                 topRight: Radius.circular(20.0),
               ),
             ),
             width: double.infinity,
-            child: Padding(
+            child: firstLoading? const Center(child: CircularProgressIndicator(color: Colors.white,)) : Padding(
               padding: const EdgeInsets.only(top: 8,left: 8,right: 8),
               child: RefreshIndicator(
                 onRefresh: onRefresh,
@@ -249,7 +251,7 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
                                     '${revisions!.items[index].totalResult.score}/${revisions!.items[index].totalResult.maxScore}',
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 25,
+                                      fontSize: 20,
                                     ),
                                   ),
 
@@ -257,7 +259,7 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
                                   Text(
                                     revisions!.items[index].subjects.join(', '),
                                     style: const TextStyle(
-                                      fontSize: 11,
+                                      fontSize: 9,
                                     ),
                                     textAlign: TextAlign.center,
                                   ),

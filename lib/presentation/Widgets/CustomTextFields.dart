@@ -24,6 +24,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+
       keyboardType: widget.suffix == true ?  TextInputType.visiblePassword: TextInputType.number,
       controller: widget.controller,
       obscureText: widget.suffix == true ? !_passwordVisible: false,

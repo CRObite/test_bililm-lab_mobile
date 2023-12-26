@@ -15,9 +15,18 @@ class TestQuestion {
   List<MediaFile> mediaFiles;
   List<TestOption> options;
   String? recommendation;
+  String? answeredType;
 
-  TestQuestion(this.id, this.question, this.multipleAnswers,
-      this.checkedAnswers, this.mediaFiles, this.options, this.recommendation);
+
+  TestQuestion(
+      this.id,
+      this.question,
+      this.multipleAnswers,
+      this.checkedAnswers,
+      this.mediaFiles,
+      this.options,
+      this.recommendation,
+      this.answeredType);
 
   factory TestQuestion.fromJson(Map<String, dynamic> json) => _$TestQuestionFromJson(json);
   Map<String, dynamic> toJson() => _$TestQuestionToJson(this);

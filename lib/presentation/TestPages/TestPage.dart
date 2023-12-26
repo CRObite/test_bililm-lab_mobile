@@ -59,6 +59,8 @@ class _TestPageState extends State<TestPage> {
   int? startedIndex;
   Uint8List? currentBytes;
 
+  bool pictureIsLoading = true;
+
   @override
   void initState() {
     super.initState();
@@ -68,6 +70,7 @@ class _TestPageState extends State<TestPage> {
     }else if(widget.format == TestFormatEnum.SCHOOL){
       _elapsedSeconds = (widget.test.modoTest!.schoolClass.timeInMilliseconds/1000).round();
     }
+
 
     _timer = Timer.periodic(const Duration(seconds: 1), _updateTimer);
     _scrollController = ScrollController();
@@ -81,15 +84,24 @@ class _TestPageState extends State<TestPage> {
 
 
     ComplexCheck();
-    // String formattedCurrentDate = DateFormat('dd.MM.yyyy HH:mm:ss').format(DateTime.now());
-    //
-    // print(differenceInSeconds(widget.test.startedDate,formattedCurrentDate));
-    //
-    // if(-differenceInSeconds(widget.test.startedDate,formattedCurrentDate) < _elapsedSeconds){
-    //     _elapsedSeconds = _elapsedSeconds - differenceInSeconds(widget.test.startedDate,formattedCurrentDate);
-    // }else{
-    //    _entTest();
-    // }
+
+    String formattedCurrentDate = DateFormat('dd.MM.yyyy HH:mm:ss').format(DateTime.now());
+
+
+    if(widget.format == TestFormatEnum.ENT){
+      if(-differenceInSeconds(widget.test.entTest!.startedDate,formattedCurrentDate) < _elapsedSeconds){
+        _elapsedSeconds = _elapsedSeconds - differenceInSeconds(widget.test.entTest!.startedDate,formattedCurrentDate);
+      }else{
+        _endTest();
+      }
+    }else if(widget.format == TestFormatEnum.SCHOOL){
+      if(-differenceInSeconds(widget.test.modoTest!.startedDate,formattedCurrentDate) < _elapsedSeconds){
+        _elapsedSeconds = _elapsedSeconds - differenceInSeconds(widget.test.modoTest!.startedDate,formattedCurrentDate);
+      }else{
+        _endTest();
+      }
+    }
+
 
   }
 
@@ -143,6 +155,11 @@ class _TestPageState extends State<TestPage> {
 
 
   Future<void> setBytes() async {
+
+    setState(() {
+      pictureIsLoading = true;
+    });
+
     if(widget.format == TestFormatEnum.ENT){
       if(currentQuestions[currentQuestion].mediaFiles.isNotEmpty) {
         currentBytes = await MediaService().getMediaById(currentQuestions[currentQuestion].mediaFiles[0].id);
@@ -157,6 +174,10 @@ class _TestPageState extends State<TestPage> {
       }
     }
 
+
+    setState(() {
+      pictureIsLoading = false;
+    });
   }
 
   List<String> getAllTypeSubject() {
@@ -307,6 +328,7 @@ class _TestPageState extends State<TestPage> {
     String formattedTime = DateFormat('h:mm:ss').format(DateTime.utc(0, 1, 1, 0, 0, _elapsedSeconds));
 
 
+
     return  Scaffold(
 
       appBar: AppBar(
@@ -408,6 +430,8 @@ class _TestPageState extends State<TestPage> {
                       ),
 
                       if (currentBytes != null)
+                        pictureIsLoading ?
+                        CircularProgressIndicator( color: AppColors.colorButton,):
                         Container(
                           margin: const EdgeInsets.symmetric(vertical: 16),
                           width: double.infinity,
@@ -443,7 +467,7 @@ class _TestPageState extends State<TestPage> {
                                   selectedAnswerIndex = currentSchoolQuestions[currentQuestion].checkedAnswers![0]:
                                   selectedAnswerIndex = null;
                                 }else{
-                                  currentQuestions[currentQuestion].checkedAnswers = [];
+                                  currentSchoolQuestions[currentQuestion].checkedAnswers = [];
                                 }
                               }else{
                                 selectedMultipleAnswerIndex = currentSchoolQuestions[currentQuestion].checkedAnswers;
@@ -453,6 +477,7 @@ class _TestPageState extends State<TestPage> {
                             if(widget.format == TestFormatEnum.ENT){
                               return !currentQuestions[currentQuestion].multipleAnswers ?
                               RadioListTile(
+                                activeColor: AppColors.colorButton,
                                 title: Text(currentQuestions[currentQuestion].options[index].text),
                                 value: currentQuestions[currentQuestion].options[index].id,
                                 groupValue: selectedAnswerIndex,
@@ -473,6 +498,7 @@ class _TestPageState extends State<TestPage> {
                                 },
                                 contentPadding: EdgeInsets.zero,
                               ): CheckboxListTile(
+                                  activeColor: AppColors.colorButton,
                                   title: Text(currentQuestions[currentQuestion].options[index].text),
                                   value: currentQuestions[currentQuestion].checkedAnswers?.contains(currentQuestions[currentQuestion].options[index].id) ?? false,
                                   onChanged: (bool? value) {
@@ -498,6 +524,7 @@ class _TestPageState extends State<TestPage> {
                             }else{
                               return !currentSchoolQuestions[currentQuestion].multipleAnswers ?
                               RadioListTile(
+                                activeColor: AppColors.colorButton,
                                 title: Text(currentSchoolQuestions[currentQuestion].schoolOptions[index].text),
                                 value: currentSchoolQuestions[currentQuestion].schoolOptions[index].id,
                                 groupValue: selectedAnswerIndex,
@@ -519,6 +546,7 @@ class _TestPageState extends State<TestPage> {
                                 },
                                 contentPadding: EdgeInsets.zero,
                               ): CheckboxListTile(
+                                  activeColor: AppColors.colorButton,
                                   title: Text(currentSchoolQuestions[currentQuestion].schoolOptions[index].text),
                                   value: currentSchoolQuestions[currentQuestion].checkedAnswers?.contains(currentSchoolQuestions[currentQuestion].schoolOptions[index].id) ?? false,
                                   onChanged: (bool? value) {
@@ -567,11 +595,11 @@ class _TestPageState extends State<TestPage> {
                               }
 
                             },
-                            buttonColors: AppColors.colorGrayButton,
-                            innerElement: Icon(
+                            buttonColors: currentQuestion != 0 ? AppColors.colorGrayButton : AppColors.colorGrayButton.withOpacity(0.2),
+                            innerElement: const Icon(
                               Icons.arrow_back_ios_new_rounded,
-                              color: currentQuestion != 0 ? Colors.grey: Colors.greenAccent,
-                            ), isDisabled: currentQuestion != 0 ? false: true,
+                              color:  Colors.greenAccent,
+                            ), isDisabled: false,
                         ),
                         const SizedBox(width: 8,),
                         widget.format == TestFormatEnum.ENT ? SmallButton(
@@ -586,11 +614,11 @@ class _TestPageState extends State<TestPage> {
                                 _scrollToElement(currentQuestion);
                               }
                             },
-                            buttonColors: AppColors.colorGrayButton,
-                            innerElement:  Icon(
+                            buttonColors: currentQuestion !=currentQuestions.length-1 ? AppColors.colorGrayButton: AppColors.colorGrayButton.withOpacity(0.2),
+                            innerElement:  const Icon(
                                 Icons.arrow_forward_ios_rounded,
-                                color: currentQuestion !=currentQuestions.length-1 ? Colors.grey: Colors.greenAccent
-                            ), isDisabled: currentQuestion != currentQuestions.length-1 ? false: true,
+                                color:  Colors.greenAccent
+                            ), isDisabled: false,
                         ):
                         SmallButton(
                           onPressed: (){
@@ -603,11 +631,11 @@ class _TestPageState extends State<TestPage> {
                               _scrollToElement(currentQuestion);
                             }
                           },
-                          buttonColors: AppColors.colorGrayButton,
-                          innerElement:  Icon(
+                          buttonColors: currentQuestion != currentSchoolQuestions.length-1 ? AppColors.colorGrayButton : AppColors.colorGrayButton.withOpacity(0.2),
+                          innerElement:  const Icon(
                               Icons.arrow_forward_ios_rounded,
-                              color: currentQuestion !=currentSchoolQuestions.length-1 ? Colors.grey: Colors.greenAccent
-                          ), isDisabled: currentQuestion != currentSchoolQuestions.length-1 ? false: true,
+                              color:  Colors.greenAccent
+                          ), isDisabled: false,
                         ),
 
                       ],
@@ -638,11 +666,11 @@ class _TestPageState extends State<TestPage> {
                                 }
 
                               },
-                              buttonColors: AppColors.colorButton,
-                              innerElement: Icon(
+                              buttonColors: currentSubject != 0 ? AppColors.colorButton : AppColors.colorButton.withOpacity(0.2) ,
+                              innerElement: const Icon(
                                 Icons.arrow_back_ios_new_rounded,
-                                color: currentSubject != 0 ? Colors.white: Colors.greenAccent,
-                              ), isDisabled: currentSubject != 0 ? false: true,
+                                color: Colors.white,
+                              ), isDisabled: false,
                             ) : SmallButton(
                               onPressed: (){
                                 if(currentSubject != 0){
@@ -668,11 +696,11 @@ class _TestPageState extends State<TestPage> {
                                 }
 
                               },
-                              buttonColors: AppColors.colorButton,
-                              innerElement: Icon(
+                              buttonColors: currentSubject != 0 || currentTypeSubject != 0 ? AppColors.colorButton : AppColors.colorButton.withOpacity(0.2) ,
+                              innerElement: const Icon(
                                 Icons.arrow_back_ios_new_rounded,
-                                color: currentSubject != 0 && currentTypeSubject != 0 ? Colors.white: Colors.greenAccent,
-                              ), isDisabled: currentSubject != 0 && currentTypeSubject != 0  ? false: true,
+                                color: Colors.white,
+                              ), isDisabled: false,
                             ),
                             const SizedBox(width: 8,),
                             widget.format == TestFormatEnum.ENT ? SmallButton(
@@ -687,11 +715,11 @@ class _TestPageState extends State<TestPage> {
                                   });
                                 }
                               },
-                              buttonColors: AppColors.colorButton,
-                              innerElement:  Icon(
+                              buttonColors: currentSubject != currentSubjects.length-1 ? AppColors.colorButton : AppColors.colorButton.withOpacity(0.2) ,
+                              innerElement:  const Icon(
                                   Icons.arrow_forward_ios_rounded,
-                                  color: currentSubject != currentSubjects.length-1 ? Colors.white: Colors.greenAccent
-                              ), isDisabled: currentSubject != currentSubjects.length-1 ? false: true,
+                                  color: Colors.white,
+                              ), isDisabled: false,
                             ): SmallButton(
                               onPressed: (){
                                 if(currentSubject != currentSubjects.length-1){
@@ -714,11 +742,11 @@ class _TestPageState extends State<TestPage> {
                                   });
                                 }
                               },
-                              buttonColors: AppColors.colorButton,
-                              innerElement:  Icon(
+                              buttonColors: currentSubject != currentSubjects.length-1 || currentTypeSubject != currentTypeSubjects.length-1 ? AppColors.colorButton : AppColors.colorButton.withOpacity(0.2) ,
+                              innerElement:  const Icon(
                                   Icons.arrow_forward_ios_rounded,
-                                  color: currentSubject != currentSubjects.length-1 && currentTypeSubject != currentTypeSubjects.length-1 ? Colors.white: Colors.greenAccent
-                              ), isDisabled: currentSubject != currentSubjects.length-1 && currentTypeSubject != currentTypeSubjects.length-1 ? false: true,
+                                  color: Colors.white,
+                              ), isDisabled:  false,
                             ),
                           ],
                         ),

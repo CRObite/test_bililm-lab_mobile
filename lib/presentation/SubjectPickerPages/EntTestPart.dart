@@ -148,7 +148,7 @@ class _EntTestPartState extends State<EntTestPart> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              TextButton(onPressed: (){widget.onPressed();}, child: Text('${AppText.modoTest} >', style: const TextStyle(fontSize: 16),)),
+              TextButton(onPressed: (){widget.onPressed();}, child: Text('${AppText.modoTest} >', style: TextStyle(fontSize: 16, color: AppColors.colorButton),)),
             ],
           ),
         ),

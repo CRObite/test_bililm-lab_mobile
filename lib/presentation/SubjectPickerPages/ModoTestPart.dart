@@ -104,7 +104,7 @@ class _ModoTestPartState extends State<ModoTestPart> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              TextButton(onPressed: (){widget.onPressed();}, child: Text('< ${AppText.entTest}', style: const TextStyle(fontSize: 16),)),
+              TextButton(onPressed: (){widget.onPressed();}, child: Text('< ${AppText.entTest}', style: TextStyle(fontSize: 16, color: AppColors.colorButton), )),
             ],
           ),
         ),

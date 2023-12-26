@@ -31,7 +31,7 @@ class AppText {
   static String passedTests = 'Тапсырылған тесттер';
   static String lastPassedTest = 'Соңғы тест балы';
   static String averageScore = 'Орташа бал';
-  static String allTestsScores = 'Тест балдары';
+  static String allTestsScores = 'Орташа балдар';
   static String firstProfileSubject = '1-ші бейіндік пән';
   static String secondProfileSubject = '2-ші бейіндік пән';
   static String kazakhHistory = 'Қазақстан тарихы';

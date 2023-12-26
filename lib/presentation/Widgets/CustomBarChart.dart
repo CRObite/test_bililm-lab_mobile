@@ -25,20 +25,15 @@ class _CustomBarChartState extends State<CustomBarChart> {
   late List<int> scores;
   final ScrollController _scrollController = ScrollController();
 
-  List<String> formatDates(List<String?> dates) {
-    List<String> formattedDates = [];
+  String formatDates(String dateStr) {
+    String formattedDate = '';
 
 
-    for (String? dateStr in dates) {
-      if(dateStr!=null){
-        DateTime date = DateFormat('dd.MM.yyyy HH:mm:ss').parse(dateStr);
-        String formattedDate = DateFormat('dd/MM/yy').format(date);
-        formattedDates.add(formattedDate);
-      }
+    DateTime date = DateFormat('dd.MM.yyyy HH:mm:ss').parse(dateStr);
+    String changed = DateFormat('dd/MM/yy').format(date);
+    formattedDate = changed;
 
-    }
-
-    return formattedDates;
+    return formattedDate;
   }
 
 
@@ -48,9 +43,6 @@ class _CustomBarChartState extends State<CustomBarChart> {
     dates = widget.data.dates;
     scores  = widget.data.scores;
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollToBottom();
-    });
 
     super.initState();
   }
@@ -61,13 +53,7 @@ class _CustomBarChartState extends State<CustomBarChart> {
     super.dispose();
   }
 
-  void _scrollToBottom() {
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeOut,
-    );
-  }
+
 
 
 
@@ -107,11 +93,12 @@ class _CustomBarChartState extends State<CustomBarChart> {
                   ),
                 ),
               ),
+
               barTouchData: BarTouchData(
                   touchTooltipData: BarTouchTooltipData(
                       getTooltipItem: (group, groupIndex, rod, rodIndex) {
 
-                        String info = '${dates[groupIndex]}  \n';
+                        String info = '${formatDates(dates[groupIndex]!)}  \n';
                         return BarTooltipItem(
                           info,
                           const TextStyle(

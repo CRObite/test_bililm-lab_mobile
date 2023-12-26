@@ -32,19 +32,17 @@ class _ProfilePartState extends State<ProfilePart> {
   }
 
 
-  IconData getPermissionIcon(bool permission){
+  Icon getPermissionIcon(bool permission){
     if(permission){
-      return Icons.check_circle_outline_rounded;
+      return const Icon(Icons.check_circle_outline_rounded, color: Colors.green, size: 40,);
     }else{
-      return Icons.cancel_outlined;
+      return const Icon(Icons.cancel_outlined, color: Colors.red,size: 40,);
     }
   }
 
 
   void getUserInfo() async {
     try {
-
-
 
       setState(() {
         isLoading = true;
@@ -102,7 +100,7 @@ class _ProfilePartState extends State<ProfilePart> {
         ),
 
         Center(
-          child: Card(
+          child: isLoading? CircularProgressIndicator(color: AppColors.colorButton,) : Card(
             elevation: 10,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 28),
@@ -142,7 +140,8 @@ class _ProfilePartState extends State<ProfilePart> {
                                   ),
                                 ),
                                 child: Center(
-                                    child: Icon(user!= null ? getPermissionIcon(user!.permissionForTest): getPermissionIcon(false), color: Colors.green,size: 40,),),
+                                    child: user!= null ? getPermissionIcon(user!.permissionForTest): getPermissionIcon(false)
+                                )
                               ),
                             ],
                           ),
@@ -175,7 +174,8 @@ class _ProfilePartState extends State<ProfilePart> {
                                   ),
                                 ),
                                 child:  Center(
-                                    child: Icon(user!= null ? getPermissionIcon(user!.permissionForModo): getPermissionIcon(false), color: Colors.green,  size: 40,),),
+                                    child: user!= null ? getPermissionIcon(user!.permissionForModo): getPermissionIcon(false)
+                                )
                               ),
                             ],
                           ),

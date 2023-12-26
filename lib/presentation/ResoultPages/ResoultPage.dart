@@ -103,7 +103,7 @@ class _ResultPageState extends State<ResultPage> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(widget.result.entResult!.subjectsResult[index].subjectName),
+                        SizedBox(width: 200, child: Text(widget.result.entResult!.subjectsResult[index].subjectName)),
                         Text('${widget.result.entResult!.subjectsResult[index].score}')
                       ],
                     ),
@@ -119,11 +119,13 @@ class _ResultPageState extends State<ResultPage> {
                   expandedHeaderPadding: const EdgeInsets.all(0),
                   expansionCallback: (int index, bool isExpanded) {
 
+                    print(widget.result.modoResult!.typeSubjects[index].isExpanded);
                     setState(() {
                       widget.result.modoResult!.typeSubjects[index].isExpanded = !isExpanded;
                     });
 
                     print(widget.result.modoResult!.typeSubjects[index].isExpanded);
+
                   },
                   children: widget.result.modoResult!.typeSubjects.map<ExpansionPanel>((TypeSubject typeSubject) {
                     return ExpansionPanel(
@@ -177,7 +179,7 @@ class _ResultPageState extends State<ResultPage> {
             SmallButton(
                 onPressed: (){ Navigator.pushReplacementNamed(context, '/');},
                 buttonColors: AppColors.colorButton,
-                innerElement: Text(AppText.endTest,style: TextStyle(color: Colors.white)),
+                innerElement: Text(AppText.endTest,style: const TextStyle(color: Colors.white)),
                 isDisabled: false
             ),
 

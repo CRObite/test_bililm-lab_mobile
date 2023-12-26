@@ -12,6 +12,8 @@ class TypeSubject {
   bool isExpanded = false;
 
 
+
+
   TypeSubject(this.type, this.score, this.subjectsResult );
 
   factory TypeSubject.fromJson(Map<String, dynamic> json) => _$TypeSubjectFromJson(json);

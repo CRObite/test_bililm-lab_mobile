@@ -121,7 +121,22 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
     }
   }
 
+  Color getCircleColor(String isRight){
+
+
+      if(isRight == "FULL_CORRECTLY"){
+          return Colors.green;
+      }else if(isRight == "HALF_CORRECTLY"){
+          return Colors.yellow;
+      }else if(isRight == "NO_CORRECT"){
+          return Colors.red;
+      }else{
+          return Colors.blue;
+      }
+  }
+
   Color? getRadioBackgroundColor(int index){
+
     if(currentQuestions[currentQuestion].options[index].isRight != null ){
       if(currentQuestions[currentQuestion].options[index].isRight!){
         return Colors.green.withOpacity(0.2);
@@ -186,7 +201,7 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
                             currentQuestion = index;
                           });
                         },
-                        child: QuestionCircle(qusetionNuber: index+1, roundColor: AppColors.colorButton  , itsFocusedQuestion: index == currentQuestion,)
+                        child: QuestionCircle(qusetionNuber: index+1, roundColor: getCircleColor(currentQuestions[currentQuestion].answeredType ?? "NO_CORRECT" )  , itsFocusedQuestion: index == currentQuestion,)
                     ),
                   );
                 },
@@ -234,7 +249,7 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
 
                     Container(
                       width: double.infinity,
-                      height: currentQuestions[currentQuestion].options.length * 70,
+                      height: currentQuestions[currentQuestion].options.length * 80,
                       child: ListView.builder(
                         scrollDirection: Axis.vertical,
                         itemCount: currentQuestions[currentQuestion].options.length,
@@ -261,12 +276,14 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
                               title: Text(currentQuestions[currentQuestion].options[index].text),
                               value: currentQuestions[currentQuestion].options[index].id,
                               groupValue: selectedAnswerIndex,
+                              activeColor: AppColors.colorButton,
                               onChanged: (int? value) {
                               },
                               contentPadding: EdgeInsets.zero,
                             ): CheckboxListTile(
                                 title: Text(currentQuestions[currentQuestion].options[index].text),
                                 value: currentQuestions[currentQuestion].checkedAnswers?.contains(currentQuestions[currentQuestion].options[index].id) ?? false,
+                                activeColor: AppColors.colorButton,
                                 onChanged: (bool? value) {
                                 },
                                 contentPadding: EdgeInsets.zero,

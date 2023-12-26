@@ -217,14 +217,15 @@ class TestRepository {
 
 
   Future<CustomResponse> answerSchoolTest(String testId,int questionId,int optionId) async {
+
     try {
       dio.options.headers['Authorization'] = 'Bearer ${CurrentUser.currentTestUser?.accessToken}';
       final response = await dio.post(
           AppApiUrls.saveAnswerSchoolTest,
           data: {
-            "entTestId": testId,
-            "questionId": questionId,
-            "optionId": optionId
+            "schoolTestId": testId,
+            "schoolQuestionId": questionId,
+            "schoolOptionId": optionId
           }
       );
 
@@ -243,9 +244,9 @@ class TestRepository {
       final response = await dio.delete(
           AppApiUrls.deleteAnswerSchoolTest,
           data: {
-            "entTestId": testId,
-            "questionId": questionId,
-            "optionId": optionId
+            "schoolTestId": testId,
+            "schoolQuestionId": questionId,
+            "schoolOptionId": optionId
           }
       );
 

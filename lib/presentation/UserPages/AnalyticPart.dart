@@ -89,7 +89,7 @@ class _AnalyticPartState extends State<AnalyticPart> {
     if(index % 2 != 0){
       return AppColors.firstAndSecondProfileBarChartColor;
     }else{
-      return  AppColors.mathAndReadingLitBarChartColor;
+      return  AppColors.kazakhHistoryBarChartColor;
     }
   }
 
@@ -113,7 +113,7 @@ class _AnalyticPartState extends State<AnalyticPart> {
             // Text('${AppText.lastPassedTest}:  0'),
             // Text('${AppText.averageScore}:  0'),
             if(isLoading)
-              const Center(child: CircularProgressIndicator())
+              Center(child: CircularProgressIndicator(color: AppColors.colorButton,))
             else
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -128,12 +128,12 @@ class _AnalyticPartState extends State<AnalyticPart> {
               const SizedBox(height: 28,),
 
 
-
+              if(datas != null)
               Text(AppText.allTestsScores,style: const TextStyle(fontWeight: FontWeight.bold),),
               if(datas != null)
                 CustomBarChart(
                     barColor: AppColors.generalBarChartColor,
-                    data:  ScoresData(datas != null ? formatDates(datas!.general.dates): [], datas!=null ? datas!.general.scores: [], datas!=null? datas !.general.maxScore: 40),
+                    data:  ScoresData(datas != null ? datas!.general.dates: [], datas!=null ? datas!.general.scores: [], datas!=null? datas !.general.maxScore: 40),
                     type: BarTypeEnum.GENERAL),
               
               if(datas != null)
