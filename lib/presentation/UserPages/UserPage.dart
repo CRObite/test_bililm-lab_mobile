@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:test_bilimlab_project/data/service/login_service.dart';
-import 'package:test_bilimlab_project/domain/testUser.dart';
 import 'package:test_bilimlab_project/presentation/UserPages/AnalyticPart.dart';
 import 'package:test_bilimlab_project/presentation/UserPages/ProfilePart.dart';
-
-import '../../domain/currentUser.dart';
-import '../../domain/customResponse.dart';
 import '../../utils/AppTexts.dart';
-import '../Widgets/CustomAppBar.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({super.key});

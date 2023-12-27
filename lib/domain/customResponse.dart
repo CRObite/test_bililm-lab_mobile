@@ -1,7 +1,7 @@
 class CustomResponse {
   int? _code;
   String? _title;
-  dynamic? _body;
+  dynamic _body;
 
 
   CustomResponse(this._code, this._title, this._body);

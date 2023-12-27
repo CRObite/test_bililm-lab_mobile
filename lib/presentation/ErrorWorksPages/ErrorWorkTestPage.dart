@@ -2,12 +2,9 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:quickalert/models/quickalert_type.dart';
-import 'package:quickalert/widgets/quickalert_dialog.dart';
+
 import 'package:test_bilimlab_project/data/service/media_service.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
-
-import '../../data/service/test_service.dart';
 import '../../domain/test.dart';
 import '../../domain/testQuestion.dart';
 import '../../utils/AppTexts.dart';

@@ -1,9 +1,11 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
 import 'package:test_bilimlab_project/data/service/login_service.dart';
+import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
-import 'package:test_bilimlab_project/utils/AppColors.dart';
+import 'package:test_bilimlab_project/domain/userWithJwt.dart';
 import '../../utils/AppImages.dart';
 import '../../utils/AppTexts.dart';
 import '../Widgets/CustomTextFields.dart';
@@ -23,7 +25,27 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _iinController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+
+  @override
+  void initState() {
+    checkCurrentUserInSP();
+    super.initState();
+  }
+
+  void checkCurrentUserInSP() async {
+    if(await SharedPreferencesOperator.containsUserWithJwt()){
+      UserWithJwt? user = await SharedPreferencesOperator.getUserWithJwt();
+      if(user!= null){
+        CurrentUser.currentTestUser = user;
+
+        Navigator.pushReplacementNamed(context, '/app');
+      }
+    }
+  }
+
   Future<void> onEnterButtonPressed() async {
+
+
 
     setState(() {
       errorMassage = null;
@@ -32,6 +54,9 @@ class _LoginPageState extends State<LoginPage> {
 
     CustomResponse currentResponse = await LoginService().logIn(_iinController.text, _passwordController.text);
     if(currentResponse.code == 200){
+
+
+
       Navigator.pushReplacementNamed(context, '/app');
     }else{
       print(currentResponse.code);

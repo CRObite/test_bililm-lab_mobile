@@ -5,9 +5,6 @@ import 'package:test_bilimlab_project/presentation/SubjectPickerPages/SubjectPic
 
 import 'package:test_bilimlab_project/presentation/UserPages/AnalyticPart.dart';
 import 'package:test_bilimlab_project/presentation/UserPages/ProfilePart.dart';
-
-import '../utils/AppColors.dart';
-import '../utils/AppImages.dart';
 import '../utils/AppTexts.dart';
 import 'Widgets/CustomAppBar.dart';
 

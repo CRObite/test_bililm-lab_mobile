@@ -46,144 +46,149 @@ class _ResultPageState extends State<ResultPage> {
           child: CustomAppBar(user:  CurrentUser.currentTestUser!.testUser)
       ),
       body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(AppText.testResult,style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
-            Container(
-              margin: const EdgeInsets.only(top: 32),
-              height: 100,
-              width: 100,
-              child: Stack(
-                children: [
-                  SizedBox(
-                    height: 100,
-                    width: 100,
-                    child: CircularProgressIndicator(
-                      color: AppColors.colorButton,
-                      backgroundColor: AppColors.colorGrayButton,
-                      value: widget.format == TestFormatEnum.ENT ?
-                          widget.result.entResult!.totalResult.score / widget.result.entResult!.totalResult.maxScore :
-                          widget.result.modoResult!.totalResult.score / widget.result.modoResult!.totalResult.maxScore,
-                      strokeWidth: 15.0,
-                    ),
-                  ),
-
-                  Center(
-                    child:Text(
-                      widget.format == TestFormatEnum.ENT ?
-                        '${widget.result.entResult!.totalResult.score}':
-                        '${widget.result.modoResult!.totalResult.score}',
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
-                  ),
-                ],
-              ),
-            ),
-
-            widget.format == TestFormatEnum.ENT ?
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 32),
-              width: 300,
-              height: 300,
-              child: ListView.builder(
-                itemCount: widget.result.entResult!.subjectsResult.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    width: double.infinity,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          color: AppColors.colorGrayButton,
-                          width: 1.0,
-                        ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(AppText.testResult,style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
+              Container(
+                margin: const EdgeInsets.only(top: 32),
+                height: 100,
+                width: 100,
+                child: Stack(
+                  children: [
+                    SizedBox(
+                      height: 100,
+                      width: 100,
+                      child: CircularProgressIndicator(
+                        color: AppColors.colorButton,
+                        backgroundColor: AppColors.colorGrayButton,
+                        value: widget.format == TestFormatEnum.ENT ?
+                            widget.result.entResult!.totalResult.score / widget.result.entResult!.totalResult.maxScore :
+                            widget.result.modoResult!.totalResult.score / widget.result.modoResult!.totalResult.maxScore,
+                        strokeWidth: 15.0,
                       ),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(width: 200, child: Text(widget.result.entResult!.subjectsResult[index].subjectName)),
-                        Text('${widget.result.entResult!.subjectsResult[index].score}')
-                      ],
+          
+                    Center(
+                      child:Text(
+                        widget.format == TestFormatEnum.ENT ?
+                          '${widget.result.entResult!.totalResult.score}':
+                          '${widget.result.modoResult!.totalResult.score}',
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
                     ),
-                  );
-                },
-              ),
-            ): Container(
-              margin: const EdgeInsets.symmetric(vertical: 32),
-              width: 300,
-              child: SingleChildScrollView(
-                child: ExpansionPanelList(
-                  elevation: 1,
-                  expandedHeaderPadding: const EdgeInsets.all(0),
-                  expansionCallback: (int index, bool isExpanded) {
-
-                    print(widget.result.modoResult!.typeSubjects[index].isExpanded);
-                    setState(() {
-                      widget.result.modoResult!.typeSubjects[index].isExpanded = !isExpanded;
-                    });
-
-                    print(widget.result.modoResult!.typeSubjects[index].isExpanded);
-
-                  },
-                  children: widget.result.modoResult!.typeSubjects.map<ExpansionPanel>((TypeSubject typeSubject) {
-                    return ExpansionPanel(
-                      headerBuilder: (BuildContext context, bool isExpanded) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox( width: 200, child: Text(getTypeText(typeSubject.type))),
-                              Text('${typeSubject.score}')
-                            ],
-                          ),
-                        );
-                      },
-                      body: Container(
-                        width: 300,
-                        height: 300,
-                        child: ListView.builder(
-                          itemCount: typeSubject.subjectsResult.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              width: double.infinity,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                    color: AppColors.colorGrayButton,
-                                    width: 1.0,
-                                  ),
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(typeSubject.subjectsResult[index].subjectName),
-                                  Text('${typeSubject.subjectsResult[index].score}')
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    );
-                  }).toList(),
+                  ],
                 ),
               ),
-            ),
+          
+              widget.format == TestFormatEnum.ENT ?
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 32),
+                width: 300,
+                height: 300,
+                child: ListView.builder(
+                  itemCount: widget.result.entResult!.subjectsResult.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      width: double.infinity,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: AppColors.colorGrayButton,
+                            width: 1.0,
+                          ),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(width: 200, child: Text(widget.result.entResult!.subjectsResult[index].subjectName)),
+                          Text('${widget.result.entResult!.subjectsResult[index].score}')
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ): Container(
+                margin: const EdgeInsets.symmetric(vertical: 32),
+                width: 300,
+                child: SingleChildScrollView(
+                  child: ExpansionPanelList(
+                    elevation: 1,
+                    expandedHeaderPadding: const EdgeInsets.all(0),
+                    expansionCallback: (int index, bool isExpanded) {
 
-            SmallButton(
-                onPressed: (){ Navigator.pushReplacementNamed(context, '/');},
-                buttonColors: AppColors.colorButton,
-                innerElement: Text(AppText.endTest,style: const TextStyle(color: Colors.white)),
-                isDisabled: false
-            ),
+                      setState(() {
+                        widget.result.modoResult!.typeSubjects[index].isExpanded = isExpanded;
+                      });
 
-          ],
+                    },
+                    children: widget.result.modoResult!.typeSubjects.map<ExpansionPanel>((TypeSubject typeSubject) {
+                      return ExpansionPanel(
+                        headerBuilder: (BuildContext context, bool isExpanded) {
+                          return Container(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox( width: 200, child: Text(getTypeText(typeSubject.type))),
+                                  Text('${typeSubject.score}')
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        body: Container(
+                          width: 300,
+                          height: typeSubject.subjectsResult.length * 50,
+                          child: ListView.builder(
+                            itemCount: typeSubject.subjectsResult.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                width: double.infinity,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                      color: AppColors.colorGrayButton,
+                                      width: 1.0,
+                                    ),
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(typeSubject.subjectsResult[index].subjectName),
+                                      Text('${typeSubject.subjectsResult[index].score}')
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        isExpanded: typeSubject.isExpanded
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+          
+              SmallButton(
+                  onPressed: (){ Navigator.pop(context);},
+                  buttonColors: AppColors.colorButton,
+                  innerElement: Text(AppText.endTest,style: const TextStyle(color: Colors.white)),
+                  isDisabled: false
+              ),
+          
+            ],
+          ),
         ),
       ),
     );

@@ -18,6 +18,10 @@ class TestService{
     return await TestRepository().answerEntTest(entTestId,questionId,optionId);
   }
 
+  Future<CustomResponse> comparisonAnswerEntTest(String entTestId,int questionId,int optionId, int subOptionId) async {
+    return await TestRepository().comparisonAnswerEntTest(entTestId,questionId,optionId,subOptionId);
+  }
+
   Future<CustomResponse> deleteAnswerEntTest(String entTestId,int questionId,int optionId) async {
     return await TestRepository().deleteAnswerEntTest( entTestId, questionId, optionId);
   }

@@ -1,20 +1,16 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:test_bilimlab_project/domain/testUser.dart';
 
+part 'userWithJwt.g.dart';
+
+@JsonSerializable()
 class UserWithJwt{
-  String _accessToken;
-  TestUser _testUser;
+  String accessToken;
+  TestUser testUser;
 
-  UserWithJwt(this._accessToken, this._testUser);
+  UserWithJwt(this.accessToken, this.testUser);
 
-  TestUser get testUser => _testUser;
+  factory UserWithJwt.fromJson(Map<String, dynamic> json) => _$UserWithJwtFromJson(json);
+  Map<String, dynamic> toJson() => _$UserWithJwtToJson(this);
 
-  set testUser(TestUser value) {
-    _testUser = value;
-  }
-
-  String get accessToken => _accessToken;
-
-  set accessToken(String value) {
-    _accessToken = value;
-  }
 }

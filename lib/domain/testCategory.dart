@@ -13,10 +13,16 @@ class TestCategory {
   List<TestQuestion>? multipleQuestions;
   List<SchoolQuestion>? schoolQuestions;
   List<SchoolQuestion>? schoolMultipleQuestions;
+  List<TestQuestion>? comparisonQuestions;
 
 
-  TestCategory(this.questions, this.contextQuestions, this.multipleQuestions,
-      this.schoolQuestions, this.schoolMultipleQuestions);
+  TestCategory(
+      this.questions,
+      this.contextQuestions,
+      this.multipleQuestions,
+      this.schoolQuestions,
+      this.schoolMultipleQuestions,
+      this.comparisonQuestions);
 
   int startedIndex = 0;
   bool itsFirstTime = true;
@@ -25,6 +31,9 @@ class TestCategory {
     List<TestQuestion> allQuestions = [];
     allQuestions.addAll(questions ?? []);
     allQuestions.addAll(multipleQuestions ?? []);
+
+
+    //нужно добавить comparisonQuestions
 
     for (ContextTestQuestion? contextQuestion in contextQuestions ?? []) {
       if (contextQuestion?.questions != null) {

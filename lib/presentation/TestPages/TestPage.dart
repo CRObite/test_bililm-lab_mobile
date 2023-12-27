@@ -441,7 +441,7 @@ class _TestPageState extends State<TestPage> {
 
                       Container(
                         width: double.infinity,
-                        height: 350,
+                        height: currentQuestions[currentQuestion].options.length * 80,
                         child: ListView.builder(
                           scrollDirection: Axis.vertical,
                           itemCount: widget.format == TestFormatEnum.ENT ?
@@ -570,6 +570,63 @@ class _TestPageState extends State<TestPage> {
                           },
                         ),
                       ),
+
+                      // Container(
+                      //   width: double.infinity,
+                      //   height: currentQuestions[currentQuestion].options.length * 100,
+                      //   child: Row(
+                      //     children: [
+                      //       Column(
+                      //         children: [
+                      //             ListView.builder(
+                      //                 itemCount: currentQuestions[currentQuestion].subOptions!.length,
+                      //                 itemBuilder: (context, index){
+                      //                   return  Container(
+                      //                     width: 350,
+                      //                     decoration: const BoxDecoration(
+                      //                       color: Colors.blue,
+                      //                       borderRadius: BorderRadius.all(
+                      //                         Radius.circular(10.0),
+                      //                       ),
+                      //                     ),
+                      //                     child: Padding(
+                      //                       padding: const EdgeInsets.all(8.0),
+                      //                       child: Text('${index + 1}.  ${currentQuestions[currentQuestion].subOptions![index].text}', style: const TextStyle(color: Colors.white),),
+                      //                     ),
+                      //                   );
+                      //                 }
+                      //             )
+                      //         ],
+                      //       ),
+                      //       const SizedBox(
+                      //         width: 8,
+                      //       ),
+                      //       Column(
+                      //         children: [
+                      //           ListView.builder(
+                      //               itemCount: currentQuestions[currentQuestion].options.length,
+                      //               itemBuilder: (context, index){
+                      //                 return  Container(
+                      //                   width: 350,
+                      //                   decoration: const BoxDecoration(
+                      //                     color: Colors.blue,
+                      //                     borderRadius: BorderRadius.all(
+                      //                       Radius.circular(10.0),
+                      //                     ),
+                      //                   ),
+                      //                   child: Padding(
+                      //                     padding: const EdgeInsets.all(8.0),
+                      //                     child: Text('${index + 1}.  ${currentQuestions[currentQuestion].options[index].text}', style: const TextStyle(color: Colors.white),),
+                      //                   ),
+                      //                 );
+                      //               }
+                      //           )
+                      //         ],
+                      //       ),
+                      //     ],
+                      //   ),
+                      //
+                      // )
                     ],
                   ),
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
 import 'package:test_bilimlab_project/domain/testUser.dart';
 
 import '../../utils/AppColors.dart';
@@ -38,7 +39,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 child: Image.asset(AppImages.full_logo)
             ),
             GestureDetector(
-              onTap: (){
+              onTap: () async {
+                await SharedPreferencesOperator.clearUserWithJwt();
                 Navigator.pushReplacementNamed(context, '/');
               },
               child: Row(

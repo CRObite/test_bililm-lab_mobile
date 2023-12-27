@@ -75,6 +75,28 @@ class TestRepository {
     }
   }
 
+  Future<CustomResponse> comparisonAnswerEntTest(String entTestId,int questionId,int optionId, int subOptionId) async {
+    try {
+      dio.options.headers['Authorization'] = 'Bearer ${CurrentUser.currentTestUser?.accessToken}';
+      final response = await dio.post(
+          AppApiUrls.saveAnswerEntTest,
+          data: {
+            "entTestId": entTestId,
+            "questionId": questionId,
+            "optionId": optionId,
+            "subOptionId": subOptionId,
+          }
+      );
+
+      print(response.data);
+      return CustomResponse(200, '', null);
+
+    } catch (e) {
+      print(e);
+      return HandleErrorResponse.handleErrorResponse(e);
+    }
+  }
+
 
   Future<CustomResponse> deleteAnswerEntTest(String entTestId,int questionId,int optionId) async {
     try {

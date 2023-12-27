@@ -1,5 +1,6 @@
 
 import 'package:dio/dio.dart';
+import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
 import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
 import 'package:test_bilimlab_project/domain/testUser.dart';
@@ -20,11 +21,16 @@ class LoginRepository {
         data: {"iin": iin, "password": password},
       );
 
-      CurrentUser.currentTestUser = UserWithJwt( response.data['accessToken'],TestUser.fromJson(response.data['testUser']));
+      print(response.data);
+
+      CurrentUser.currentTestUser = UserWithJwt.fromJson(response.data);
+
+      await SharedPreferencesOperator.saveUserWithJwt(CurrentUser.currentTestUser!);
+
       return CustomResponse(200, '', null);
 
     } catch (e) {
-      print('asdasdadas');
+
       return HandleErrorResponse.handleErrorResponse(e);
     }
   }

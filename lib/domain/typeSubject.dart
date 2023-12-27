@@ -9,12 +9,10 @@ class TypeSubject {
   String type;
   int score;
   List<ResultSubject> subjectsResult;
-  bool isExpanded = false;
+  bool isExpanded;
 
 
-
-
-  TypeSubject(this.type, this.score, this.subjectsResult );
+  TypeSubject(this.type, this.score, this.subjectsResult, {this.isExpanded = false});
 
   factory TypeSubject.fromJson(Map<String, dynamic> json) => _$TypeSubjectFromJson(json);
   Map<String, dynamic> toJson() => _$TypeSubjectToJson(this);

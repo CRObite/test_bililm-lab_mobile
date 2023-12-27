@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 
-import '../../utils/AppColors.dart';
 
 class QuestionCircle extends StatefulWidget {
   const QuestionCircle({super.key, required this.qusetionNuber, required this.roundColor, required this.itsFocusedQuestion});

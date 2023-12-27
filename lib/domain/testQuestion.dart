@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:test_bilimlab_project/domain/mediaFile.dart';
+import 'package:test_bilimlab_project/domain/subOption.dart';
 import 'package:test_bilimlab_project/domain/testOption.dart';
 
 
@@ -14,6 +15,7 @@ class TestQuestion {
   List<int>? checkedAnswers;
   List<MediaFile> mediaFiles;
   List<TestOption> options;
+  List<SubOption>? subOptions;
   String? recommendation;
   String? answeredType;
 
@@ -25,6 +27,7 @@ class TestQuestion {
       this.checkedAnswers,
       this.mediaFiles,
       this.options,
+      this.subOptions,
       this.recommendation,
       this.answeredType);
 

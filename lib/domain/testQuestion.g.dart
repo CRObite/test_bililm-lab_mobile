@@ -17,6 +17,9 @@ TestQuestion _$TestQuestionFromJson(Map<String, dynamic> json) => TestQuestion(
       (json['options'] as List<dynamic>)
           .map((e) => TestOption.fromJson(e as Map<String, dynamic>))
           .toList(),
+      (json['subOptions'] as List<dynamic>?)
+          ?.map((e) => SubOption.fromJson(e as Map<String, dynamic>))
+          .toList(),
       json['recommendation'] as String?,
       json['answeredType'] as String?,
     );
@@ -29,6 +32,7 @@ Map<String, dynamic> _$TestQuestionToJson(TestQuestion instance) =>
       'checkedAnswers': instance.checkedAnswers,
       'mediaFiles': instance.mediaFiles,
       'options': instance.options,
+      'subOptions': instance.subOptions,
       'recommendation': instance.recommendation,
       'answeredType': instance.answeredType,
     };

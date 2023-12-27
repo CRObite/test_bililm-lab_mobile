@@ -1,12 +1,7 @@
 
-import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:dio/dio.dart';
-
-import '../../config/handleErrorResponse.dart';
 import '../../domain/currentUser.dart';
-import '../../domain/customResponse.dart';
 import '../../utils/AppApiUrls.dart';
 
 class MediaRepository {

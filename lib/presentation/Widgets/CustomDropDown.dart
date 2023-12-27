@@ -50,7 +50,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
         }).toList(),
         onChanged: (int? newValue) {
           if (newValue != null) {
-            widget.onSelected?.call(newValue);
+            widget.onSelected.call(newValue);
           }
         },
         icon: const Icon(Icons.keyboard_arrow_down_rounded),

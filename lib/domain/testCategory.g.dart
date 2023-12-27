@@ -22,6 +22,9 @@ TestCategory _$TestCategoryFromJson(Map<String, dynamic> json) => TestCategory(
       (json['schoolMultipleQuestions'] as List<dynamic>?)
           ?.map((e) => SchoolQuestion.fromJson(e as Map<String, dynamic>))
           .toList(),
+      (json['comparisonQuestions'] as List<dynamic>?)
+          ?.map((e) => TestQuestion.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$TestCategoryToJson(TestCategory instance) =>
@@ -31,4 +34,5 @@ Map<String, dynamic> _$TestCategoryToJson(TestCategory instance) =>
       'multipleQuestions': instance.multipleQuestions,
       'schoolQuestions': instance.schoolQuestions,
       'schoolMultipleQuestions': instance.schoolMultipleQuestions,
+      'comparisonQuestions': instance.comparisonQuestions,
     };
