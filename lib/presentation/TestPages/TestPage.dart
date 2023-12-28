@@ -439,6 +439,7 @@ class _TestPageState extends State<TestPage> {
                         ),
 
 
+                      currentQuestions[currentQuestion].subOptions != null ?
                       Container(
                         width: double.infinity,
                         height: currentQuestions[currentQuestion].options.length * 80,
@@ -569,8 +570,7 @@ class _TestPageState extends State<TestPage> {
 
                           },
                         ),
-                      ),
-
+                      ):
                       Container(
                         width: double.infinity,
                         height: currentQuestions[currentQuestion].options.length * 100,
