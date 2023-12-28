@@ -361,7 +361,7 @@ class _TestPageState extends State<TestPage> {
           ),
         ),
       ),
-      body: WillPopScope(
+      body:   WillPopScope(
         onWillPop: _onWillPop,
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 16),
@@ -571,62 +571,131 @@ class _TestPageState extends State<TestPage> {
                         ),
                       ),
 
-                      // Container(
-                      //   width: double.infinity,
-                      //   height: currentQuestions[currentQuestion].options.length * 100,
-                      //   child: Row(
-                      //     children: [
-                      //       Column(
-                      //         children: [
-                      //             ListView.builder(
-                      //                 itemCount: currentQuestions[currentQuestion].subOptions!.length,
-                      //                 itemBuilder: (context, index){
-                      //                   return  Container(
-                      //                     width: 350,
-                      //                     decoration: const BoxDecoration(
-                      //                       color: Colors.blue,
-                      //                       borderRadius: BorderRadius.all(
-                      //                         Radius.circular(10.0),
-                      //                       ),
-                      //                     ),
-                      //                     child: Padding(
-                      //                       padding: const EdgeInsets.all(8.0),
-                      //                       child: Text('${index + 1}.  ${currentQuestions[currentQuestion].subOptions![index].text}', style: const TextStyle(color: Colors.white),),
-                      //                     ),
-                      //                   );
-                      //                 }
-                      //             )
-                      //         ],
-                      //       ),
-                      //       const SizedBox(
-                      //         width: 8,
-                      //       ),
-                      //       Column(
-                      //         children: [
-                      //           ListView.builder(
-                      //               itemCount: currentQuestions[currentQuestion].options.length,
-                      //               itemBuilder: (context, index){
-                      //                 return  Container(
-                      //                   width: 350,
-                      //                   decoration: const BoxDecoration(
-                      //                     color: Colors.blue,
-                      //                     borderRadius: BorderRadius.all(
-                      //                       Radius.circular(10.0),
-                      //                     ),
-                      //                   ),
-                      //                   child: Padding(
-                      //                     padding: const EdgeInsets.all(8.0),
-                      //                     child: Text('${index + 1}.  ${currentQuestions[currentQuestion].options[index].text}', style: const TextStyle(color: Colors.white),),
-                      //                   ),
-                      //                 );
-                      //               }
-                      //           )
-                      //         ],
-                      //       ),
-                      //     ],
-                      //   ),
-                      //
-                      // )
+                      Container(
+                        width: double.infinity,
+                        height: currentQuestions[currentQuestion].options.length * 100,
+                        child: Row(
+                          children: [
+                            Column(
+                              children: [
+                                  ListView.builder(
+                                      itemCount: currentQuestions[currentQuestion].subOptions!.length,
+                                      itemBuilder: (context, index){
+                                        return  Draggable<int>(
+                                          data: currentQuestions[currentQuestion].subOptions![index].id,
+                                          onDraggableCanceled: (velocity, offset){},
+                                          feedback: Container(
+                                            width: 350,
+                                            decoration: BoxDecoration(
+                                              color: Colors.blue.withOpacity(0.5),
+                                              borderRadius: const BorderRadius.all(
+                                                Radius.circular(10.0),
+                                              ),
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Text('${index + 1}.  ${currentQuestions[currentQuestion].subOptions![index].text}', style: const TextStyle(color: Colors.white),),
+                                            ),
+                                          ),
+                                          child: Container(
+                                            width: 350,
+                                            decoration: const BoxDecoration(
+                                              color: Colors.blue,
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(10.0),
+                                              ),
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Text('${index + 1}.  ${currentQuestions[currentQuestion].subOptions![index].text}', style: const TextStyle(color: Colors.white),),
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                  )
+                              ],
+                            ),
+                            const SizedBox(
+                              width: 16,
+                            ),
+
+                            Column(
+                              children: [
+                                ListView.builder(
+                                    itemCount: currentQuestions[currentQuestion].subOptions!.length,
+                                    itemBuilder: (context, index){
+
+                                      List<int?> selectedValues = List.filled(currentQuestions[currentQuestion].subOptions!.length, null);
+
+                                      if(currentQuestions[currentQuestion].options[index].subOption != null){
+                                        setState(() {
+                                          selectedValues[index] = currentQuestions[currentQuestion].subOptions!.indexOf( currentQuestions[currentQuestion].options[index].subOption! )+1;
+                                        });
+                                      }
+
+                                      return  Container(
+                                        width: 350,
+                                        child: DropdownButton<int>(
+                                          value: selectedValues[index],
+                                          items: List.generate(
+                                            currentQuestions[index].options.length -1,
+                                                (index) => DropdownMenuItem<int>(
+                                              value: index + 1,
+                                              child: Text('${index + 1}'),
+                                            ),
+                                          ),
+                                          onChanged: (int? selectedValue) {
+                                            setState(() {
+                                              selectedValues[index] = selectedValue;
+                                            });
+
+                                            if(selectedValue!= null){
+                                              TestService().comparisonAnswerEntTest(
+                                                  widget.test.entTest!.id,
+                                                  currentQuestions[currentQuestion].id,
+                                                  currentQuestions[currentQuestion].options[index].id,
+                                                  currentQuestions[currentQuestion].subOptions![selectedValue-1].id
+                                              );
+                                            }
+
+                                          },
+                                        ),
+                                      );
+                                    }
+                                )
+                              ],
+                            ),
+
+                            const SizedBox(
+                              width: 8,
+                            ),
+
+                            Column(
+                              children: [
+                                ListView.builder(
+                                    itemCount: currentQuestions[currentQuestion].options.length,
+                                    itemBuilder: (context, index){
+                                      return  Container(
+                                        width: 350,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.blue,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(10.0),
+                                          ),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text('${index + 1}.  ${currentQuestions[currentQuestion].options[index].text}', style: const TextStyle(color: Colors.white),),
+                                        ),
+                                      );
+                                    }
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+
+                      )
                     ],
                   ),
                 ),

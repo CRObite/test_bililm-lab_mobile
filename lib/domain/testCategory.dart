@@ -31,9 +31,7 @@ class TestCategory {
     List<TestQuestion> allQuestions = [];
     allQuestions.addAll(questions ?? []);
     allQuestions.addAll(multipleQuestions ?? []);
-
-
-    //нужно добавить comparisonQuestions
+    allQuestions.addAll(comparisonQuestions ?? []);
 
     for (ContextTestQuestion? contextQuestion in contextQuestions ?? []) {
       if (contextQuestion?.questions != null) {
