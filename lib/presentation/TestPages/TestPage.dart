@@ -85,22 +85,22 @@ class _TestPageState extends State<TestPage> {
 
     ComplexCheck();
 
-    String formattedCurrentDate = DateFormat('dd.MM.yyyy HH:mm:ss').format(DateTime.now());
-
-
-    if(widget.format == TestFormatEnum.ENT){
-      if(-differenceInSeconds(widget.test.entTest!.startedDate,formattedCurrentDate) < _elapsedSeconds){
-        _elapsedSeconds = _elapsedSeconds - differenceInSeconds(widget.test.entTest!.startedDate,formattedCurrentDate);
-      }else{
-        _endTest();
-      }
-    }else if(widget.format == TestFormatEnum.SCHOOL){
-      if(-differenceInSeconds(widget.test.modoTest!.startedDate,formattedCurrentDate) < _elapsedSeconds){
-        _elapsedSeconds = _elapsedSeconds - differenceInSeconds(widget.test.modoTest!.startedDate,formattedCurrentDate);
-      }else{
-        _endTest();
-      }
-    }
+    // String formattedCurrentDate = DateFormat('dd.MM.yyyy HH:mm:ss').format(DateTime.now());
+    //
+    //
+    // if(widget.format == TestFormatEnum.ENT){
+    //   if(-differenceInSeconds(widget.test.entTest!.startedDate,formattedCurrentDate) < _elapsedSeconds){
+    //     _elapsedSeconds = _elapsedSeconds - differenceInSeconds(widget.test.entTest!.startedDate,formattedCurrentDate);
+    //   }else{
+    //     _endTest();
+    //   }
+    // }else if(widget.format == TestFormatEnum.SCHOOL){
+    //   if(-differenceInSeconds(widget.test.modoTest!.startedDate,formattedCurrentDate) < _elapsedSeconds){
+    //     _elapsedSeconds = _elapsedSeconds - differenceInSeconds(widget.test.modoTest!.startedDate,formattedCurrentDate);
+    //   }else{
+    //     _endTest();
+    //   }
+    // }
 
 
   }
@@ -439,7 +439,7 @@ class _TestPageState extends State<TestPage> {
                         ),
 
 
-                      currentQuestions[currentQuestion].subOptions != null ?
+                      currentQuestions[currentQuestion].subOptions!= null && currentQuestions[currentQuestion].subOptions!.isEmpty ?
                       Container(
                         width: double.infinity,
                         height: currentQuestions[currentQuestion].options.length * 80,
@@ -571,57 +571,64 @@ class _TestPageState extends State<TestPage> {
                           },
                         ),
                       ):
-                      Container(
-                        width: double.infinity,
-                        height: currentQuestions[currentQuestion].options.length * 100,
-                        child: Row(
-                          children: [
-                            Column(
-                              children: [
-                                  ListView.builder(
-                                      itemCount: currentQuestions[currentQuestion].subOptions!.length,
-                                      itemBuilder: (context, index){
-                                        return  Draggable<int>(
-                                          data: currentQuestions[currentQuestion].subOptions![index].id,
-                                          onDraggableCanceled: (velocity, offset){},
-                                          feedback: Container(
-                                            width: 350,
-                                            decoration: BoxDecoration(
-                                              color: Colors.blue.withOpacity(0.5),
-                                              borderRadius: const BorderRadius.all(
-                                                Radius.circular(10.0),
-                                              ),
-                                            ),
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: Text('${index + 1}.  ${currentQuestions[currentQuestion].subOptions![index].text}', style: const TextStyle(color: Colors.white),),
-                                            ),
-                                          ),
-                                          child: Container(
-                                            width: 350,
-                                            decoration: const BoxDecoration(
-                                              color: Colors.blue,
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(10.0),
-                                              ),
-                                            ),
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: Text('${index + 1}.  ${currentQuestions[currentQuestion].subOptions![index].text}', style: const TextStyle(color: Colors.white),),
-                                            ),
-                                          ),
-                                        );
-                                      }
-                                  )
-                              ],
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            height: currentQuestions[currentQuestion].subOptions!.length * 50,
+                            child: ListView.builder(
+                                itemCount: currentQuestions[currentQuestion].subOptions!.length,
+                                itemBuilder: (context, index){
+                                  return  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('${index + 1}.  ${currentQuestions[currentQuestion].subOptions![index].text}', style: const TextStyle(),),
+                                  );
+                                }
                             ),
-                            const SizedBox(
-                              width: 16,
-                            ),
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
 
-                            Column(
-                              children: [
-                                ListView.builder(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+
+                              SizedBox(
+                                width: 250,
+                                height: currentQuestions[currentQuestion].options.length * 80,
+                                child: ListView.builder(
+                                    itemCount: currentQuestions[currentQuestion].options.length,
+                                    itemBuilder: (context, index){
+                                      return  Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          width: double.infinity,
+                                          decoration: const BoxDecoration(
+                                            color: Colors.blue,
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10.0),
+                                            ),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text('${index + 1}.  ${currentQuestions[currentQuestion].options[index].text}', style: const TextStyle(color: Colors.white),),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                ),
+                              ),
+
+                              const SizedBox(
+                                width: 8,
+                              ),
+
+                              SizedBox(
+                                width: 100,
+                                height: currentQuestions[currentQuestion].subOptions!.length * 80,
+                                child: ListView.builder(
                                     itemCount: currentQuestions[currentQuestion].subOptions!.length,
                                     itemBuilder: (context, index){
 
@@ -633,68 +640,41 @@ class _TestPageState extends State<TestPage> {
                                         });
                                       }
 
-                                      return  Container(
-                                        width: 350,
-                                        child: DropdownButton<int>(
-                                          value: selectedValues[index],
-                                          items: List.generate(
-                                            currentQuestions[index].options.length -1,
-                                                (index) => DropdownMenuItem<int>(
-                                              value: index + 1,
-                                              child: Text('${index + 1}'),
-                                            ),
-                                          ),
-                                          onChanged: (int? selectedValue) {
-                                            setState(() {
-                                              selectedValues[index] = selectedValue;
-                                            });
 
-                                            if(selectedValue!= null){
-                                              TestService().comparisonAnswerEntTest(
-                                                  widget.test.entTest!.id,
-                                                  currentQuestions[currentQuestion].id,
-                                                  currentQuestions[currentQuestion].options[index].id,
-                                                  currentQuestions[currentQuestion].subOptions![selectedValue-1].id
-                                              );
-                                            }
 
-                                          },
-                                        ),
-                                      );
-                                    }
-                                )
-                              ],
-                            ),
-
-                            const SizedBox(
-                              width: 8,
-                            ),
-
-                            Column(
-                              children: [
-                                ListView.builder(
-                                    itemCount: currentQuestions[currentQuestion].options.length,
-                                    itemBuilder: (context, index){
-                                      return  Container(
-                                        width: 350,
-                                        decoration: const BoxDecoration(
-                                          color: Colors.blue,
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(10.0),
+                                      return  DropdownButton<int>(
+                                        value: selectedValues[index],
+                                        items: List.generate(
+                                          currentQuestions[currentQuestion].options.length,
+                                              (index) => DropdownMenuItem<int>(
+                                            value: index + 1,
+                                            child: Text('${index + 1}'),
                                           ),
                                         ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text('${index + 1}.  ${currentQuestions[currentQuestion].options[index].text}', style: const TextStyle(color: Colors.white),),
-                                        ),
+                                        onChanged: (int? selectedValue) {
+
+                                          setState(() {
+                                            selectedValues[index] = selectedValue;
+                                          });
+
+                                          if(selectedValue!= null){
+                                            // TestService().comparisonAnswerEntTest(
+                                            //     widget.test.entTest!.id,
+                                            //     currentQuestions[currentQuestion].id,
+                                            //     currentQuestions[currentQuestion].options[index].id,
+                                            //     currentQuestions[currentQuestion].subOptions![selectedValue-1].id
+                                            // );
+                                          }
+
+                                        },
                                       );
                                     }
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
+                                ),
+                              ),
 
+                            ],
+                          ),
+                        ],
                       )
                     ],
                   ),
