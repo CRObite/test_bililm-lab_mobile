@@ -26,6 +26,10 @@ class TestService{
     return await TestRepository().deleteAnswerEntTest( entTestId, questionId, optionId);
   }
 
+  Future<CustomResponse> comparisonDeleteAnswerEntTest(String entTestId,int questionId,int optionId, int subOptionId) async {
+    return await TestRepository().comparisonDeleteAnswerEntTest(entTestId,questionId,optionId, subOptionId);
+  }
+
   Future<CustomResponse> getLastEntTest() async {
     return await TestRepository().getLastEntTest();
   }

@@ -59,70 +59,70 @@ class _EntTestPartState extends State<EntTestPart> {
 
   Future<void> onTestButtonPressed() async {
 
-    EntTest test = EntTest('QWERTY', '02.02.2023', null, false, 'Survival', {
-      'Math': TestCategory([], [], [], [], [],
-        [TestQuestion(12, 'sdfsdfsdfsd', false, [], [],
-            [TestOption(1, 'sdrftyhjuhyj', null, null, []),
-              TestOption(2, 'sdrftyhjuhyj', null, null, []),
-              TestOption(3, 'sdrftyhjuhyj', null, null, [])],
-            [SubOption(1, 'hjkhjkh', []),
-              SubOption(2, 'hjkhjkh', []),
-              SubOption(3, 'hjkhjkh', [])], 'sdfsdfs', 'sdfsdfsd'),
-          TestQuestion(13, 'sdfsdfsdfsd', false, [], [],
-              [TestOption(1, 'sdrftyhjuhyj', null, null, []),
-                TestOption(2, 'sdrftyhjuhyj', null, null, []),
-                TestOption(3, 'sdrftyhjuhyj', null, null, [])],
-              [SubOption(1, 'hjkhjkh', []),
-                SubOption(2, 'hjkhjkh', []),
-                SubOption(3, 'hjkhjkh', [])], 'sdfsdfs', 'sdfsdfsd')],),
-      'Phys': TestCategory([], [], [], [], [], [TestQuestion(12, 'sdfsdfsdfsd', false, [], [], [TestOption(1, 'sdrftyhjuhyj', null, null, []), TestOption(2, 'sdrftyhjuhyj', null, null, []), TestOption(3, 'sdrftyhjuhyj', null, null, [])], [SubOption(1, 'hjkhjkh', []), SubOption(2, 'hjkhjkh', []), SubOption(3, 'hjkhjkh', [])], 'sdfsdfs', 'sdfsdfsd'),TestQuestion(13, 'sdfsdfsdfsd', false, [], [], [TestOption(1, 'sdrftyhjuhyj', null, null, []), TestOption(2, 'sdrftyhjuhyj', null, null, []), TestOption(3, 'sdrftyhjuhyj', null, null, [])], [SubOption(1, 'hjkhjkh', []), SubOption(2, 'hjkhjkh', []), SubOption(3, 'hjkhjkh', [])], 'sdfsdfs', 'sdfsdfsd')],),
-    });
+    // EntTest test = EntTest('QWERTY', '02.02.2023', null, false, 'Survival', {
+    //   'Math': TestCategory([], [], [], [], [],
+    //     [TestQuestion(12, 'sdfsdfsdfsd', false, [], [],
+    //         [TestOption(1, 'sdrftyhjuhyj', null, null, []),
+    //           TestOption(2, 'sdrftyhjuhyj', null, null, []),
+    //           TestOption(3, 'sdrftyhjuhyj', null, null, [])],
+    //         [SubOption(1, 'hjkhjkh', []),
+    //           SubOption(2, 'hjkhjkh', []),
+    //           SubOption(3, 'hjkhjkh', [])], 'sdfsdfs', 'sdfsdfsd'),
+    //       TestQuestion(13, 'sdfsdfsdfsd', false, [], [],
+    //           [TestOption(1, 'sdrftyhjuhyj', null, null, []),
+    //             TestOption(2, 'sdrftyhjuhyj', null, null, []),
+    //             TestOption(3, 'sdrftyhjuhyj', null, null, [])],
+    //           [SubOption(1, 'hjkhjkh', []),
+    //             SubOption(2, 'hjkhjkh', []),
+    //             SubOption(3, 'hjkhjkh', [])], 'sdfsdfs', 'sdfsdfsd')],),
+    //   'Phys': TestCategory([], [], [], [], [], [TestQuestion(12, 'sdfsdfsdfsd', false, [], [], [TestOption(1, 'sdrftyhjuhyj', null, null, []), TestOption(2, 'sdrftyhjuhyj', null, null, []), TestOption(3, 'sdrftyhjuhyj', null, null, [])], [SubOption(1, 'hjkhjkh', []), SubOption(2, 'hjkhjkh', []), SubOption(3, 'hjkhjkh', [])], 'sdfsdfs', 'sdfsdfsd'),TestQuestion(13, 'sdfsdfsdfsd', false, [], [], [TestOption(1, 'sdrftyhjuhyj', null, null, []), TestOption(2, 'sdrftyhjuhyj', null, null, []), TestOption(3, 'sdrftyhjuhyj', null, null, [])], [SubOption(1, 'hjkhjkh', []), SubOption(2, 'hjkhjkh', []), SubOption(3, 'hjkhjkh', [])], 'sdfsdfs', 'sdfsdfsd')],),
+    // });
+    //
+    // Navigator.pushNamed(
+    //   context,
+    //   '/test',
+    //   arguments: {
+    //     'test': Test(test, null),
+    //     'testFormatEnum': TestFormatEnum.ENT,
+    //   },
+    // );
 
-    Navigator.pushNamed(
-      context,
-      '/test',
-      arguments: {
-        'test': Test(test, null),
-        'testFormatEnum': TestFormatEnum.ENT,
-      },
-    );
+    if(selectedFirstSub!= null && selectedSecondSub!= null){
 
-    // if(selectedFirstSub!= null && selectedSecondSub!= null){
-    //
-    //
-    //
-    //   setState(() {
-    //     errorMessage = null;
-    //     isLoading = true;
-    //   });
-    //
-    //   CustomResponse response = await TestService().generateEntTest(TestTypeEnum.SURVIVAL, selectedFirstSub, selectedSecondSub);
-    //
-    //   setState(() {
-    //     isLoading = false;
-    //   });
-    //
-    //   if(response.code == 200){
-    //     EntTest entTest = response.body as EntTest;
-    //     Navigator.pushNamed(
-    //       context,
-    //       '/test',
-    //       arguments: {
-    //         'test': Test(entTest, null),
-    //         'testFormatEnum': TestFormatEnum.ENT,
-    //       },
-    //     );
-    //
-    //   }else{
-    //     setState(() {
-    //       errorMessage = response.title;
-    //     });
-    //   }
-    // }else{
-    //     setState(() {
-    //       errorMessage = AppText.selectBoth;
-    //     });
-    // }
+
+
+      setState(() {
+        errorMessage = null;
+        isLoading = true;
+      });
+
+      CustomResponse response = await TestService().generateEntTest(TestTypeEnum.SURVIVAL, selectedFirstSub, selectedSecondSub);
+
+      setState(() {
+        isLoading = false;
+      });
+
+      if(response.code == 200){
+        EntTest entTest = response.body as EntTest;
+        Navigator.pushNamed(
+          context,
+          '/test',
+          arguments: {
+            'test': Test(entTest, null),
+            'testFormatEnum': TestFormatEnum.ENT,
+          },
+        );
+
+      }else{
+        setState(() {
+          errorMessage = response.title;
+        });
+      }
+    }else{
+        setState(() {
+          errorMessage = AppText.selectBoth;
+        });
+    }
   }
 
   Future<void> onTestButtonPressedCreative() async {

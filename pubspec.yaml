@@ -59,8 +59,12 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   json_serializable: ^6.7.1
+  flutter_launcher_icons: ^0.13.1
 
-
+flutter_icons:
+  android: true
+  ios: true
+  image_path: assets/sqr_logo.jpg
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -80,8 +84,10 @@ flutter:
     - assets/profile_image.png
     - assets/error_work.png
     - assets/oqu_way.png
+    - assets/sqr_logo.jpg
     - certificates/oqutest_kz.crt
     - certificates/_oquway_kz.crt
+
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

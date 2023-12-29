@@ -60,6 +60,7 @@ class _TestPageState extends State<TestPage> {
   Uint8List? currentBytes;
 
   bool pictureIsLoading = true;
+  late List<int?> selectedValues;
 
   @override
   void initState() {
@@ -85,22 +86,22 @@ class _TestPageState extends State<TestPage> {
 
     ComplexCheck();
 
-    // String formattedCurrentDate = DateFormat('dd.MM.yyyy HH:mm:ss').format(DateTime.now());
-    //
-    //
-    // if(widget.format == TestFormatEnum.ENT){
-    //   if(-differenceInSeconds(widget.test.entTest!.startedDate,formattedCurrentDate) < _elapsedSeconds){
-    //     _elapsedSeconds = _elapsedSeconds - differenceInSeconds(widget.test.entTest!.startedDate,formattedCurrentDate);
-    //   }else{
-    //     _endTest();
-    //   }
-    // }else if(widget.format == TestFormatEnum.SCHOOL){
-    //   if(-differenceInSeconds(widget.test.modoTest!.startedDate,formattedCurrentDate) < _elapsedSeconds){
-    //     _elapsedSeconds = _elapsedSeconds - differenceInSeconds(widget.test.modoTest!.startedDate,formattedCurrentDate);
-    //   }else{
-    //     _endTest();
-    //   }
-    // }
+    String formattedCurrentDate = DateFormat('dd.MM.yyyy HH:mm:ss').format(DateTime.now());
+
+
+    if(widget.format == TestFormatEnum.ENT){
+      if(-differenceInSeconds(widget.test.entTest!.startedDate,formattedCurrentDate) < _elapsedSeconds){
+        _elapsedSeconds = _elapsedSeconds - differenceInSeconds(widget.test.entTest!.startedDate,formattedCurrentDate);
+      }else{
+        _endTest();
+      }
+    }else if(widget.format == TestFormatEnum.SCHOOL){
+      if(-differenceInSeconds(widget.test.modoTest!.startedDate,formattedCurrentDate) < _elapsedSeconds){
+        _elapsedSeconds = _elapsedSeconds - differenceInSeconds(widget.test.modoTest!.startedDate,formattedCurrentDate);
+      }else{
+        _endTest();
+      }
+    }
 
 
   }
@@ -151,6 +152,7 @@ class _TestPageState extends State<TestPage> {
 
     setBytes();
     checkContext();
+    checkComp();
   }
 
 
@@ -245,6 +247,12 @@ class _TestPageState extends State<TestPage> {
     }
   }
 
+  void checkComp(){
+    if(currentQuestions[currentQuestion].subOptions != null){
+      selectedValues = List.filled(currentQuestions[currentQuestion].subOptions!.length, null);
+    }
+  }
+
 
 
   Future<bool> _onWillPop() async {
@@ -296,6 +304,8 @@ class _TestPageState extends State<TestPage> {
       print('${response.code}   ${response.title}');
     }
   }
+
+
 
   void _scrollToElement(int index) {
 
@@ -439,8 +449,8 @@ class _TestPageState extends State<TestPage> {
                         ),
 
 
-                      currentQuestions[currentQuestion].subOptions!= null && currentQuestions[currentQuestion].subOptions!.isEmpty ?
-                      Container(
+                      if (currentQuestions[currentQuestion].subOptions!= null && currentQuestions[currentQuestion].subOptions!.isEmpty)
+                        Container(
                         width: double.infinity,
                         height: currentQuestions[currentQuestion].options.length * 80,
                         child: ListView.builder(
@@ -570,8 +580,7 @@ class _TestPageState extends State<TestPage> {
 
                           },
                         ),
-                      ):
-                      Column(
+                      ) else Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Container(
@@ -613,7 +622,7 @@ class _TestPageState extends State<TestPage> {
                                           ),
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
-                                            child: Text('${index + 1}.  ${currentQuestions[currentQuestion].options[index].text}', style: const TextStyle(color: Colors.white),),
+                                            child: Text(currentQuestions[currentQuestion].options[index].text, style: const TextStyle(color: Colors.white),),
                                           ),
                                         ),
                                       );
@@ -632,17 +641,12 @@ class _TestPageState extends State<TestPage> {
                                     itemCount: currentQuestions[currentQuestion].subOptions!.length,
                                     itemBuilder: (context, index){
 
-                                      List<int?> selectedValues = List.filled(currentQuestions[currentQuestion].subOptions!.length, null);
-
                                       if(currentQuestions[currentQuestion].options[index].subOption != null){
-                                        setState(() {
-                                          selectedValues[index] = currentQuestions[currentQuestion].subOptions!.indexOf( currentQuestions[currentQuestion].options[index].subOption! )+1;
-                                        });
+                                        selectedValues[index] = currentQuestions[currentQuestion].subOptions!.indexOf( currentQuestions[currentQuestion].options[index].subOption! )+1;
                                       }
 
-
-
                                       return  DropdownButton<int>(
+
                                         value: selectedValues[index],
                                         items: List.generate(
                                           currentQuestions[currentQuestion].options.length,
@@ -652,18 +656,70 @@ class _TestPageState extends State<TestPage> {
                                           ),
                                         ),
                                         onChanged: (int? selectedValue) {
-
-                                          setState(() {
-                                            selectedValues[index] = selectedValue;
-                                          });
-
                                           if(selectedValue!= null){
-                                            // TestService().comparisonAnswerEntTest(
-                                            //     widget.test.entTest!.id,
-                                            //     currentQuestions[currentQuestion].id,
-                                            //     currentQuestions[currentQuestion].options[index].id,
-                                            //     currentQuestions[currentQuestion].subOptions![selectedValue-1].id
-                                            // );
+
+                                            if(selectedValues.contains(selectedValue)){
+                                              int i = selectedValues.indexOf(selectedValue);
+                                              if(selectedValues[index]!= null){
+                                                int? j = selectedValues[index];
+                                                setState(() {
+                                                  selectedValues[index] = selectedValue;
+                                                  selectedValues[i] = j;
+                                                });
+                                                currentQuestions[currentQuestion].options[index].subOption = currentQuestions[currentQuestion].subOptions![selectedValue-1];
+
+                                                TestService().comparisonAnswerEntTest(
+                                                    widget.test.entTest!.id,
+                                                    currentQuestions[currentQuestion].id,
+                                                    currentQuestions[currentQuestion].options[index].id,
+                                                    currentQuestions[currentQuestion].subOptions![selectedValue-1].id
+                                                );
+
+                                                currentQuestions[currentQuestion].options[i].subOption = currentQuestions[currentQuestion].subOptions![j!-1];
+
+                                                TestService().comparisonAnswerEntTest(
+                                                    widget.test.entTest!.id,
+                                                    currentQuestions[currentQuestion].id,
+                                                    currentQuestions[currentQuestion].options[i].id,
+                                                    currentQuestions[currentQuestion].subOptions![j-1].id
+                                                );
+                                              }else {
+                                                setState(() {
+                                                  selectedValues[index] = selectedValue;
+                                                  selectedValues[i] = null;
+                                                });
+                                                currentQuestions[currentQuestion].options[index].subOption = currentQuestions[currentQuestion].subOptions![selectedValue-1];
+
+                                                TestService().comparisonAnswerEntTest(
+                                                    widget.test.entTest!.id,
+                                                    currentQuestions[currentQuestion].id,
+                                                    currentQuestions[currentQuestion].options[index].id,
+                                                    currentQuestions[currentQuestion].subOptions![selectedValue-1].id
+                                                );
+
+                                                currentQuestions[currentQuestion].options[i].subOption = null;
+
+                                                TestService().comparisonDeleteAnswerEntTest(
+                                                    widget.test.entTest!.id,
+                                                    currentQuestions[currentQuestion].id,
+                                                    currentQuestions[currentQuestion].options[i].id,
+                                                    currentQuestions[currentQuestion].subOptions![selectedValue-1].id
+                                                );
+
+                                              }
+                                            }else{
+                                              setState(() {
+                                                selectedValues[index] = selectedValue;
+                                              });
+                                              currentQuestions[currentQuestion].options[index].subOption = currentQuestions[currentQuestion].subOptions![selectedValue-1];
+
+                                              TestService().comparisonAnswerEntTest(
+                                                  widget.test.entTest!.id,
+                                                  currentQuestions[currentQuestion].id,
+                                                  currentQuestions[currentQuestion].options[index].id,
+                                                  currentQuestions[currentQuestion].subOptions![selectedValue-1].id
+                                              );
+                                            }
                                           }
 
                                         },
@@ -695,6 +751,8 @@ class _TestPageState extends State<TestPage> {
                                 currentQuestion-=1;
                                 checkContext();
                                 setBytes();
+                                checkComp();
+
                                 setState(() {
                                 });
                                 _scrollToElement(currentQuestion);
@@ -715,6 +773,7 @@ class _TestPageState extends State<TestPage> {
                                 currentQuestion+=1;
                                 checkContext();
                                 setBytes();
+                                checkComp();
                                 setState(() {
                                 });
                                 _scrollToElement(currentQuestion);
@@ -732,6 +791,7 @@ class _TestPageState extends State<TestPage> {
                               currentQuestion+=1;
                               checkContext();
                               setBytes();
+                              checkComp();
                               setState(() {
                               });
                               _scrollToElement(currentQuestion);
