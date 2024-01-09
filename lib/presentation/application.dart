@@ -5,6 +5,7 @@ import 'package:test_bilimlab_project/presentation/SubjectPickerPages/SubjectPic
 
 import 'package:test_bilimlab_project/presentation/UserPages/AnalyticPart.dart';
 import 'package:test_bilimlab_project/presentation/UserPages/ProfilePart.dart';
+import '../utils/AppColors.dart';
 import '../utils/AppTexts.dart';
 import 'Widgets/CustomAppBar.dart';
 
@@ -49,21 +50,23 @@ class _ApplicationState extends State<Application> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
+        selectedItemColor: AppColors.colorButton,
+        selectedLabelStyle: TextStyle(color: AppColors.colorButton,),
         items: [
           BottomNavigationBarItem(
-            icon: const Icon(Icons.find_in_page_rounded),
+            icon: Icon(Icons.find_in_page_rounded),
             label: AppText.analytics,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.school_rounded),
+            icon: Icon(Icons.school_rounded),
             label: AppText.test,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.person),
+            icon: Icon(Icons.person),
             label: AppText.profile,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.edit),
+            icon: Icon(Icons.edit),
             label: AppText.errorWork,
           ),
         ],

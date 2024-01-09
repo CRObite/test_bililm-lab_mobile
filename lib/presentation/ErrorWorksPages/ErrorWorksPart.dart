@@ -20,20 +20,6 @@ class ErrorWorksPart extends StatefulWidget {
 
 class _ErrorWorksPartState extends State<ErrorWorksPart> {
 
-  List<int> scores = [15,20,48,59,23,45,99,98,105,140];
-  List<String> subjects = ['Математика Физика','Математика Физика','Математика Физика','Математика Физика','Математика Физика','Математика Физика','Математика Физика','Математика Физика','Математика Физика','Математика Физика'];
-  List<String> time = [
-    '03.05.2023',
-    '04.05.2023',
-    '05.05.2023',
-    '06.05.2023',
-    '07.05.2023',
-    '08.05.2023',
-    '09.05.2023',
-    '10.05.2023',
-    '11.05.2023',
-    '12.05.2023'];
-
   int pageNum = 1;
 
   final ScrollController _controller = ScrollController();
@@ -214,7 +200,7 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
             width: double.infinity,
             child: firstLoading? const Center(child: CircularProgressIndicator(color: Colors.white,)) : Padding(
               padding: const EdgeInsets.only(top: 8,left: 8,right: 8),
-              child: RefreshIndicator(
+              child: revisions!.items.isEmpty?Center(child: Text('Қателермен жұмыс істеуге арналған сынақтарыңыз жоқ', style: TextStyle(color: Colors.white, fontSize: 24),),) : RefreshIndicator(
                 onRefresh: onRefresh,
                 child: GridView.builder(
                   controller: _controller,
