@@ -40,4 +40,7 @@ class AppText {
   static String recommendation = 'Ұсыныс';
   static String modoPermission = 'Модоға рұқсат';
   static String entPermission = 'ҰБТға рұқсат';
+  static String emptyFiled = 'Бос орын';
+  static String unknown = 'Белгісіз';
+  static String noErrorWorkTests = 'Қателермен жұмыс істеуге арналған сынақтарыңыз жоқ';
 }

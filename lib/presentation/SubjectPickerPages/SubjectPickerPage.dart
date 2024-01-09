@@ -10,6 +10,7 @@ import 'package:test_bilimlab_project/domain/test.dart';
 import 'package:test_bilimlab_project/presentation/SubjectPickerPages/EntTestPart.dart';
 import 'package:test_bilimlab_project/presentation/SubjectPickerPages/ModoTestPart.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/CustomAppBar.dart';
+import '../../utils/AppColors.dart';
 import '../../utils/AppTexts.dart';
 import '../../utils/TestFormatEnum.dart';
 
@@ -128,24 +129,13 @@ class _SubjectPickerPageState extends State<SubjectPickerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:  Padding(
+      body: isLoading? Center(child: CircularProgressIndicator(color: AppColors.colorButton,)) :  Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Stack(
+        child: PageView(
+          controller: _pageController,
           children: [
-            PageView(
-              controller: _pageController,
-              children: [
-                EntTestPart(onPressed: changeChosen),
-                ModoTestPart(onPressed: changeChosen),
-              ],
-            ),
-            if (isLoading)
-              Container(
-                color: Colors.black.withOpacity(0.5),
-                child: const Center(
-                  child: CircularProgressIndicator(),
-                ),
-              ),
+            EntTestPart(onPressed: changeChosen),
+            ModoTestPart(onPressed: changeChosen),
           ],
         ),
       ),

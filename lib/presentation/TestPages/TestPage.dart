@@ -58,13 +58,18 @@ class _TestPageState extends State<TestPage> {
   List<int> allLength = [];
   int? startedIndex;
   Uint8List? currentBytes;
-
+  bool _isLoading = true;
   bool pictureIsLoading = true;
   late List<int?> selectedValues;
 
   @override
   void initState() {
     super.initState();
+
+
+    setState(() {
+      _isLoading  = true;
+    });
 
     if(widget.format == TestFormatEnum.ENT){
       _elapsedSeconds = 12600;
@@ -81,7 +86,9 @@ class _TestPageState extends State<TestPage> {
     }
 
     currentSubjects = getAllCategoryNames();
-
+    setState(() {
+      _isLoading  = false;
+    });
 
 
     ComplexCheck();
@@ -138,6 +145,11 @@ class _TestPageState extends State<TestPage> {
   }
 
   void ComplexCheck(){
+
+    setState(() {
+      _isLoading  = true;
+    });
+
     if(widget.format == TestFormatEnum.ENT){
       currentQuestions = widget.test.entTest!.questionsMap[currentSubjects[currentSubject]]!.getAllQuestions();
       allContents = widget.test.entTest!.questionsMap[currentSubjects[currentSubject]]!.getAllContextContents();
@@ -153,6 +165,11 @@ class _TestPageState extends State<TestPage> {
     setBytes();
     checkContext();
     checkComp();
+
+
+    setState(() {
+      _isLoading  = false;
+    });
   }
 
 
@@ -255,7 +272,7 @@ class _TestPageState extends State<TestPage> {
 
 
 
-  Future<bool> _onWillPop() async {
+  Future<bool> _onWillPop(bool goToResult) async {
     QuickAlert.show(
         context: context,
         type:QuickAlertType.confirm,
@@ -267,8 +284,14 @@ class _TestPageState extends State<TestPage> {
           Navigator.pop(context);
         },
         onConfirmBtnTap: () {
-          Navigator.pop(context);
-          _endTest();
+          if(goToResult){
+            Navigator.pop(context);
+            _endTest();
+          }else{
+            Navigator.pop(context);
+            Navigator.pop(context);
+          }
+
         }
     );
     return false;
@@ -371,8 +394,10 @@ class _TestPageState extends State<TestPage> {
           ),
         ),
       ),
-      body:   WillPopScope(
-        onWillPop: _onWillPop,
+      body: _isLoading? Expanded(child: Center(child: CircularProgressIndicator(color: AppColors.colorButton,))) :  WillPopScope(
+        onWillPop:  () async {
+          return await _onWillPop(false);
+        },
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 16),
           child: Column(
@@ -585,15 +610,41 @@ class _TestPageState extends State<TestPage> {
                         children: [
                           Container(
                             width: double.infinity,
-                            height: currentQuestions[currentQuestion].subOptions!.length * 50,
+                            height: currentQuestions[currentQuestion].subOptions!.length * 70,
                             child: ListView.builder(
                                 itemCount: currentQuestions[currentQuestion].subOptions!.length,
                                 itemBuilder: (context, index){
                                   return  Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Text('${index + 1}.  ${currentQuestions[currentQuestion].subOptions![index].text}', style: const TextStyle(),),
+                                    child: Draggable<int>(
+                                      data: index,
+                                      feedback: Card(
+                                        color: Colors.blue.withOpacity(0.5),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text('${currentQuestions[currentQuestion].subOptions![index].text}', style: TextStyle( color:  Colors.white),),
+                                      )),
+                                      childWhenDragging:  Card(
+                                          color: Colors.blue.withOpacity(0.5),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text('${currentQuestions[currentQuestion].subOptions![index].text}', style: TextStyle( color:  Colors.white),),
+                                          )),
+                                      child: Container(
+                                          decoration: const BoxDecoration(
+                                            color: Colors.blue,
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10.0),
+                                            ),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text('${currentQuestions[currentQuestion].subOptions![index].text}', style: TextStyle( color:  Colors.white),)),
+                                      )
+                                    ),
+
                                   );
-                                }
+                                },
                             ),
                           ),
                           const SizedBox(
@@ -605,7 +656,7 @@ class _TestPageState extends State<TestPage> {
                             children: [
 
                               SizedBox(
-                                width: 250,
+                                width: 220,
                                 height: currentQuestions[currentQuestion].options.length * 80,
                                 child: ListView.builder(
                                     itemCount: currentQuestions[currentQuestion].options.length,
@@ -613,7 +664,6 @@ class _TestPageState extends State<TestPage> {
                                       return  Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Container(
-                                          width: double.infinity,
                                           decoration: const BoxDecoration(
                                             color: Colors.blue,
                                             borderRadius: BorderRadius.all(
@@ -635,95 +685,207 @@ class _TestPageState extends State<TestPage> {
                               ),
 
                               SizedBox(
-                                width: 100,
+                                width: 130,
                                 height: currentQuestions[currentQuestion].subOptions!.length * 80,
                                 child: ListView.builder(
                                     itemCount: currentQuestions[currentQuestion].subOptions!.length,
                                     itemBuilder: (context, index){
 
                                       if(currentQuestions[currentQuestion].options[index].subOption != null){
-                                        selectedValues[index] = currentQuestions[currentQuestion].subOptions!.indexOf( currentQuestions[currentQuestion].options[index].subOption! )+1;
+                                        selectedValues[index] = currentQuestions[currentQuestion].subOptions!.indexOf( currentQuestions[currentQuestion].options[index].subOption!);
                                       }
 
-                                      return  DropdownButton<int>(
+                                      return Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: DragTarget<int>(
 
-                                        value: selectedValues[index],
-                                        items: List.generate(
-                                          currentQuestions[currentQuestion].options.length,
-                                              (index) => DropdownMenuItem<int>(
-                                            value: index + 1,
-                                            child: Text('${index + 1}'),
-                                          ),
-                                        ),
-                                        onChanged: (int? selectedValue) {
-                                          if(selectedValue!= null){
+                                            onAccept: (data){
+                                              if(selectedValues.contains(data)){
 
-                                            if(selectedValues.contains(selectedValue)){
-                                              int i = selectedValues.indexOf(selectedValue);
-                                              if(selectedValues[index]!= null){
-                                                int? j = selectedValues[index];
+                                                int i = selectedValues.indexOf(data);
+                                                if(selectedValues[index]!= null){
+
+                                                  int? j = selectedValues[index];
+                                                  setState(() {
+                                                    selectedValues[index] = data;
+                                                    selectedValues[i] = j;
+                                                  });
+                                                  currentQuestions[currentQuestion].options[index].subOption = currentQuestions[currentQuestion].subOptions![data];
+
+                                                  TestService().comparisonAnswerEntTest(
+                                                      widget.test.entTest!.id,
+                                                      currentQuestions[currentQuestion].id,
+                                                      currentQuestions[currentQuestion].options[index].id,
+                                                      currentQuestions[currentQuestion].subOptions![data].id
+                                                  );
+                                                  currentQuestions[currentQuestion].options[i].subOption = currentQuestions[currentQuestion].subOptions![j!];
+
+                                                  TestService().comparisonAnswerEntTest(
+                                                      widget.test.entTest!.id,
+                                                      currentQuestions[currentQuestion].id,
+                                                      currentQuestions[currentQuestion].options[i].id,
+                                                      currentQuestions[currentQuestion].subOptions![j].id
+                                                  );
+
+                                                }else{
+
+                                                  setState(() {
+                                                    selectedValues[index] = data;
+                                                    selectedValues[i] = null;
+                                                  });
+                                                  currentQuestions[currentQuestion].options[index].subOption = currentQuestions[currentQuestion].subOptions![data];
+
+                                                  TestService().comparisonAnswerEntTest(
+                                                      widget.test.entTest!.id,
+                                                      currentQuestions[currentQuestion].id,
+                                                      currentQuestions[currentQuestion].options[index].id,
+                                                      currentQuestions[currentQuestion].subOptions![data].id
+                                                  );
+
+                                                  currentQuestions[currentQuestion].options[i].subOption = null;
+
+                                                  TestService().comparisonDeleteAnswerEntTest(
+                                                      widget.test.entTest!.id,
+                                                      currentQuestions[currentQuestion].id,
+                                                      currentQuestions[currentQuestion].options[i].id,
+                                                      currentQuestions[currentQuestion].subOptions![data].id
+                                                  );
+
+                                                }
+                                              }else{
                                                 setState(() {
-                                                  selectedValues[index] = selectedValue;
-                                                  selectedValues[i] = j;
+                                                  selectedValues[index] = data;
                                                 });
-                                                currentQuestions[currentQuestion].options[index].subOption = currentQuestions[currentQuestion].subOptions![selectedValue-1];
+                                                currentQuestions[currentQuestion].options[index].subOption = currentQuestions[currentQuestion].subOptions![data];
 
                                                 TestService().comparisonAnswerEntTest(
                                                     widget.test.entTest!.id,
                                                     currentQuestions[currentQuestion].id,
                                                     currentQuestions[currentQuestion].options[index].id,
-                                                    currentQuestions[currentQuestion].subOptions![selectedValue-1].id
+                                                    currentQuestions[currentQuestion].subOptions![data].id
                                                 );
-
-                                                currentQuestions[currentQuestion].options[i].subOption = currentQuestions[currentQuestion].subOptions![j!-1];
-
-                                                TestService().comparisonAnswerEntTest(
-                                                    widget.test.entTest!.id,
-                                                    currentQuestions[currentQuestion].id,
-                                                    currentQuestions[currentQuestion].options[i].id,
-                                                    currentQuestions[currentQuestion].subOptions![j-1].id
-                                                );
-                                              }else {
-                                                setState(() {
-                                                  selectedValues[index] = selectedValue;
-                                                  selectedValues[i] = null;
-                                                });
-                                                currentQuestions[currentQuestion].options[index].subOption = currentQuestions[currentQuestion].subOptions![selectedValue-1];
-
-                                                TestService().comparisonAnswerEntTest(
-                                                    widget.test.entTest!.id,
-                                                    currentQuestions[currentQuestion].id,
-                                                    currentQuestions[currentQuestion].options[index].id,
-                                                    currentQuestions[currentQuestion].subOptions![selectedValue-1].id
-                                                );
-
-                                                currentQuestions[currentQuestion].options[i].subOption = null;
-
-                                                TestService().comparisonDeleteAnswerEntTest(
-                                                    widget.test.entTest!.id,
-                                                    currentQuestions[currentQuestion].id,
-                                                    currentQuestions[currentQuestion].options[i].id,
-                                                    currentQuestions[currentQuestion].subOptions![selectedValue-1].id
-                                                );
-
                                               }
-                                            }else{
-                                              setState(() {
-                                                selectedValues[index] = selectedValue;
-                                              });
-                                              currentQuestions[currentQuestion].options[index].subOption = currentQuestions[currentQuestion].subOptions![selectedValue-1];
+                                            },
 
-                                              TestService().comparisonAnswerEntTest(
-                                                  widget.test.entTest!.id,
-                                                  currentQuestions[currentQuestion].id,
-                                                  currentQuestions[currentQuestion].options[index].id,
-                                                  currentQuestions[currentQuestion].subOptions![selectedValue-1].id
-                                              );
+
+                                            builder: (context, candidateData, rejectedData){
+
+                                              if(selectedValues[index] != null){
+                                                return Container(
+                                                  decoration: const BoxDecoration(
+                                                    color: Colors.blue,
+                                                    borderRadius: BorderRadius.all(
+                                                      Radius.circular(10.0),
+                                                    ),
+                                                  ),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: Text('${currentQuestions[currentQuestion].subOptions![selectedValues[index]!].text}', style: const TextStyle(color: Colors.white),),
+                                                  ),
+                                                );
+                                              }else{
+                                                return Container(
+                                                  decoration: BoxDecoration(
+                                                    color: AppColors.colorGrayButton,
+                                                    borderRadius: BorderRadius.all(
+                                                      Radius.circular(10.0),
+                                                    ),
+                                                  ),
+
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: Center(
+                                                      child: Text(
+                                                        AppText.emptyFiled, style: TextStyle(color: Colors.blueGrey),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+
                                             }
-                                          }
-
-                                        },
+                                        ),
                                       );
+
+                                      // return  DropdownButton<int>(
+                                      //
+                                      //   value: selectedValues[index],
+                                      //   items: List.generate(
+                                      //     currentQuestions[currentQuestion].options.length,
+                                      //         (index) => DropdownMenuItem<int>(
+                                      //       value: index + 1,
+                                      //       child: Text('${index + 1}'),
+                                      //     ),
+                                      //   ),
+                                      //   onChanged: (int? selectedValue) {
+                                      //     if(selectedValue!= null){
+                                      //
+                                      //       if(selectedValues.contains(selectedValue)){
+                                      //         int i = selectedValues.indexOf(selectedValue);
+                                      //         if(selectedValues[index]!= null){
+                                      //           int? j = selectedValues[index];
+                                      //           setState(() {
+                                      //             selectedValues[index] = selectedValue;
+                                      //             selectedValues[i] = j;
+                                      //           });
+                                      //           currentQuestions[currentQuestion].options[index].subOption = currentQuestions[currentQuestion].subOptions![selectedValue-1];
+                                      //
+                                      //           TestService().comparisonAnswerEntTest(
+                                      //               widget.test.entTest!.id,
+                                      //               currentQuestions[currentQuestion].id,
+                                      //               currentQuestions[currentQuestion].options[index].id,
+                                      //               currentQuestions[currentQuestion].subOptions![selectedValue-1].id
+                                      //           );
+                                      //
+                                      //           currentQuestions[currentQuestion].options[i].subOption = currentQuestions[currentQuestion].subOptions![j!-1];
+                                      //
+                                      //           TestService().comparisonAnswerEntTest(
+                                      //               widget.test.entTest!.id,
+                                      //               currentQuestions[currentQuestion].id,
+                                      //               currentQuestions[currentQuestion].options[i].id,
+                                      //               currentQuestions[currentQuestion].subOptions![j-1].id
+                                      //           );
+                                      //         }else {
+                                      //           setState(() {
+                                      //             selectedValues[index] = selectedValue;
+                                      //             selectedValues[i] = null;
+                                      //           });
+                                      //           currentQuestions[currentQuestion].options[index].subOption = currentQuestions[currentQuestion].subOptions![selectedValue-1];
+                                      //
+                                      //           TestService().comparisonAnswerEntTest(
+                                      //               widget.test.entTest!.id,
+                                      //               currentQuestions[currentQuestion].id,
+                                      //               currentQuestions[currentQuestion].options[index].id,
+                                      //               currentQuestions[currentQuestion].subOptions![selectedValue-1].id
+                                      //           );
+                                      //
+                                      //           currentQuestions[currentQuestion].options[i].subOption = null;
+                                      //
+                                      //           TestService().comparisonDeleteAnswerEntTest(
+                                      //               widget.test.entTest!.id,
+                                      //               currentQuestions[currentQuestion].id,
+                                      //               currentQuestions[currentQuestion].options[i].id,
+                                      //               currentQuestions[currentQuestion].subOptions![selectedValue-1].id
+                                      //           );
+
+                                      //         }
+                                      //       }else{
+                                      //         setState(() {
+                                      //           selectedValues[index] = selectedValue;
+                                      //         });
+                                      //         currentQuestions[currentQuestion].options[index].subOption = currentQuestions[currentQuestion].subOptions![selectedValue-1];
+                                      //
+                                      //         TestService().comparisonAnswerEntTest(
+                                      //             widget.test.entTest!.id,
+                                      //             currentQuestions[currentQuestion].id,
+                                      //             currentQuestions[currentQuestion].options[index].id,
+                                      //             currentQuestions[currentQuestion].subOptions![selectedValue-1].id
+                                      //         );
+                                      //       }
+                                      //     }
+                                      //
+                                      //   },
+                                      // );
                                     }
                                 ),
                               ),
@@ -924,7 +1086,7 @@ class _TestPageState extends State<TestPage> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         SmallButton(onPressed: (){
-                          _onWillPop();
+                          _onWillPop(true);
                         }, innerElement: Text(AppText.endTest, style: const TextStyle(color: Colors.white)), buttonColors: Colors.red, isDisabled: false,),
                       ],
                     )

@@ -101,7 +101,7 @@ class _AnalyticPartState extends State<AnalyticPart> {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
-        child: Column(
+        child: isLoading ? Center(child: CircularProgressIndicator(color: AppColors.colorButton,)) : Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
@@ -112,9 +112,6 @@ class _AnalyticPartState extends State<AnalyticPart> {
             // Text('${AppText.passedTests}:  0'),
             // Text('${AppText.lastPassedTest}:  0'),
             // Text('${AppText.averageScore}:  0'),
-            if(isLoading)
-              Center(child: CircularProgressIndicator(color: AppColors.colorButton,))
-            else
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -126,7 +123,6 @@ class _AnalyticPartState extends State<AnalyticPart> {
                 ],
               ),
               const SizedBox(height: 28,),
-
 
               if(datas != null)
               Text(AppText.allTestsScores,style: const TextStyle(fontWeight: FontWeight.bold),),

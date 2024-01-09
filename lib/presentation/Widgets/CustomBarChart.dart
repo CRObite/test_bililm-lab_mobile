@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import 'package:test_bilimlab_project/domain/scoresData.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
+import 'package:test_bilimlab_project/utils/AppTexts.dart';
 
 import '../../utils/barTypeEnum.dart';
 
@@ -98,7 +99,7 @@ class _CustomBarChartState extends State<CustomBarChart> {
                   touchTooltipData: BarTouchTooltipData(
                       getTooltipItem: (group, groupIndex, rod, rodIndex) {
 
-                        String info = '${formatDates(dates[groupIndex]!)}  \n';
+                        String info = dates[groupIndex] != null ? '${formatDates(dates[groupIndex]!)}  \n' : '${AppText.unknown}  \n'  ;
                         return BarTooltipItem(
                           info,
                           const TextStyle(

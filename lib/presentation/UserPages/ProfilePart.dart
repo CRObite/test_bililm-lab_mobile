@@ -70,7 +70,7 @@ class _ProfilePartState extends State<ProfilePart> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return isLoading? Center(child: CircularProgressIndicator(color: AppColors.colorButton,)) :  Stack(
       children: [
         Column(
           children: [
@@ -100,7 +100,7 @@ class _ProfilePartState extends State<ProfilePart> {
         ),
 
         Center(
-          child: isLoading? CircularProgressIndicator(color: AppColors.colorButton,) : Card(
+          child: Card(
             elevation: 10,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 28),

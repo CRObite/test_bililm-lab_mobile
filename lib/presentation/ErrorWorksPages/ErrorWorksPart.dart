@@ -162,11 +162,9 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return firstLoading? Center(child: CircularProgressIndicator(color: AppColors.colorButton,)) : Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
-
         Container(
           width: double.infinity,
           height: 150,
@@ -198,9 +196,9 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
               ),
             ),
             width: double.infinity,
-            child: firstLoading? const Center(child: CircularProgressIndicator(color: Colors.white,)) : Padding(
+            child:  Padding(
               padding: const EdgeInsets.only(top: 8,left: 8,right: 8),
-              child: revisions!.items.isEmpty?Center(child: Text('Қателермен жұмыс істеуге арналған сынақтарыңыз жоқ', style: TextStyle(color: Colors.white, fontSize: 24),),) : RefreshIndicator(
+              child: revisions!.items.isEmpty?Center(child: Text(AppText.noErrorWorkTests, style: TextStyle(color: Colors.white, fontSize: 24),),) : RefreshIndicator(
                 onRefresh: onRefresh,
                 child: GridView.builder(
                   controller: _controller,
