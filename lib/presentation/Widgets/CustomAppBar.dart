@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
+import 'package:test_bilimlab_project/domain/language.dart';
 import 'package:test_bilimlab_project/domain/testUser.dart';
 
 import '../../utils/AppColors.dart';
@@ -27,15 +28,17 @@ class _CustomAppBarState extends State<CustomAppBar> {
       automaticallyImplyLeading: false,
       backgroundColor: Colors.transparent,
       elevation: 1,
-      toolbarHeight: 80,
+      toolbarHeight: 60,
       flexibleSpace: Container(
         height: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             SizedBox(
-                height: 30,
+                height: 25,
                 child: Image.asset(AppImages.full_logo)
             ),
             GestureDetector(
@@ -45,31 +48,64 @@ class _CustomAppBarState extends State<CustomAppBar> {
               },
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Container(
-                    width: 40,
-                    height: 40,
+                    width: 35,
+                    height: 35,
                     decoration: BoxDecoration(
                       color: AppColors.colorGrayButton,
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: Center(child: Text('${widget.user.lastName[0]}${widget.user.firstName[0]}',style: const TextStyle(fontSize: 16),)),
+                    child: Center(child: Text('${widget.user.lastName[0]}${widget.user.firstName[0]}',style: const TextStyle(fontSize: 14),)),
                   ),
                   const SizedBox(
                     width: 8,
                   ),
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("${widget.user.lastName} ${widget.user.firstName[0]}.", style: const TextStyle(fontWeight: FontWeight.bold),),
-                      Text(widget.user.iin),
+                      Text("${widget.user.lastName} ${widget.user.firstName[0]}.", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),),
+                      Text(widget.user.iin, style: const TextStyle(fontSize: 12),),
                     ],
-                  )
+                  ),
+                  const SizedBox(
+                    width: 16,
+                  ),
+
+
+
+
+
+
+                  // DropdownButton<Language>(
+                  //   underline: SizedBox(),
+                  //   icon: Icon(Icons.language_rounded, size: 26, color: Colors.black),
+                  //   style: TextStyle(fontSize: 16, color: Colors.black), // Adjust the font size and color
+                  //   onChanged: (Language? lan) {
+                  //     setState(() {
+                  //       print(lan);
+                  //     });
+                  //     print(lan!.name);
+                  //   },
+                  //   items: Language.languageList().map<DropdownMenuItem<Language>>(
+                  //         (Language e) => DropdownMenuItem<Language>(
+                  //       value: e,
+                  //       child: Text(
+                  //         e.name,
+                  //         style: TextStyle(fontSize: 12),
+                  //       ),
+                  //     ),
+                  //   ).toList(),
+                  // ),
+
+
                 ],
               ),
             ),
+
           ],
         ),
       ),

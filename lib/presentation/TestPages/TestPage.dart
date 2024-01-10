@@ -93,22 +93,22 @@ class _TestPageState extends State<TestPage> {
 
     ComplexCheck();
 
-    // String formattedCurrentDate = DateFormat('dd.MM.yyyy HH:mm:ss').format(DateTime.now());
-    //
-    //
-    // if(widget.format == TestFormatEnum.ENT){
-    //   if(-differenceInSeconds(widget.test.entTest!.startedDate,formattedCurrentDate) < _elapsedSeconds){
-    //     _elapsedSeconds = _elapsedSeconds - differenceInSeconds(widget.test.entTest!.startedDate,formattedCurrentDate);
-    //   }else{
-    //     _endTest();
-    //   }
-    // }else if(widget.format == TestFormatEnum.SCHOOL){
-    //   if(-differenceInSeconds(widget.test.modoTest!.startedDate,formattedCurrentDate) < _elapsedSeconds){
-    //     _elapsedSeconds = _elapsedSeconds - differenceInSeconds(widget.test.modoTest!.startedDate,formattedCurrentDate);
-    //   }else{
-    //     _endTest();
-    //   }
-    // }
+    String formattedCurrentDate = DateFormat('dd.MM.yyyy HH:mm:ss').format(DateTime.now());
+
+
+    if(widget.format == TestFormatEnum.ENT){
+      if(-differenceInSeconds(widget.test.entTest!.startedDate,formattedCurrentDate) < _elapsedSeconds){
+        _elapsedSeconds = _elapsedSeconds - differenceInSeconds(widget.test.entTest!.startedDate,formattedCurrentDate);
+      }else{
+        _endTest();
+      }
+    }else if(widget.format == TestFormatEnum.SCHOOL){
+      if(-differenceInSeconds(widget.test.modoTest!.startedDate,formattedCurrentDate) < _elapsedSeconds){
+        _elapsedSeconds = _elapsedSeconds - differenceInSeconds(widget.test.modoTest!.startedDate,formattedCurrentDate);
+      }else{
+        _endTest();
+      }
+    }
 
 
   }

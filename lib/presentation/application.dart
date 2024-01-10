@@ -41,7 +41,7 @@ class _ApplicationState extends State<Application> {
     return Scaffold(
 
       appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(80),
+          preferredSize: const Size.fromHeight(60),
           child: CustomAppBar(user:  CurrentUser.currentTestUser!.testUser)
       ),
 

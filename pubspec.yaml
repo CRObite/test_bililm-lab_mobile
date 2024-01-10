@@ -47,6 +47,7 @@ dependencies:
   fl_chart: ^0.65.0
   flutter_svg: ^2.0.9
   shared_preferences: ^2.2.2
+  upgrader: ^8.4.0
 
 
 flutter_native_splash:
