@@ -43,6 +43,8 @@ class _AnalyticPartState extends State<AnalyticPart> {
         setState(() {
           datas = response.body;
         });
+      }else if(response.code == 401 && mounted ){
+        Navigator.pushReplacementNamed(context, '/');
       }
 
     } finally {

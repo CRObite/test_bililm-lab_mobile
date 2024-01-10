@@ -56,6 +56,8 @@ class _ProfilePartState extends State<ProfilePart> {
         setState(() {
           user = testUser;
         });
+      }else if(testUser == null && mounted ){
+        Navigator.pushReplacementNamed(context, '/');
       }
 
     } finally {

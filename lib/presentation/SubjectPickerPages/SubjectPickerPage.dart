@@ -52,6 +52,8 @@ class _SubjectPickerPageState extends State<SubjectPickerPage> {
       if(!entTest.passed){
         _onWillPop(TestFormatEnum.ENT , Test(entTest, null));
       }
+    }else if(response.code == 401 && mounted ){
+      Navigator.pushReplacementNamed(context, '/');
     }
 
     CustomResponse responseSchool = await TestService().getLastSchoolTest();
@@ -60,6 +62,8 @@ class _SubjectPickerPageState extends State<SubjectPickerPage> {
       if(!modoTest.passed){
         _onWillPop(TestFormatEnum.SCHOOL , Test(null, modoTest));
       }
+    }else if(response.code == 401 && mounted ){
+      Navigator.pushReplacementNamed(context, '/');
     }
 
     if(mounted){

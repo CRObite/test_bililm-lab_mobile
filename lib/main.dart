@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_upgrade_version/flutter_upgrade_version.dart';
 
 
 
@@ -25,7 +26,6 @@ import 'domain/test.dart';
 Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
-
   ByteData data = await PlatformAssetBundle().load('certificates/oqutest_kz.crt');
   SecurityContext.defaultContext.setTrustedCertificatesBytes(data.buffer.asUint8List());
   ByteData secondCertData = await PlatformAssetBundle().load('certificates/_oquway_kz.crt');
@@ -46,6 +46,60 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  PackageInfo _packageInfo = PackageInfo();
+
+  @override
+  void initState() {
+    super.initState();
+    getPackageData();
+  }
+
+  Future<void> getPackageData() async {
+
+    print('getPackageData started ');
+    if (!mounted) return;
+    _packageInfo = await PackageManager.getPackageInfo();
+    setState(() {});
+    print('getPackageData ended ');
+
+    usePackageData();
+  }
+  Future<void> usePackageData() async {
+    print('usePackageData started ');
+    if (Platform.isAndroid) {
+      InAppUpdateManager manager = InAppUpdateManager();
+      AppUpdateInfo? appUpdateInfo =
+      await manager.checkForUpdate();
+      if (appUpdateInfo == null) return;
+      if (appUpdateInfo.updateAvailability ==
+          UpdateAvailability
+              .developerTriggeredUpdateInProgress) {
+        String? message = await manager.startAnUpdate(
+            type: AppUpdateType.immediate);
+        debugPrint(message ?? '');
+      } else if (appUpdateInfo.updateAvailability ==
+          UpdateAvailability.updateAvailable) {
+        if (appUpdateInfo.immediateAllowed) {
+          String? message = await manager.startAnUpdate(
+              type: AppUpdateType.immediate);
+          debugPrint(message ?? '');
+        } else if (appUpdateInfo.flexibleAllowed) {
+          String? message = await manager.startAnUpdate(
+              type: AppUpdateType.flexible);
+          debugPrint(message ?? '');
+        } else {
+          debugPrint('Update available. Immediate & Flexible Update Flow not allow');
+        }
+      }
+    } else if (Platform.isIOS) {
+      VersionInfo? _versionInfo =
+      await UpgradeVersion.getiOSStoreVersion(
+          packageInfo: _packageInfo, regionCode: "US");
+      debugPrint(_versionInfo.toJson().toString());
+    }
+
+    print('usePackageData end ');
+  }
 
   final Map<String, WidgetBuilder> routes = {
 

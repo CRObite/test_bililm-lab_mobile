@@ -145,6 +145,8 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
         },
       );
 
+    }else if(response.code == 401 && mounted ){
+      Navigator.pushReplacementNamed(context, '/');
     }
 
   }

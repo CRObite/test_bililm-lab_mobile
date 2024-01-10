@@ -87,57 +87,57 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
-      body: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.only(top: 200),
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(
-                    height: 70,
-                    child: Image.asset(AppImages.full_logo)),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Card(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0),
-                    ),
-                    elevation: 5,
-                    child: Padding(
-                      padding: const EdgeInsets.all(32.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                            Text(AppText.enterIIN),
-                            const SizedBox(height: 8,),
-                            CustomTextField(controller: _iinController, title: AppText.iin, suffix: false, keybordType: TextInputType.number),
-                            const SizedBox(height: 16,),
-                            Text(AppText.enterPassword),
-                            const SizedBox(height: 8,),
-                            CustomTextField(controller: _passwordController, title: AppText.password, suffix: true , keybordType: TextInputType.visiblePassword),
-                            const SizedBox(height: 16,),
 
-                            if(errorMassage != null)
-                              Text(errorMassage!, style: const TextStyle(color: Colors.red),),
+        body: SingleChildScrollView(
+          child: Container(
+            margin: const EdgeInsets.only(top: 200),
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                      height: 70,
+                      child: Image.asset(AppImages.full_logo)),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Card(
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      elevation: 5,
+                      child: Padding(
+                        padding: const EdgeInsets.all(32.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                              Text(AppText.enterIIN),
+                              const SizedBox(height: 8,),
+                              CustomTextField(controller: _iinController, title: AppText.iin, suffix: false, keybordType: TextInputType.number),
+                              const SizedBox(height: 16,),
+                              Text(AppText.enterPassword),
+                              const SizedBox(height: 8,),
+                              CustomTextField(controller: _passwordController, title: AppText.password, suffix: true , keybordType: TextInputType.visiblePassword),
                               const SizedBox(height: 16,),
 
-                          LongButton(
-                            onPressed: isLoading ? (){} : onEnterButtonPressed,
-                            title: isLoading ? 'Loading...' : AppText.enter,
-                          )
-                        ],
+                              if(errorMassage != null)
+                                Text(errorMassage!, style: const TextStyle(color: Colors.red),),
+                                const SizedBox(height: 16,),
+
+                            LongButton(
+                              onPressed: isLoading ? (){} : onEnterButtonPressed,
+                              title: isLoading ? 'Loading...' : AppText.enter,
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
-      ),
     );
   }
 }
