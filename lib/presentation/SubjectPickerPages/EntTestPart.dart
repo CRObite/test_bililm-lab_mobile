@@ -59,84 +59,96 @@ class _EntTestPartState extends State<EntTestPart> {
 
   Future<void> onTestButtonPressed() async {
 
-    // EntTest test = EntTest('QWERTY', '02.02.2023', null, false, 'Survival', {
-    //   'Math': TestCategory([], [], [], [], [],
-    //     [TestQuestion(12, 'question 1', false, [], [],
-    //         [TestOption(1, 'option 1', null, null, []),
-    //           TestOption(2, 'option 2', null, null, []),
-    //           TestOption(3, 'option 3', null, null, [])],
-    //         [SubOption(1, 'suboption 1', []),
-    //           SubOption(2, 'suboption 2', []),
-    //           SubOption(3, 'suboption 3', [])], 'recomendation 1', 'answeredType 1'),
-    //       TestQuestion(13, 'question 2', false, [], [],
-    //           [TestOption(1, 'option 1', null, null, []),
-    //             TestOption(2, 'option 2', null, null, []),
-    //             TestOption(3, 'option 3', null, null, [])],
-    //           [SubOption(1, 'suboption 1', []),
-    //             SubOption(2, 'suboption 2', []),
-    //             SubOption(3, 'suboption 3', [])], 'recomendation 2', 'recomendation 2')],),
-    //   'Phys': TestCategory([], [], [], [], [],
-    //     [TestQuestion(12, 'question 1', false, [], [],
-    //         [TestOption(1, 'option 1', null, null, []),
-    //           TestOption(2, 'option 2', null, null, []),
-    //           TestOption(3, 'option 3', null, null, [])],
-    //         [SubOption(1, 'suboption 1', []),
-    //           SubOption(2, 'suboption 2', []),
-    //           SubOption(3, 'suboption 3', [])], 'recomendation 1', 'answeredType 1'),
-    //       TestQuestion(13, 'question 2', false, [], [],
-    //           [TestOption(1, 'option 1', null, null, []),
-    //             TestOption(2, 'option 2', null, null, []),
-    //             TestOption(3, 'option 3', null, null, [])],
-    //           [SubOption(1, 'suboption 1', []),
-    //             SubOption(2, 'suboption 2', []),
-    //             SubOption(3, 'suboption 3', [])], 'recomendation 2', 'recomendation 2')],),
-    // });
+    EntTest test = EntTest('QWERTY', '02.02.2023', null, false, 'Survival', {
+      'Математика': TestCategory([], [], [], [], [],
+        [TestQuestion(12, 'Үшбұрыштардың келесі түрлерін олардың өлшемімен байланыстырыңыз', false, [], [],
+            [TestOption(1, 'Scalene', null, null, []),
+              TestOption(2, 'Изоссельдер', null, null, []),
+              TestOption(3, 'Тең жақты', null, null, []),
+              TestOption(4, 'Тік бұрыш', null, null, [])],
+            [SubOption(1, 'әр түрлі ұзындықтағы барлық жақтар.', []),
+              SubOption(2, 'бірдей ұзындықтағы екі жағы.', []),
+              SubOption(3, 'бірдей ұзындықтағы 3 жағы', []),
+              SubOption(4, '190°бұрыш', []) ], 'recomendation 1', 'answeredType 1'),
+          TestQuestion(13, 'Келесі пішіндерді олардың жақтарының санына сәйкестендіріңіз', false, [], [],
+              [TestOption(1, 'Төртбұрыш', null, null, []),
+                TestOption(2, 'Алтыбұрыш', null, null, []),
+                TestOption(3, 'Пентагон', null, null, []),
+                TestOption(4, 'Октагон', null, null, [])],
+              [SubOption(1, '4', []),
+                SubOption(2, '6', []),
+                SubOption(3, '5', []),
+                SubOption(4, '8', [])], 'recomendation 2', 'recomendation 2')],),
+      'Химия': TestCategory([], [], [], [], [],
+        [TestQuestion(14, 'Элементтер мен олардың таңбаларын сәйкестендіріңіз', false, [], [],
+            [TestOption(1, 'Темір', null, null, []),
+              TestOption(2, 'Натрий', null, null, []),
+              TestOption(3, 'Күміс', null, null, []),
+              TestOption(4, 'Мыс', null, null, []),
+            ],
+            [SubOption(1, 'Fe', []),
+              SubOption(2, 'Na', []),
+              SubOption(3, 'Ag', []),
+              SubOption(4, 'Cu', []),
+            ], 'recomendation 1', 'answeredType 1'),
+          TestQuestion(15, 'Элементтерді және олардың атомдық нөмірлерін сәйкестендіріңіз', false, [], [],
+              [TestOption(1, 'Сутегі', null, null, []),
+                TestOption(2, 'Көміртек', null, null, []),
+                TestOption(3, 'Неон', null, null, []),
+                TestOption(3, 'Кобальт', null, null, []),
+              ],
+              [SubOption(1, '1', []),
+                SubOption(2, '6', []),
+                SubOption(3, '10', []),
+                SubOption(3, '27', []),
+              ], 'recomendation 2', 'recomendation 2')],),
+    });
+
+    Navigator.pushNamed(
+      context,
+      '/test',
+      arguments: {
+        'test': Test(test, null),
+        'testFormatEnum': TestFormatEnum.ENT,
+      },
+    );
+
+    // if(selectedFirstSub!= null && selectedSecondSub!= null){
     //
-    // Navigator.pushNamed(
-    //   context,
-    //   '/test',
-    //   arguments: {
-    //     'test': Test(test, null),
-    //     'testFormatEnum': TestFormatEnum.ENT,
-    //   },
-    // );
-
-    if(selectedFirstSub!= null && selectedSecondSub!= null){
-
-
-
-      setState(() {
-        errorMessage = null;
-        isLoading = true;
-      });
-
-      CustomResponse response = await TestService().generateEntTest(TestTypeEnum.SURVIVAL, selectedFirstSub, selectedSecondSub);
-
-      setState(() {
-        isLoading = false;
-      });
-
-      if(response.code == 200){
-        EntTest entTest = response.body as EntTest;
-        Navigator.pushNamed(
-          context,
-          '/test',
-          arguments: {
-            'test': Test(entTest, null),
-            'testFormatEnum': TestFormatEnum.ENT,
-          },
-        );
-
-      }else{
-        setState(() {
-          errorMessage = response.title;
-        });
-      }
-    }else{
-        setState(() {
-          errorMessage = AppText.selectBoth;
-        });
-    }
+    //
+    //
+    //   setState(() {
+    //     errorMessage = null;
+    //     isLoading = true;
+    //   });
+    //
+    //   CustomResponse response = await TestService().generateEntTest(TestTypeEnum.SURVIVAL, selectedFirstSub, selectedSecondSub);
+    //
+    //   setState(() {
+    //     isLoading = false;
+    //   });
+    //
+    //   if(response.code == 200){
+    //     EntTest entTest = response.body as EntTest;
+    //     Navigator.pushNamed(
+    //       context,
+    //       '/test',
+    //       arguments: {
+    //         'test': Test(entTest, null),
+    //         'testFormatEnum': TestFormatEnum.ENT,
+    //       },
+    //     );
+    //
+    //   }else{
+    //     setState(() {
+    //       errorMessage = response.title;
+    //     });
+    //   }
+    // }else{
+    //     setState(() {
+    //       errorMessage = AppText.selectBoth;
+    //     });
+    // }
   }
 
   Future<void> onTestButtonPressedCreative() async {

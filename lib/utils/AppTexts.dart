@@ -43,4 +43,6 @@ class AppText {
   static String emptyFiled = 'Бос орын';
   static String unknown = 'Белгісіз';
   static String noErrorWorkTests = 'Қателермен жұмыс істеуге арналған сынақтарыңыз жоқ';
+  static String previousQuestion = 'Жетекші сұрақ';
+  static String nextQuestion = 'Келесі сұрақ';
 }

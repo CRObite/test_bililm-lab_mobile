@@ -10,6 +10,8 @@ import 'package:test_bilimlab_project/utils/AppTexts.dart';
 import 'package:test_bilimlab_project/domain/scoresData.dart';
 import 'package:test_bilimlab_project/utils/barTypeEnum.dart';
 
+import '../../config/SharedPreferencesOperator.dart';
+
 class AnalyticPart extends StatefulWidget {
   const AnalyticPart({super.key});
 
@@ -44,6 +46,7 @@ class _AnalyticPartState extends State<AnalyticPart> {
           datas = response.body;
         });
       }else if(response.code == 401 && mounted ){
+        SharedPreferencesOperator.clearUserWithJwt();
         Navigator.pushReplacementNamed(context, '/');
       }
 

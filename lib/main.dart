@@ -2,10 +2,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_upgrade_version/flutter_upgrade_version.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 
 
 
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+
 import 'package:test_bilimlab_project/config/dependency_injection.dart';
 
 import 'package:test_bilimlab_project/presentation/AuthorizationPages/LoginPage.dart';
@@ -16,7 +18,6 @@ import 'package:test_bilimlab_project/presentation/TestPages/TestPage.dart';
 import 'package:test_bilimlab_project/presentation/UserPages/UserPage.dart';
 import 'package:test_bilimlab_project/presentation/application.dart';
 import 'package:test_bilimlab_project/utils/TestFormatEnum.dart';
-
 import 'domain/result.dart';
 import 'domain/test.dart';
 

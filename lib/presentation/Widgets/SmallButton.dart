@@ -7,6 +7,7 @@ class SmallButton extends StatelessWidget {
   final Widget innerElement;
   final Color buttonColors;
   final bool isDisabled;
+
   const SmallButton({Key? key, required this.onPressed,  required this.buttonColors, required this.innerElement, required this.isDisabled}) : super(key: key);
 
   @override
@@ -17,6 +18,7 @@ class SmallButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
+
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),

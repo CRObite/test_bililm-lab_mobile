@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
 import 'package:test_bilimlab_project/domain/revision.dart';
 
 import '../../data/service/test_service.dart';
@@ -59,6 +60,9 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
         setState(() {
           revisions = response.body;
         });
+      } else if(response.code == 401 && mounted ){
+        SharedPreferencesOperator.clearUserWithJwt();
+        Navigator.pushReplacementNamed(context, '/');
       }
 
     } finally {
