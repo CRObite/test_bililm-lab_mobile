@@ -38,6 +38,7 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
   List<int> allLength = [];
   int? startedIndex;
   Uint8List? currentBytes;
+  late List<int?> selectedValues;
 
   @override
   void initState() {
@@ -61,6 +62,7 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
 
     setBytes();
     checkContext();
+    checkComp();
   }
 
 
@@ -73,6 +75,11 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
 
   }
 
+  void checkComp(){
+    if(currentQuestions[currentQuestion].subOptions != null){
+      selectedValues = List.filled(currentQuestions[currentQuestion].subOptions!.length, null);
+    }
+  }
 
   List<String> getAllCategoryNames() {
     List<String> categoryNames = [];
@@ -243,54 +250,202 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
                         child: Image.memory(currentBytes!),
                       ),
 
+                    if (currentQuestions[currentQuestion].subOptions == null  || currentQuestions[currentQuestion].subOptions!.isEmpty)
 
-                    Container(
-                      width: double.infinity,
-                      height: currentQuestions[currentQuestion].options.length * 80,
-                      child: ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        itemCount: currentQuestions[currentQuestion].options.length,
-                        itemBuilder: (context, index) {
-                          if(!currentQuestions[currentQuestion].multipleAnswers){
-                            if(currentQuestions[currentQuestion].checkedAnswers !=null){
-                              currentQuestions[currentQuestion].checkedAnswers!.isNotEmpty ?
-                              selectedAnswerIndex = currentQuestions[currentQuestion].checkedAnswers![0]:
-                              selectedAnswerIndex = null;
-                            }
-                          }else{
-                            selectedMultipleAnswerIndex = currentQuestions[currentQuestion].checkedAnswers;
-                          }
+                        Container(
+                          width: double.infinity,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemCount: currentQuestions[currentQuestion].options.length,
+                            itemBuilder: (context, index) {
+                              if(!currentQuestions[currentQuestion].multipleAnswers){
+                                if(currentQuestions[currentQuestion].checkedAnswers !=null){
+                                  currentQuestions[currentQuestion].checkedAnswers!.isNotEmpty ?
+                                  selectedAnswerIndex = currentQuestions[currentQuestion].checkedAnswers![0]:
+                                  selectedAnswerIndex = null;
+                                }
+                              }else{
+                                selectedMultipleAnswerIndex = currentQuestions[currentQuestion].checkedAnswers;
+                              }
 
-                          return Container(
+                              return Container(
 
+                                decoration: BoxDecoration(
+                                    color: getRadioBackgroundColor(index),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: !currentQuestions[currentQuestion].multipleAnswers ?
+                                RadioListTile(
+
+                                  title: Text(currentQuestions[currentQuestion].options[index].text),
+                                  value: currentQuestions[currentQuestion].options[index].id,
+                                  groupValue: selectedAnswerIndex,
+                                  activeColor: AppColors.colorButton,
+                                  onChanged: (int? value) {
+                                  },
+                                  contentPadding: EdgeInsets.zero,
+                                ): CheckboxListTile(
+                                    title: Text(currentQuestions[currentQuestion].options[index].text),
+                                    value: currentQuestions[currentQuestion].checkedAnswers?.contains(currentQuestions[currentQuestion].options[index].id) ?? false,
+                                    activeColor: AppColors.colorButton,
+                                    onChanged: (bool? value) {
+                                    },
+                                    contentPadding: EdgeInsets.zero,
+                                    controlAffinity: ListTileControlAffinity.leading
+                                )
+                              );
+
+                            },
+                          ),
+                        )else Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
                             decoration: BoxDecoration(
-                                color: getRadioBackgroundColor(index),
-                                borderRadius: BorderRadius.circular(10.0),
+                              borderRadius: BorderRadius.circular(10.0),
+                              border: Border.all(
+                                color: Colors.grey.withOpacity(0.5),
+                                width: 2.0,
+
+                              ),
                             ),
-                            child: !currentQuestions[currentQuestion].multipleAnswers ?
-                            RadioListTile(
+                            width: double.infinity,
+                            child: ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: currentQuestions[currentQuestion].subOptions!.length,
+                              itemBuilder: (context, index){
+                                return  Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Draggable<int>(
 
-                              title: Text(currentQuestions[currentQuestion].options[index].text),
-                              value: currentQuestions[currentQuestion].options[index].id,
-                              groupValue: selectedAnswerIndex,
-                              activeColor: AppColors.colorButton,
-                              onChanged: (int? value) {
+                                      data: index,
+
+                                      feedback: Card(
+                                          color: Colors.blue.withOpacity(0.5),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text('${currentQuestions[currentQuestion].subOptions![index].text}', style: TextStyle( color:  Colors.white),),
+                                          )),
+                                      childWhenDragging:  Card(
+                                          color: Colors.blue.withOpacity(0.5),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text('${currentQuestions[currentQuestion].subOptions![index].text}', style: TextStyle( color:  Colors.white),),
+                                          )),
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                          color: Colors.blue,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(10.0),
+                                          ),
+                                        ),
+                                        child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text('${currentQuestions[currentQuestion].subOptions![index].text}', style: TextStyle( color:  Colors.white),)),
+                                      ),
+                                      ignoringFeedbackPointer: true,
+                                      ignoringFeedbackSemantics: true,
+                                  ),
+                                );
                               },
-                              contentPadding: EdgeInsets.zero,
-                            ): CheckboxListTile(
-                                title: Text(currentQuestions[currentQuestion].options[index].text),
-                                value: currentQuestions[currentQuestion].checkedAnswers?.contains(currentQuestions[currentQuestion].options[index].id) ?? false,
-                                activeColor: AppColors.colorButton,
-                                onChanged: (bool? value) {
-                                },
-                                contentPadding: EdgeInsets.zero,
-                                controlAffinity: ListTileControlAffinity.leading
-                            )
-                          );
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
 
-                        },
-                      ),
-                    ),
+                          Container(
+                            width: double.infinity,
+                            child: ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: currentQuestions[currentQuestion].options.length,
+                                itemBuilder: (context, index){
+
+                                  if(currentQuestions[currentQuestion].options[index].subOption != null){
+                                    selectedValues[index] = currentQuestions[currentQuestion].subOptions!.indexOf( currentQuestions[currentQuestion].options[index].subOption!);
+                                  }
+
+                                  return  Container(
+                                    color: getRadioBackgroundColor(index),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        SizedBox(
+
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Text(currentQuestions[currentQuestion].options[index].text),
+                                            ),
+                                          ),
+                                          width: 150,
+                                        ),
+
+                                        Icon(Icons.remove),
+
+                                        SizedBox(
+                                          width: 160,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: DragTarget<int>(
+
+                                                onAccept: (data){
+                                                },
+                                                builder: (context, candidateData, rejectedData){
+
+                                                  if(selectedValues[index] != null){
+                                                    return Container(
+                                                      decoration: const BoxDecoration(
+                                                        color: Colors.blue,
+                                                        borderRadius: BorderRadius.all(
+                                                          Radius.circular(10.0),
+                                                        ),
+                                                      ),
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.all(8.0),
+                                                        child: Text('${currentQuestions[currentQuestion].subOptions![selectedValues[index]!].text}', style: const TextStyle(color: Colors.white),),
+                                                      ),
+                                                    );
+                                                  }else{
+                                                    return Container(
+                                                      decoration: BoxDecoration(
+                                                        color: AppColors.colorGrayButton,
+                                                        borderRadius: BorderRadius.all(
+                                                          Radius.circular(10.0),
+                                                        ),
+                                                      ),
+
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.all(8.0),
+                                                        child: Center(
+                                                          child: Text(
+                                                            AppText.emptyFiled, style: TextStyle(color: Colors.blueGrey),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }
+
+                                                }
+                                            ),
+                                          ),
+                                        )
+
+                                      ],
+                                    ),
+                                  );
+                                }
+                            ),
+                          ),
+
+                          ],
+                        ),
+
+                    SizedBox(height: 16,),
 
                     Row(
                       children: [
@@ -327,8 +482,11 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
               width: double.infinity,
               child: Column(
                 children: [
+                  SizedBox(
+                    height: 8,
+                  ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SmallButton(
                         onPressed: (){
@@ -337,17 +495,22 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
                             currentQuestion-=1;
                             checkContext();
                             setBytes();
+                            checkComp();
+
                             setState(() {
                             });
                             _scrollToElement(currentQuestion);
                           }
 
                         },
-                        buttonColors: AppColors.colorGrayButton,
-                        innerElement: Icon(
-                          Icons.arrow_back_ios_new_rounded,
-                          color: currentQuestion != 0 ? Colors.grey: Colors.greenAccent,
-                        ), isDisabled: currentQuestion != 0 ? false: true,
+                        buttonColors: currentQuestion != 0 ? AppColors.colorGrayButton : Colors.white,
+                        innerElement: Row(
+                          children: [
+                            Icon(Icons.arrow_back_ios_new_rounded,color: currentQuestion != 0 ? AppColors.colorButton: AppColors.colorButton.withOpacity(0.5),size: 18, ),
+                            Text(AppText.previousQuestion, style: TextStyle(color: currentQuestion != 0 ? AppColors.colorButton: AppColors.colorButton.withOpacity(0.5), fontSize: 12),),
+                          ],
+                        ),
+                        isDisabled: currentQuestion != 0 ? false: true,
                       ),
                       const SizedBox(width: 8,),
                       SmallButton(
@@ -357,24 +520,27 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
                             currentQuestion+=1;
                             checkContext();
                             setBytes();
+                            checkComp();
                             setState(() {
                             });
                             _scrollToElement(currentQuestion);
                           }
                         },
-                        buttonColors: AppColors.colorGrayButton,
-                        innerElement:  Icon(
-                            Icons.arrow_forward_ios_rounded,
-                            color: currentQuestion !=currentQuestions.length-1 ? Colors.grey: Colors.greenAccent
-                        ), isDisabled: currentQuestion != currentQuestions.length-1 ? false: true,
-                      ),
+                        buttonColors: currentQuestion !=currentQuestions.length-1 ? AppColors.colorGrayButton: Colors.white,
+                        innerElement:  Row(
+                          children: [
+                            Text(AppText.nextQuestion, style: TextStyle(color: currentQuestion !=currentQuestions.length-1 ? AppColors.colorButton: AppColors.colorButton.withOpacity(0.5), fontSize: 12),),
+                            Icon(Icons.arrow_forward_ios_rounded,color: currentQuestion !=currentQuestions.length-1 ? AppColors.colorButton: AppColors.colorButton.withOpacity(0.5),size: 18, ),
+                          ],
+                        ),
+                        isDisabled: currentQuestion !=currentQuestions.length-1 ? false : true,
+                      )
 
                     ],
                   ),
                   const SizedBox(
-                    height: 8,
+                    height: 16,
                   ),
-
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -386,29 +552,26 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
                           SmallButton(
                             onPressed: (){
                               if(currentSubject != 0){
-                                content = null;
-                                currentContext = 0;
+
                                 setState(() {
                                   currentSubject -= 1;
                                   currentQuestion = 0;
+
+                                  ComplexCheck();
                                 });
-
-                                ComplexCheck();
                               }
-
                             },
-                            buttonColors: AppColors.colorButton,
-                            innerElement: Icon(
+                            buttonColors: currentSubject != 0 ? AppColors.colorButton : Colors.white ,
+                            innerElement:  Icon(
                               Icons.arrow_back_ios_new_rounded,
-                              color: currentSubject != 0 ? Colors.white: Colors.greenAccent,
+                              color: currentSubject != 0 ?  Colors.white: Colors.grey.withOpacity(0.5),
                             ), isDisabled: currentSubject != 0 ? false: true,
                           ),
                           const SizedBox(width: 8,),
                           SmallButton(
                             onPressed: (){
                               if(currentSubject != currentSubjects.length-1){
-                                content = null;
-                                currentContext = 0;
+
                                 setState(() {
                                   currentSubject += 1;
                                   currentQuestion = 0;
@@ -417,18 +580,24 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
                                 });
                               }
                             },
-                            buttonColors: AppColors.colorButton,
+                            buttonColors: currentSubject != currentSubjects.length-1 ? AppColors.colorButton : Colors.white,
                             innerElement:  Icon(
-                                Icons.arrow_forward_ios_rounded,
-                                color: currentSubject != currentSubjects.length-1 ? Colors.white: Colors.greenAccent
-                            ), isDisabled: currentSubject != currentSubjects.length-1 ? false: true,
-                          ),
+                              Icons.arrow_forward_ios_rounded,
+                              color: currentSubject != currentSubjects.length-1 ?  Colors.white: Colors.grey.withOpacity(0.5),
+                            ), isDisabled: currentSubject != currentSubjects.length-1 ?  false : true,
+                          )
                         ],
                       ),
 
+                    ],
+                  ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
                       SmallButton(onPressed: (){
-                          Navigator.pop(context);
-                      }, innerElement: Text(AppText.endTest, style: const TextStyle(color: Colors.white)), buttonColors: Colors.red, isDisabled: false,)
+                        Navigator.pop(context);
+                      }, innerElement: Text(AppText.endTest, style: const TextStyle(color: Colors.white)), buttonColors: Colors.red, isDisabled: false,),
                     ],
                   )
                 ],

@@ -15,16 +15,19 @@ class SmallButton extends StatelessWidget {
     return Container(
       height: 40,
 
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
+      child: Visibility(
+        visible: !isDisabled,
+        child: ElevatedButton(
+          onPressed: onPressed,
+          style: ElevatedButton.styleFrom(
 
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            backgroundColor: buttonColors,
           ),
-          backgroundColor: isDisabled?  AppColors.colorGrayButtonDisabled : buttonColors,
+          child: innerElement,
         ),
-        child: innerElement,
       ),
     );
   }

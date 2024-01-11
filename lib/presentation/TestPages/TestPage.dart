@@ -23,7 +23,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../../domain/entResult.dart';
 import '../../domain/test.dart';
 import '../../domain/testQuestion.dart';
-import '../../utils/FullScreenImageDialog.dart';
+import '../Widgets/FullScreenImageDialog.dart';
 
 
 class TestPage extends StatefulWidget {
@@ -498,11 +498,11 @@ class _TestPageState extends State<TestPage> {
                         ),
 
 
-                      if (currentQuestions[currentQuestion].subOptions!= null && currentQuestions[currentQuestion].subOptions!.isEmpty)
+                      if (currentQuestions[currentQuestion].subOptions == null  || currentQuestions[currentQuestion].subOptions!.isEmpty)
                         Container(
                         width: double.infinity,
-                        height: currentQuestions[currentQuestion].options.length * 80,
                         child: ListView.builder(
+                          shrinkWrap: true,
                           scrollDirection: Axis.vertical,
                           itemCount: widget.format == TestFormatEnum.ENT ?
                             currentQuestions[currentQuestion].options.length :
@@ -641,11 +641,10 @@ class _TestPageState extends State<TestPage> {
 
                               ),
                             ),
-                            height: currentQuestions[currentQuestion].subOptions!.length * 70 + 10,
                             width: double.infinity,
                             child: ListView.builder(
                                 physics: NeverScrollableScrollPhysics(),
-                                itemExtent: 70,
+                                shrinkWrap: true,
                                 itemCount: currentQuestions[currentQuestion].subOptions!.length,
                                 itemBuilder: (context, index){
                                   return  Padding(
@@ -686,8 +685,8 @@ class _TestPageState extends State<TestPage> {
 
                           Container(
                             width: double.infinity,
-                            height: currentQuestions[currentQuestion].options.length * 90,
                             child: ListView.builder(
+                                shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
                                 itemCount: currentQuestions[currentQuestion].options.length,
                                 itemBuilder: (context, index){
@@ -703,22 +702,14 @@ class _TestPageState extends State<TestPage> {
 
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
-                                          child: Container(
-                                            decoration: const BoxDecoration(
-                                              color: Colors.blue,
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(10.0),
-                                              ),
-                                            ),
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: Text(currentQuestions[currentQuestion].options[index].text, style: const TextStyle(color: Colors.white),),
-                                            ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(currentQuestions[currentQuestion].options[index].text),
                                           ),
                                         ),
-                                        width: 160,
+                                        width: 150,
                                       ),
-                                      
+
                                       Icon(Icons.remove),
 
                                       SizedBox(
@@ -853,6 +844,9 @@ class _TestPageState extends State<TestPage> {
                 width: double.infinity,
                 child: Column(
                   children: [
+                    SizedBox(
+                      height: 8,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -872,8 +866,13 @@ class _TestPageState extends State<TestPage> {
 
                             },
                             buttonColors: currentQuestion != 0 ? AppColors.colorGrayButton : Colors.white,
-                            innerElement: Text(AppText.previousQuestion, style: TextStyle(color: currentQuestion != 0 ? AppColors.colorButton: AppColors.colorButton.withOpacity(0.5)),),
-                          isDisabled: false,
+                            innerElement: Row(
+                              children: [
+                                Icon(Icons.arrow_back_ios_new_rounded,color: currentQuestion != 0 ? AppColors.colorButton: AppColors.colorButton.withOpacity(0.5),size: 18, ),
+                                Text(AppText.previousQuestion, style: TextStyle(color: currentQuestion != 0 ? AppColors.colorButton: AppColors.colorButton.withOpacity(0.5), fontSize: 12),),
+                              ],
+                            ),
+                          isDisabled: currentQuestion != 0 ? false: true,
                         ),
                         const SizedBox(width: 8,),
                         widget.format == TestFormatEnum.ENT ? SmallButton(
@@ -890,8 +889,13 @@ class _TestPageState extends State<TestPage> {
                               }
                             },
                             buttonColors: currentQuestion !=currentQuestions.length-1 ? AppColors.colorGrayButton: Colors.white,
-                            innerElement:  Text(AppText.nextQuestion, style: TextStyle(color: currentQuestion !=currentQuestions.length-1 ? AppColors.colorButton: AppColors.colorButton.withOpacity(0.5)),),
-                          isDisabled: false,
+                            innerElement:  Row(
+                              children: [
+                                Text(AppText.nextQuestion, style: TextStyle(color: currentQuestion !=currentQuestions.length-1 ? AppColors.colorButton: AppColors.colorButton.withOpacity(0.5), fontSize: 12),),
+                                Icon(Icons.arrow_forward_ios_rounded,color: currentQuestion !=currentQuestions.length-1 ? AppColors.colorButton: AppColors.colorButton.withOpacity(0.5),size: 18, ),
+                              ],
+                            ),
+                          isDisabled: currentQuestion !=currentQuestions.length-1 ? false : true,
                         ):
                         SmallButton(
                           onPressed: (){
@@ -906,8 +910,13 @@ class _TestPageState extends State<TestPage> {
                             }
                           },
                           buttonColors: currentQuestion !=currentQuestions.length-1 ? AppColors.colorGrayButton: Colors.white,
-                          innerElement:  Text(AppText.nextQuestion, style: TextStyle(color: currentQuestion !=currentQuestions.length-1 ? AppColors.colorButton: AppColors.colorButton.withOpacity(0.5)),),
-                          isDisabled: false,
+                          innerElement:  Row(
+                            children: [
+                              Text(AppText.nextQuestion, style: TextStyle(color: currentQuestion !=currentQuestions.length-1 ? AppColors.colorButton: AppColors.colorButton.withOpacity(0.5), fontSize: 12),),
+                              Icon(Icons.arrow_forward_ios_rounded,color: currentQuestion !=currentQuestions.length-1 ? AppColors.colorButton: AppColors.colorButton.withOpacity(0.5),size: 18, ),
+                            ],
+                          ),
+                          isDisabled: currentQuestion !=currentQuestions.length-1 ? false : true,
                         ),
 
                       ],
@@ -939,7 +948,7 @@ class _TestPageState extends State<TestPage> {
                               innerElement:  Icon(
                                 Icons.arrow_back_ios_new_rounded,
                                 color: currentSubject != 0 ?  Colors.white: Colors.grey.withOpacity(0.5),
-                              ), isDisabled: false,
+                              ), isDisabled: currentSubject != 0 ? false: true,
                             ) : SmallButton(
                               onPressed: (){
                                 if(currentSubject != 0){
@@ -969,7 +978,7 @@ class _TestPageState extends State<TestPage> {
                               innerElement:  Icon(
                                 Icons.arrow_back_ios_new_rounded,
                                 color: currentSubject != 0 || currentTypeSubject != 0 ?  Colors.white: Colors.grey.withOpacity(0.5),
-                              ), isDisabled: false,
+                              ), isDisabled: currentSubject != 0 || currentTypeSubject != 0 ? false  :true,
                             ),
                             const SizedBox(width: 8,),
                             widget.format == TestFormatEnum.ENT ? SmallButton(
@@ -988,7 +997,7 @@ class _TestPageState extends State<TestPage> {
                               innerElement:  Icon(
                                 Icons.arrow_forward_ios_rounded,
                                 color: currentSubject != currentSubjects.length-1 ?  Colors.white: Colors.grey.withOpacity(0.5),
-                              ), isDisabled: false,
+                              ), isDisabled: currentSubject != currentSubjects.length-1 ?  false : true,
                             ): SmallButton(
                               onPressed: (){
                                 if(currentSubject != currentSubjects.length-1){
@@ -1015,7 +1024,7 @@ class _TestPageState extends State<TestPage> {
                               innerElement:  Icon(
                                 Icons.arrow_forward_ios_rounded,
                                 color: currentSubject != currentSubjects.length-1 || currentTypeSubject != currentTypeSubjects.length-1 ?  Colors.white: Colors.grey.withOpacity(0.5),
-                              ), isDisabled: false,
+                              ), isDisabled: currentSubject != currentSubjects.length-1 || currentTypeSubject != currentTypeSubjects.length-1 ?  false :true,
                             ),
                           ],
                         ),
