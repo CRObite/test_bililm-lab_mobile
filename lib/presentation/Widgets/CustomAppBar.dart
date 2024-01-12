@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
 import 'package:test_bilimlab_project/domain/language.dart';
 import 'package:test_bilimlab_project/domain/testUser.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/ReportDialog.dart';
 
 import '../../utils/AppColors.dart';
 import '../../utils/AppImages.dart';
+
 
 class CustomAppBar extends StatefulWidget {
   const CustomAppBar({super.key, required this.user});
@@ -38,7 +40,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             SizedBox(
-                height: 25,
+                height: 40,
+                width: 120,
                 child: Image.asset(AppImages.full_logo)
             ),
             GestureDetector(
@@ -48,8 +51,19 @@ class _CustomAppBarState extends State<CustomAppBar> {
               },
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+
+                  IconButton(
+                      onPressed: (){
+                        showDialog(
+                          context: context,
+                          builder: (context) => ReportDialog(),
+                        );
+                      },
+                      icon: Icon(Icons.notifications_none),),
+
+
                   Container(
                     width: 35,
                     height: 35,

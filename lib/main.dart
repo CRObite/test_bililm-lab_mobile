@@ -145,7 +145,6 @@ class _MyAppState extends State<MyApp> {
       }
     },
     '/user': (context) => const UserPage(),
-
   };
 
   @override

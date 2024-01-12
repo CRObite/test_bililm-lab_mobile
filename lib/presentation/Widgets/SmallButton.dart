@@ -7,8 +7,9 @@ class SmallButton extends StatelessWidget {
   final Widget innerElement;
   final Color buttonColors;
   final bool isDisabled;
+  final bool isBordered;
 
-  const SmallButton({Key? key, required this.onPressed,  required this.buttonColors, required this.innerElement, required this.isDisabled}) : super(key: key);
+  const SmallButton({Key? key, required this.onPressed,  required this.buttonColors, required this.innerElement, required this.isDisabled, required this.isBordered}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +21,11 @@ class SmallButton extends StatelessWidget {
         child: ElevatedButton(
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
-
+            elevation: isBordered ? 1 : 0,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
-            backgroundColor: buttonColors,
+            backgroundColor: isBordered ?  buttonColors : Colors.transparent,
           ),
           child: innerElement,
         ),

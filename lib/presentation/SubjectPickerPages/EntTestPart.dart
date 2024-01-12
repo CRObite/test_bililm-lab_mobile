@@ -203,94 +203,96 @@ class _EntTestPartState extends State<EntTestPart> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextButton(onPressed: (){widget.onPressed();}, child: Text('${AppText.modoTest} >', style: TextStyle(fontSize: 16, color: AppColors.colorButton),)),
-            ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(onPressed: (){widget.onPressed();}, child: Text('${AppText.modoTest} >', style: TextStyle(fontSize: 16, color: AppColors.colorButton),)),
+              ],
+            ),
           ),
-        ),
-        Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(AppText.entTest ,style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
-              const SizedBox(
-                height: 16,
-              ),
-              Container(
-                width: 120,
-                height: 120,
-                decoration: BoxDecoration(
-                  color: AppColors.colorBackgroundGreen,
-                  borderRadius: BorderRadius.circular(130),
+          Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(AppText.entTest ,style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
+                const SizedBox(
+                  height: 16,
                 ),
-                child: Center(
-                    child: SizedBox(
-                        height: 100,
-                        child: Image.asset(AppImages.pie_chart)
-                    )
-                ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              CustomDropDown(dropItems: dropItems, hint: AppText.selectFirstSubject,onSelected: onSelectFirstSub,selectedItemId: selectedFirstSub,),
-              const SizedBox(
-                height: 16,
-              ),
-              IgnorePointer(
-                  ignoring: firstSubWasNotSelected,
-                  child: CustomDropDown(dropItems: dropItemsSecond, hint: AppText.selectSecondSubject, onSelected: onSelectSecondSub,selectedItemId: selectedSecondSub,)
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              if(errorMessage != null)
-                Text(errorMessage!, style: const TextStyle(color: Colors.red),),
-                const SizedBox(height: 16,),
-              SizedBox(
-                  width:250,
-                  child: LongButton(
-                    onPressed: isLoading ? (){} : onTestButtonPressed,
-                    title: isLoading ? 'Loading...' : AppText.startTest,
-                  )
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Container(
-                width:250,
-                decoration: const BoxDecoration(
-                  border: Border(
-                    top: BorderSide(
-                      color: Colors.grey,
-                    ),
+                Container(
+                  width: 120,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    color: AppColors.colorBackgroundGreen,
+                    borderRadius: BorderRadius.circular(130),
+                  ),
+                  child: Center(
+                      child: SizedBox(
+                          height: 100,
+                          child: Image.asset(AppImages.pie_chart)
+                      )
                   ),
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Column(
-
-                  children: [
-                    Text(AppText.creative),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    LongButton(
-                      onPressed: isLoading ? (){} : onTestButtonPressedCreative,
+                const SizedBox(
+                  height: 16,
+                ),
+                CustomDropDown(dropItems: dropItems, hint: AppText.selectFirstSubject,onSelected: onSelectFirstSub,selectedItemId: selectedFirstSub,),
+                const SizedBox(
+                  height: 16,
+                ),
+                IgnorePointer(
+                    ignoring: firstSubWasNotSelected,
+                    child: CustomDropDown(dropItems: dropItemsSecond, hint: AppText.selectSecondSubject, onSelected: onSelectSecondSub,selectedItemId: selectedSecondSub,)
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                if(errorMessage != null)
+                  Text(errorMessage!, style: const TextStyle(color: Colors.red),),
+                  const SizedBox(height: 16,),
+                SizedBox(
+                    width:250,
+                    child: LongButton(
+                      onPressed: isLoading ? (){} : onTestButtonPressed,
                       title: isLoading ? 'Loading...' : AppText.startTest,
                     )
-                  ],
                 ),
-              )
-            ],
+                const SizedBox(
+                  height: 8,
+                ),
+                Container(
+                  width:250,
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      top: BorderSide(
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Column(
+      
+                    children: [
+                      Text(AppText.creative),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      LongButton(
+                        onPressed: isLoading ? (){} : onTestButtonPressedCreative,
+                        title: isLoading ? 'Loading...' : AppText.startTest,
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

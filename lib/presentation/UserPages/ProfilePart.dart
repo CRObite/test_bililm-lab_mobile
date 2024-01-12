@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/SmallButton.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/Tariffs.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/TopUpYourBalance.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
 import 'package:test_bilimlab_project/utils/AppImages.dart';
 
@@ -32,11 +35,11 @@ class _ProfilePartState extends State<ProfilePart> {
   }
 
 
-  Icon getPermissionIcon(bool permission){
+  Widget getPermissionIcon(bool permission){
     if(permission){
-      return const Icon(Icons.check_circle_outline_rounded, color: Colors.green, size: 40,);
+      return const Icon(Icons.check, color: Colors.green, size: 28,);
     }else{
-      return const Icon(Icons.cancel_outlined, color: Colors.red,size: 40,);
+      return Transform.rotate(angle: 45 * (3.1415926535897932 / 180) , child: const Icon(Icons.add, color: Colors.red,size: 30,));
     }
   }
 
@@ -72,125 +75,197 @@ class _ProfilePartState extends State<ProfilePart> {
 
   @override
   Widget build(BuildContext context) {
-    return isLoading? Center(child: CircularProgressIndicator(color: AppColors.colorButton,)) :  Stack(
-      children: [
-        Column(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Colors.lightGreen.withOpacity(0.2),Colors.lightGreen,AppColors.firstAndSecondProfileBarChartColor ],
-                ),
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(20.0),
-                  bottomRight: Radius.circular(20.0),
-                ),
-              ),
-              width: double.infinity,
-              height: 300,
-              child: Center(child: Image.asset(AppImages.profile_image)),
-            ),
-
-
-
-
-
-
-          ],
-        ),
-
-        Center(
-          child: Card(
-            elevation: 10,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 28),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text('${CurrentUser.currentTestUser!.testUser.lastName} ${CurrentUser.currentTestUser!.testUser.firstName }', style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-                  const SizedBox(height: 8,),
-                  Text(CurrentUser.currentTestUser!.testUser.iin , style: const TextStyle(fontWeight: FontWeight.bold,),),
-                  const SizedBox(height: 16,),
-
-
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: 150,
-                        decoration:  BoxDecoration(
-                          color: AppColors.colorButton,
-                          borderRadius: const BorderRadius.all(
-                             Radius.circular(20.0),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            children: [
-                              Text(AppText.entPermission, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 10),),
-                              const SizedBox(height: 8,),
-                              Container(
-                                height: 40,
-                                width: 40,
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(20.0),
-                                  ),
-                                ),
-                                child: Center(
-                                    child: user!= null ? getPermissionIcon(user!.permissionForTest): getPermissionIcon(false)
-                                )
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(width: 8,),
-
-                      Container(
-                        width: 150,
-                        decoration: BoxDecoration(
-                          color: AppColors.colorButton,
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(20.0),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            children: [
-                              Text(AppText.modoPermission, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 10),),
-                              const SizedBox(height: 8,),
-                              Container(
-                                height: 40,
-                                width: 40,
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(20.0),
-                                  ),
-                                ),
-                                child:  Center(
-                                    child: user!= null ? getPermissionIcon(user!.permissionForModo): getPermissionIcon(false)
-                                )
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+    return isLoading? Center(child: CircularProgressIndicator(color: AppColors.colorButton,)) :  SingleChildScrollView(
+      child: Stack(
+        children: [
+          Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Colors.lightGreen.withOpacity(0.2),Colors.lightGreen,AppColors.firstAndSecondProfileBarChartColor ],
                   ),
-                ],
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(20.0),
+                    bottomRight: Radius.circular(20.0),
+                  ),
+                ),
+                width: double.infinity,
+                height: 300,
+                child: Center(child: Image.asset(AppImages.profile_image)),
+              ),
+      
+            ],
+          ),
+      
+          Container(
+            margin: EdgeInsets.fromLTRB(10, 250, 10, 0),
+            child: Card(
+              elevation: 4,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('${CurrentUser.currentTestUser!.testUser.lastName} ${CurrentUser.currentTestUser!.testUser.firstName }', style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 24,),),
+                    const SizedBox(height: 8,),
+                    Text(CurrentUser.currentTestUser!.testUser.iin , style: const TextStyle(fontSize: 16,),),
+                    const SizedBox(height: 16,),
+      
+      
+                    Container(
+                      width: 350,
+      
+                      decoration:  BoxDecoration(
+                        color: AppColors.darkerBlue,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(20.0),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                              Text(AppText.userBalance, style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.colorGrayButton.withOpacity(0.8))),
+                              Text('18 420.81 KZT', style: const TextStyle(fontSize: 30, color: Colors.white),),
+      
+                              SizedBox(height: 16,),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: SmallButton(
+                                        onPressed: (){
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) => TopUpYourBalance(),
+                                          );
+                                        },
+                                        buttonColors: AppColors.colorButton,
+                                        innerElement: Row(
+                                          children: [
+                                            Icon(Icons.account_balance_wallet_rounded, color: Colors.white,),
+                                            SizedBox(width: 8,),
+                                            Text(AppText.replenish, style: TextStyle(color: Colors.white),),
+                                          ],
+                                        ),
+                                        isDisabled: false,
+                                        isBordered: true),
+                                  ),
+      
+                                  SizedBox(width: 8,),
+      
+                                  Expanded(
+                                    child: SmallButton(
+                                        onPressed: (){
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) => Tariffs(),
+                                          );
+                                        },
+                                        buttonColors: Colors.white,
+                                        innerElement: Row(
+                                          children: [
+                                            Icon(Icons.ad_units_outlined,),
+                                            SizedBox(width: 8,),
+                                            Text(AppText.tariffs),
+                                          ],
+                                        ),
+                                        isDisabled: false,
+                                        isBordered: true),
+                                  ),
+                                ],
+                              )
+      
+                          ],
+                        ),
+                      ),
+                    ),
+      
+      
+                    const SizedBox(height: 16,),
+      
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 150,
+                          decoration:  BoxDecoration(
+                            color: AppColors.colorButton,
+                            borderRadius: const BorderRadius.all(
+                               Radius.circular(20.0),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              children: [
+                                Text(AppText.entPermission, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 10),),
+                                const SizedBox(height: 8,),
+                                Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(20.0),
+                                    ),
+                                  ),
+                                  child: Center(
+                                      child: user!= null ? getPermissionIcon(user!.permissionForTest): getPermissionIcon(false)
+                                  )
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+      
+                        const SizedBox(width: 8,),
+      
+                        Container(
+                          width: 150,
+                          decoration: BoxDecoration(
+                            color: AppColors.colorButton,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(20.0),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              children: [
+                                Text(AppText.modoPermission, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 10),),
+                                const SizedBox(height: 8,),
+                                Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(20.0),
+                                    ),
+                                  ),
+                                  child:  Center(
+                                      child: user!= null ? getPermissionIcon(user!.permissionForModo): getPermissionIcon(false)
+                                  )
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        )
-      ]
+          )
+        ]
+      ),
     );
   }
 }

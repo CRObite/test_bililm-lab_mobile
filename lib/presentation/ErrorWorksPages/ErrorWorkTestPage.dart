@@ -510,7 +510,8 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
                             Text(AppText.previousQuestion, style: TextStyle(color: currentQuestion != 0 ? AppColors.colorButton: AppColors.colorButton.withOpacity(0.5), fontSize: 12),),
                           ],
                         ),
-                        isDisabled: currentQuestion != 0 ? false: true,
+                        isDisabled: currentQuestion != 0 ? false: true, 
+                        isBordered: false,
                       ),
                       const SizedBox(width: 8,),
                       SmallButton(
@@ -533,7 +534,8 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
                             Icon(Icons.arrow_forward_ios_rounded,color: currentQuestion !=currentQuestions.length-1 ? AppColors.colorButton: AppColors.colorButton.withOpacity(0.5),size: 18, ),
                           ],
                         ),
-                        isDisabled: currentQuestion !=currentQuestions.length-1 ? false : true,
+                        isDisabled: currentQuestion !=currentQuestions.length-1 ? false : true, 
+                        isBordered: false,
                       )
 
                     ],
@@ -565,7 +567,7 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
                             innerElement:  Icon(
                               Icons.arrow_back_ios_new_rounded,
                               color: currentSubject != 0 ?  Colors.white: Colors.grey.withOpacity(0.5),
-                            ), isDisabled: currentSubject != 0 ? false: true,
+                            ), isDisabled: currentSubject != 0 ? false: true, isBordered: true,
                           ),
                           const SizedBox(width: 8,),
                           SmallButton(
@@ -584,7 +586,7 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
                             innerElement:  Icon(
                               Icons.arrow_forward_ios_rounded,
                               color: currentSubject != currentSubjects.length-1 ?  Colors.white: Colors.grey.withOpacity(0.5),
-                            ), isDisabled: currentSubject != currentSubjects.length-1 ?  false : true,
+                            ), isDisabled: currentSubject != currentSubjects.length-1 ?  false : true, isBordered: true,
                           )
                         ],
                       ),
@@ -597,7 +599,7 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
                     children: [
                       SmallButton(onPressed: (){
                         Navigator.pop(context);
-                      }, innerElement: Text(AppText.endTest, style: const TextStyle(color: Colors.white)), buttonColors: Colors.red, isDisabled: false,),
+                      }, innerElement: Text(AppText.endTest, style: const TextStyle(color: Colors.white)), buttonColors: Colors.red, isDisabled: false, isBordered: true,),
                     ],
                   )
                 ],

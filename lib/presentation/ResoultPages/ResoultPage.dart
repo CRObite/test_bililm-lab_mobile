@@ -184,7 +184,8 @@ class _ResultPageState extends State<ResultPage> {
                   onPressed: (){ Navigator.pop(context);},
                   buttonColors: AppColors.colorButton,
                   innerElement: Text(AppText.endTest,style: const TextStyle(color: Colors.white)),
-                  isDisabled: false
+                  isDisabled: false,
+                  isBordered: true,
               ),
           
             ],

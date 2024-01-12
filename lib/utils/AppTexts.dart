@@ -47,4 +47,10 @@ class AppText {
   static String nextQuestion = 'Келесі сұрақ';
   static String MendeleevTable = 'Менделеев кестесі';
   static String SolubilityTable = 'Ерігіштік кестесі';
+  static String userBalance = 'Пайдаланушы балансы';
+  static String replenish = 'Толтыру';
+  static String tariffs = 'Тарифтер';
+  static String writeYourQuestion = 'Өзіңіздің сұрағыңызды жазыңыз';
+  static String writeAboutQuestion = 'Сұрақ туралы жазыңыз';
+  static String send = 'Жіберу';
 }

@@ -39,7 +39,6 @@ class _ApplicationState extends State<Application> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(60),
           child: CustomAppBar(user:  CurrentUser.currentTestUser!.testUser)
