@@ -14,6 +14,7 @@ import '../../config/SharedPreferencesOperator.dart';
 import '../../utils/AppColors.dart';
 import '../../utils/AppTexts.dart';
 import '../../utils/TestFormatEnum.dart';
+import '../Widgets/ServerErrorDialog.dart';
 
 
 class SubjectPickerPage extends StatefulWidget {
@@ -67,6 +68,14 @@ class _SubjectPickerPageState extends State<SubjectPickerPage> {
     }else if(response.code == 401 && mounted ){
       SharedPreferencesOperator.clearUserWithJwt();
       Navigator.pushReplacementNamed(context, '/');
+    }else if(response.code == 500 && mounted){
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return ServerErrorDialog();
+        },
+      );
     }
 
     if(mounted){

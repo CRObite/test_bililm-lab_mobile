@@ -11,6 +11,7 @@ import 'package:test_bilimlab_project/domain/scoresData.dart';
 import 'package:test_bilimlab_project/utils/barTypeEnum.dart';
 
 import '../../config/SharedPreferencesOperator.dart';
+import '../Widgets/ServerErrorDialog.dart';
 
 class AnalyticPart extends StatefulWidget {
   const AnalyticPart({super.key});
@@ -48,6 +49,14 @@ class _AnalyticPartState extends State<AnalyticPart> {
       }else if(response.code == 401 && mounted ){
         SharedPreferencesOperator.clearUserWithJwt();
         Navigator.pushReplacementNamed(context, '/');
+      }else if(response.code == 500 && mounted){
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return ServerErrorDialog();
+          },
+        );
       }
 
     } finally {

@@ -14,8 +14,16 @@ class LoginRepository {
 
   Dio dio = Dio();
 
+  LoginRepository() : dio = Dio() {
+    dio.options = BaseOptions(
+      connectTimeout: Duration(milliseconds: 60 * 1000),
+      receiveTimeout: Duration(milliseconds: 60 * 1000),
+    );
+  }
+
   Future<CustomResponse> logInByIIN(String iin, String password) async {
     try {
+
       final response = await dio.post(
         AppApiUrls.userLogin,
         data: {"iin": iin, "password": password},

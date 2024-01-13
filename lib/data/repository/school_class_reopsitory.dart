@@ -7,6 +7,12 @@ import 'package:test_bilimlab_project/utils/AppApiUrls.dart';
 
 class SchoolClassRepository {
 
+  SchoolClassRepository() : dio = Dio() {
+    dio.options = BaseOptions(
+      connectTimeout: Duration(milliseconds: 60 * 1000),
+      receiveTimeout: Duration(milliseconds: 60 * 1000),
+    );
+  }
 
   Dio dio = Dio();
 

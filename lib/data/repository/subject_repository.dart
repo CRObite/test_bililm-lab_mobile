@@ -8,6 +8,13 @@ class SubjectRepository {
 
   Dio dio = Dio();
 
+  SubjectRepository() : dio = Dio() {
+    dio.options = BaseOptions(
+      connectTimeout: Duration(milliseconds: 60 * 1000),
+      receiveTimeout: Duration(milliseconds: 60 * 1000),
+    );
+  }
+
 
   Future<List<EntSubject>> getAllEntSubject() async {
     try {

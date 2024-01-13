@@ -48,7 +48,7 @@ class _ReportDialogState extends State<ReportDialog> {
                 children: [
                   SmallButton(
                       onPressed: (){
-
+                          Navigator.pop(context);
                       },
                       buttonColors: AppColors.colorButton,
                       innerElement: Text(AppText.send,style: TextStyle( color: Colors.white),),

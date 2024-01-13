@@ -189,75 +189,78 @@ class _ProfilePartState extends State<ProfilePart> {
       
                     const SizedBox(height: 16,),
       
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          width: 150,
-                          decoration:  BoxDecoration(
-                            color: AppColors.colorButton,
-                            borderRadius: const BorderRadius.all(
-                               Radius.circular(20.0),
+                    Container(
+                      width: 350,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            width: 160,
+                            decoration:  BoxDecoration(
+                              color: AppColors.colorButton,
+                              borderRadius: const BorderRadius.all(
+                                 Radius.circular(20.0),
+                              ),
                             ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              children: [
-                                Text(AppText.entPermission, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 10),),
-                                const SizedBox(height: 8,),
-                                Container(
-                                  height: 40,
-                                  width: 40,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(20.0),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                children: [
+                                  Text(AppText.entPermission, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12),),
+                                  const SizedBox(height: 8,),
+                                  Container(
+                                    height: 40,
+                                    width: 40,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(20.0),
+                                      ),
                                     ),
+                                    child: Center(
+                                        child: user!= null ? getPermissionIcon(user!.permissionForTest): getPermissionIcon(false)
+                                    )
                                   ),
-                                  child: Center(
-                                      child: user!= null ? getPermissionIcon(user!.permissionForTest): getPermissionIcon(false)
-                                  )
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-      
-                        const SizedBox(width: 8,),
-      
-                        Container(
-                          width: 150,
-                          decoration: BoxDecoration(
-                            color: AppColors.colorButton,
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(20.0),
+
+                          const SizedBox(width: 8,),
+
+                          Container(
+                            width: 160,
+                            decoration: BoxDecoration(
+                              color: AppColors.colorButton,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(20.0),
+                              ),
                             ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              children: [
-                                Text(AppText.modoPermission, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 10),),
-                                const SizedBox(height: 8,),
-                                Container(
-                                  height: 40,
-                                  width: 40,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(20.0),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                children: [
+                                  Text(AppText.modoPermission, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12),),
+                                  const SizedBox(height: 8,),
+                                  Container(
+                                    height: 40,
+                                    width: 40,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(20.0),
+                                      ),
                                     ),
+                                    child:  Center(
+                                        child: user!= null ? getPermissionIcon(user!.permissionForModo): getPermissionIcon(false)
+                                    )
                                   ),
-                                  child:  Center(
-                                      child: user!= null ? getPermissionIcon(user!.permissionForModo): getPermissionIcon(false)
-                                  )
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),

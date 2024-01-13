@@ -15,6 +15,13 @@ class TestRepository {
 
   Dio dio = Dio();
 
+  TestRepository() : dio = Dio() {
+    dio.options = BaseOptions(
+      connectTimeout: Duration(milliseconds: 60 * 1000),
+      receiveTimeout: Duration(milliseconds: 60 * 1000),
+    );
+  }
+
   Future<CustomResponse> generateEntTest(TestTypeEnum type , int? firstSubjectId, int? secondSubjectId) async {
     try {
       dio.options.headers['Authorization'] = 'Bearer ${CurrentUser.currentTestUser?.accessToken}';
@@ -196,8 +203,6 @@ class TestRepository {
 
     } catch (e) {
       print(e);
-
-
       return HandleErrorResponse.handleErrorResponse(e);
     }
   }

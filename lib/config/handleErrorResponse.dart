@@ -6,7 +6,7 @@ import '../domain/customResponse.dart';
 class HandleErrorResponse {
   static CustomResponse handleErrorResponse(dynamic error) {
     if (error is DioError) {
-      print(error.response?.data['code']);
+      print(error.response?.statusCode);
       print('asdadasdasdasdasda');
       print(error.response?.data['detail']);
       return CustomResponse(

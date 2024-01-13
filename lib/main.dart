@@ -11,6 +11,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:test_bilimlab_project/config/dependency_injection.dart';
 
 import 'package:test_bilimlab_project/presentation/AuthorizationPages/LoginPage.dart';
+import 'package:test_bilimlab_project/presentation/AuthorizationPages/RegisterPage.dart';
 import 'package:test_bilimlab_project/presentation/ErrorWorksPages/ErrorWorkTestPage.dart';
 import 'package:test_bilimlab_project/presentation/ResoultPages/ResoultPage.dart';
 import 'package:test_bilimlab_project/presentation/SubjectPickerPages/SubjectPickerPage.dart';
@@ -145,6 +146,7 @@ class _MyAppState extends State<MyApp> {
       }
     },
     '/user': (context) => const UserPage(),
+    '/register': (context) => const RegisterPage(),
   };
 
   @override

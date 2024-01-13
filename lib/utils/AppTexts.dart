@@ -53,4 +53,15 @@ class AppText {
   static String writeYourQuestion = 'Өзіңіздің сұрағыңызды жазыңыз';
   static String writeAboutQuestion = 'Сұрақ туралы жазыңыз';
   static String send = 'Жіберу';
+  static String serverError = 'Cервер қатесі';
+  static String tryLater = 'Серверде қате пайда болды кейінірек көріңіз';
+  static String register = 'Тіркеу';
+  static String name = 'Аты';
+  static String enterName = 'Атыңызды енгізіңіз';
+  static String lastName = 'Жөні';
+  static String enterLastName = 'Жөніңізді енгізіңіз';
+  static String secondNameNotRequired = 'Тегі (міндетті емес)';
+  static String enterSecondName = 'Тегіңізді енгізіңіз';
+  static String enterNumber = 'Нөміріңізді енгізіңіз';
+  static String number = 'Телефон нөмірі';
 }

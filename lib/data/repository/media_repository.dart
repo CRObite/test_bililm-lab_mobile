@@ -8,6 +8,13 @@ class MediaRepository {
 
   Dio dio = Dio();
 
+  MediaRepository() : dio = Dio() {
+    dio.options = BaseOptions(
+      connectTimeout: Duration(milliseconds: 60 * 1000),
+      receiveTimeout: Duration(milliseconds: 60 * 1000),
+    );
+  }
+
   Future<Uint8List?> getMediaById(String mediaId) async {
     try {
       dio.options.headers['Authorization'] = 'Bearer ${CurrentUser.currentTestUser?.accessToken}';

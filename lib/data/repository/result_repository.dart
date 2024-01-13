@@ -11,6 +11,13 @@ import '../../utils/AppApiUrls.dart';
 class ResultRepository{
   Dio dio = Dio();
 
+  ResultRepository() : dio = Dio() {
+    dio.options = BaseOptions(
+      connectTimeout: Duration(milliseconds: 60 * 1000),
+      receiveTimeout: Duration(milliseconds: 60 * 1000),
+    );
+  }
+
   Future<CustomResponse> getResult() async {
     try {
       dio.options.headers['Authorization'] = 'Bearer ${CurrentUser.currentTestUser?.accessToken}';
