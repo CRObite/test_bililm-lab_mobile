@@ -6,9 +6,11 @@ part 'userWithJwt.g.dart';
 @JsonSerializable()
 class UserWithJwt{
   String accessToken;
+  String refreshToken;
   TestUser testUser;
 
-  UserWithJwt(this.accessToken, this.testUser);
+
+  UserWithJwt(this.accessToken, this.refreshToken, this.testUser);
 
   factory UserWithJwt.fromJson(Map<String, dynamic> json) => _$UserWithJwtFromJson(json);
   Map<String, dynamic> toJson() => _$UserWithJwtToJson(this);

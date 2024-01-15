@@ -9,6 +9,8 @@ class TypeSubject {
   String type;
   int score;
   List<ResultSubject> subjectsResult;
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool isExpanded;
 
 

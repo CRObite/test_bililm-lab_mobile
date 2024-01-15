@@ -10,4 +10,8 @@ class LoginService{
   Future<TestUser?> userGetMe() async {
     return await LoginRepository().userGetMe();
   }
+
+  Future<CustomResponse> refreshToken(String token) async {
+    return await LoginRepository().refreshToken(token);
+  }
 }

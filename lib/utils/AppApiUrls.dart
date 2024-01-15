@@ -29,5 +29,6 @@ class AppApiUrls{
   static String getResult = '$mainApi/ent-test/result';
   static String getSchoolResult = '$mainApi/school-test/result';
 
+  static String refreshToken = '$mainApi/refresh-token';
 
 }

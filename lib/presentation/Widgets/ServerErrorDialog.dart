@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
 
 import '../../utils/AppTexts.dart';
 
@@ -7,7 +9,8 @@ class ServerErrorDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Navigator.pop(context);
+        SharedPreferencesOperator.clearUserWithJwt();
+        Navigator.pushReplacementNamed(context, '/');
         return true;
       },
       child: AlertDialog(

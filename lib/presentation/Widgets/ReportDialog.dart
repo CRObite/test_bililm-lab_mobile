@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:test_bilimlab_project/data/service/login_service.dart';
+import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/SmallButton.dart';
 import 'package:test_bilimlab_project/utils/AppTexts.dart';
 
@@ -48,7 +50,11 @@ class _ReportDialogState extends State<ReportDialog> {
                 children: [
                   SmallButton(
                       onPressed: (){
-                          Navigator.pop(context);
+                        if(CurrentUser.currentTestUser != null){
+                          LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
+                        }else {
+                          Navigator.pushReplacementNamed(context, '/');
+                        }
                       },
                       buttonColors: AppColors.colorButton,
                       innerElement: Text(AppText.send,style: TextStyle( color: Colors.white),),

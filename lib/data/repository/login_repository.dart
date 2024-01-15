@@ -16,7 +16,7 @@ class LoginRepository {
 
   LoginRepository() : dio = Dio() {
     dio.options = BaseOptions(
-      connectTimeout: Duration(milliseconds: 60 * 1000),
+      connectTimeout: Duration(milliseconds: 30 * 1000),
       receiveTimeout: Duration(milliseconds: 60 * 1000),
     );
   }
@@ -58,6 +58,30 @@ class LoginRepository {
     } catch (e) {
       print(e);
       return null;
+    }
+  }
+
+  Future<CustomResponse> refreshToken(String token) async {
+    try {
+
+      final response = await dio.post(
+        AppApiUrls.refreshToken,
+        data: {
+          "refreshToken ": token
+        },
+      );
+
+      print(response.data);
+
+      // CurrentUser.currentTestUser = UserWithJwt.fromJson(response.data);
+      //
+      // await SharedPreferencesOperator.saveUserWithJwt(CurrentUser.currentTestUser!);
+
+      return CustomResponse(200, '', null);
+
+    } catch (e) {
+
+      return HandleErrorResponse.handleErrorResponse(e);
     }
   }
 

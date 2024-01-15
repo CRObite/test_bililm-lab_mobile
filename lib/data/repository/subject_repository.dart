@@ -10,7 +10,7 @@ class SubjectRepository {
 
   SubjectRepository() : dio = Dio() {
     dio.options = BaseOptions(
-      connectTimeout: Duration(milliseconds: 60 * 1000),
+      connectTimeout: Duration(milliseconds: 30 * 1000),
       receiveTimeout: Duration(milliseconds: 60 * 1000),
     );
   }

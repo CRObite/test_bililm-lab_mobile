@@ -24,7 +24,9 @@ class TestCategory {
       this.schoolMultipleQuestions,
       this.comparisonQuestions);
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   int startedIndex = 0;
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool itsFirstTime = true;
 
   List<TestQuestion> getAllQuestions() {
