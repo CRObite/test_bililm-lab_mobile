@@ -11,6 +11,7 @@ import 'package:test_bilimlab_project/presentation/SubjectPickerPages/EntTestPar
 import 'package:test_bilimlab_project/presentation/SubjectPickerPages/ModoTestPart.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/CustomAppBar.dart';
 import '../../config/SharedPreferencesOperator.dart';
+import '../../data/service/login_service.dart';
 import '../../utils/AppColors.dart';
 import '../../utils/AppTexts.dart';
 import '../../utils/TestFormatEnum.dart';
@@ -55,8 +56,13 @@ class _SubjectPickerPageState extends State<SubjectPickerPage> {
         _onWillPop(TestFormatEnum.ENT , Test(entTest, null));
       }
     }else if(response.code == 401 && mounted ){
-      SharedPreferencesOperator.clearUserWithJwt();
-      Navigator.pushReplacementNamed(context, '/');
+      if(CurrentUser.currentTestUser != null){
+        LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
+        Navigator.pushReplacementNamed(context, '/app');
+      }else {
+        SharedPreferencesOperator.clearUserWithJwt();
+        Navigator.pushReplacementNamed(context, '/');
+      }
     }
 
     CustomResponse responseSchool = await TestService().getLastSchoolTest();

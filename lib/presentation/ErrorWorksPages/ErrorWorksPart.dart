@@ -4,7 +4,9 @@ import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
 import 'package:test_bilimlab_project/domain/revision.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/ServerErrorDialog.dart';
 
+import '../../data/service/login_service.dart';
 import '../../data/service/test_service.dart';
+import '../../domain/currentUser.dart';
 import '../../domain/customResponse.dart';
 import '../../domain/entTest.dart';
 import '../../domain/test.dart';
@@ -62,8 +64,13 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
           revisions = response.body;
         });
       } else if(response.code == 401 && mounted ){
-        SharedPreferencesOperator.clearUserWithJwt();
-        Navigator.pushReplacementNamed(context, '/');
+        if(CurrentUser.currentTestUser != null){
+          LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
+          Navigator.pushReplacementNamed(context, '/app');
+        }else {
+          SharedPreferencesOperator.clearUserWithJwt();
+          Navigator.pushReplacementNamed(context, '/');
+        }
       } else if(response.code == 500 && mounted){
         showDialog(
           context: context,

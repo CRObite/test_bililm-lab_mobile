@@ -73,9 +73,8 @@ class LoginRepository {
 
       print(response.data);
 
-      // CurrentUser.currentTestUser = UserWithJwt.fromJson(response.data);
-      //
-      // await SharedPreferencesOperator.saveUserWithJwt(CurrentUser.currentTestUser!);
+      CurrentUser.currentTestUser = UserWithJwt.fromJson(response.data);
+      await SharedPreferencesOperator.saveUserWithJwt(CurrentUser.currentTestUser!);
 
       return CustomResponse(200, '', null);
 

@@ -50,11 +50,7 @@ class _ReportDialogState extends State<ReportDialog> {
                 children: [
                   SmallButton(
                       onPressed: (){
-                        if(CurrentUser.currentTestUser != null){
-                          LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
-                        }else {
-                          Navigator.pushReplacementNamed(context, '/');
-                        }
+
                       },
                       buttonColors: AppColors.colorButton,
                       innerElement: Text(AppText.send,style: TextStyle( color: Colors.white),),

@@ -5,6 +5,7 @@ import 'package:test_bilimlab_project/presentation/Widgets/TopUpYourBalance.dart
 import 'package:test_bilimlab_project/utils/AppColors.dart';
 import 'package:test_bilimlab_project/utils/AppImages.dart';
 
+import '../../config/SharedPreferencesOperator.dart';
 import '../../data/service/login_service.dart';
 import '../../domain/currentUser.dart';
 import '../../domain/testUser.dart';
@@ -60,7 +61,14 @@ class _ProfilePartState extends State<ProfilePart> {
           user = testUser;
         });
       }else if(testUser == null && mounted ){
-        Navigator.pushReplacementNamed(context, '/');
+
+        if(CurrentUser.currentTestUser != null){
+          LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
+          Navigator.pushReplacementNamed(context, '/app');
+        }else {
+          SharedPreferencesOperator.clearUserWithJwt();
+          Navigator.pushReplacementNamed(context, '/');
+        }
       }
 
     } finally {

@@ -57,9 +57,6 @@ class _LoginPageState extends State<LoginPage> {
 
     CustomResponse currentResponse = await LoginService().logIn(_iinController.text, _passwordController.text);
     if(currentResponse.code == 200){
-
-
-
       Navigator.pushReplacementNamed(context, '/app');
     }else if(currentResponse.code == 500 && mounted){
       showDialog(
