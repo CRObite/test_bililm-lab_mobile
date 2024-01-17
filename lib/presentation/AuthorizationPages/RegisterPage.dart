@@ -1,22 +1,14 @@
-
-
-
 import 'package:flutter/material.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
-import 'package:test_bilimlab_project/data/service/login_service.dart';
 import 'package:test_bilimlab_project/domain/currentUser.dart';
-import 'package:test_bilimlab_project/domain/customResponse.dart';
 import 'package:test_bilimlab_project/domain/userWithJwt.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
-import '../../utils/AppImages.dart';
 import '../../utils/AppTexts.dart';
 import '../Widgets/CustomTextFields.dart';
 import '../Widgets/LongButton.dart';
-import '../Widgets/ServerErrorDialog.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+  const RegisterPage({Key? key});
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -24,7 +16,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   bool isLoading = false;
-  String? errorMassage;
+  String? errorMessage;
 
   final TextEditingController _iinController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
@@ -32,30 +24,25 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _secondNameController = TextEditingController();
   final TextEditingController _numberController = TextEditingController();
 
-
   @override
   void initState() {
-    checkCurrentUserInSP();
     super.initState();
+    _checkCurrentUserInSP();
   }
 
-  void checkCurrentUserInSP() async {
-    if(await SharedPreferencesOperator.containsUserWithJwt()){
+  Future<void> _checkCurrentUserInSP() async {
+    if (await SharedPreferencesOperator.containsUserWithJwt()) {
       UserWithJwt? user = await SharedPreferencesOperator.getUserWithJwt();
-      if(user!= null){
+      if (user != null) {
         CurrentUser.currentTestUser = user;
-
         Navigator.pushReplacementNamed(context, '/app');
       }
     }
   }
 
-  Future<void> onEnterButtonPressed() async {
-
+  Future<void> _onEnterButtonPressed() async {
+    // TODO: Implement registration logic
   }
-
-
-
 
   @override
   void dispose() {
@@ -67,10 +54,47 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
 
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String title,
+    required TextInputType keyboardType,
+    bool isNumberField = false,
+  }) {
+    return CustomTextField(
+      controller: controller,
+      title: title,
+      suffix: isNumberField,
+      keybordType: keyboardType,
+    );
+  }
+
+  Widget _buildPhoneNumberField() {
+    return Row(
+      children: [
+        SizedBox(width: 8,),
+        Text(
+          '+7',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        Expanded(child: SizedBox()),
+        ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: 260,
+          ),
+          child: _buildTextField(
+            controller: _numberController,
+            title: AppText.number,
+            keyboardType: TextInputType.phone,
+            isNumberField: true,
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.only(top: 100),
@@ -93,54 +117,57 @@ class _RegisterPageState extends State<RegisterPage> {
                         children: [
                           Text(AppText.enterName),
                           const SizedBox(height: 8,),
-                          CustomTextField(controller: _nameController, title: AppText.name, suffix: false , keybordType: TextInputType.text),
+                          _buildTextField(
+                            controller: _nameController,
+                            title: AppText.name,
+                            keyboardType: TextInputType.text,
+                          ),
                           const SizedBox(height: 8,),
                           Text(AppText.enterLastName),
                           const SizedBox(height: 8,),
-                          CustomTextField(controller: _lastNameController, title: AppText.lastName, suffix: false , keybordType: TextInputType.text),
+                          _buildTextField(
+                            controller: _lastNameController,
+                            title: AppText.lastName,
+                            keyboardType: TextInputType.text,
+                          ),
                           const SizedBox(height: 8,),
                           Text(AppText.enterSecondName),
                           const SizedBox(height: 8,),
-                          CustomTextField(controller: _secondNameController, title: AppText.secondNameNotRequired, suffix: false , keybordType: TextInputType.text),
+                          _buildTextField(
+                            controller: _secondNameController,
+                            title: AppText.secondNameNotRequired,
+                            keyboardType: TextInputType.text,
+                          ),
                           const SizedBox(height: 8,),
                           Text(AppText.enterNumber),
                           const SizedBox(height: 8,),
-                          Row(
-                            children: [
-                              SizedBox(width: 8,),
-                              Text('+7',style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                              Expanded(child: SizedBox()),
-                              ConstrainedBox(
-                                  constraints: BoxConstraints(
-                                    maxWidth: 260
-                                  ),
-                                  child: CustomTextField(controller: _numberController, title: AppText.number, suffix: false , keybordType: TextInputType.phone)
-                              ),
-                            ],
-                          ),
+                          _buildPhoneNumberField(),
                           const SizedBox(height: 8,),
                           Text(AppText.enterIIN),
                           const SizedBox(height: 8,),
-                          CustomTextField(controller: _iinController, title: AppText.iin, suffix: false, keybordType: TextInputType.number),
+                          _buildTextField(
+                            controller: _iinController,
+                            title: AppText.iin,
+                            keyboardType: TextInputType.number,
+                          ),
                           const SizedBox(height: 16,),
 
-                          if(errorMassage != null)
-                            Text(errorMassage!, style: const TextStyle(color: Colors.red),),
+                          if(errorMessage != null)
+                            Text(errorMessage!, style: const TextStyle(color: Colors.red),),
                           const SizedBox(height: 8,),
 
-
                           TextButton(
-                              onPressed: (){
-                                Navigator.pushReplacementNamed(context, '/');
-                              },
-                              child: Text(AppText.enter, style: TextStyle(color: AppColors.colorButton),)
+                            onPressed: () {
+                              Navigator.pushReplacementNamed(context, '/');
+                            },
+                            child: Text(AppText.enter, style: TextStyle(color: AppColors.colorButton),),
                           ),
                           const SizedBox(height: 8,),
 
                           LongButton(
-                            onPressed: isLoading ? (){} : onEnterButtonPressed,
+                            onPressed: isLoading ? (){} : _onEnterButtonPressed,
                             title: isLoading ? 'Loading...' : AppText.register,
-                          )
+                          ),
                         ],
                       ),
                     ),

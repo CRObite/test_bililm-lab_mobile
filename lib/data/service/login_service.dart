@@ -7,7 +7,7 @@ class LoginService{
     return await LoginRepository().logInByIIN(iin, password);
   }
 
-  Future<TestUser?> userGetMe() async {
+  Future<CustomResponse> userGetMe() async {
     return await LoginRepository().userGetMe();
   }
 

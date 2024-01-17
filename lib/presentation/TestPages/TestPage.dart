@@ -19,7 +19,6 @@ import 'package:test_bilimlab_project/presentation/Widgets/SmallButton.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
 import 'package:test_bilimlab_project/utils/AppTexts.dart';
 import 'package:test_bilimlab_project/utils/TestFormatEnum.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import '../../domain/entResult.dart';
 import '../../domain/test.dart';
 import '../../domain/testQuestion.dart';

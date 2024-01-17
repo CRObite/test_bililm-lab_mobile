@@ -1,6 +1,3 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
 import 'package:test_bilimlab_project/data/service/login_service.dart';
@@ -15,7 +12,7 @@ import '../Widgets/LongButton.dart';
 import '../Widgets/ServerErrorDialog.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -23,61 +20,59 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool isLoading = false;
-  String? errorMassage;
+  String? errorMessage;
 
   final TextEditingController _iinController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-
   @override
   void initState() {
-    checkCurrentUserInSP();
     super.initState();
+    _checkCurrentUserInSP();
   }
 
-  void checkCurrentUserInSP() async {
-    if(await SharedPreferencesOperator.containsUserWithJwt()){
+  Future<void> _checkCurrentUserInSP() async {
+    if (await SharedPreferencesOperator.containsUserWithJwt()) {
       UserWithJwt? user = await SharedPreferencesOperator.getUserWithJwt();
-      if(user!= null){
+      if (user != null) {
         CurrentUser.currentTestUser = user;
-
         Navigator.pushReplacementNamed(context, '/app');
       }
     }
   }
 
-  Future<void> onEnterButtonPressed() async {
-
-
-
+  Future<void> _onEnterButtonPressed() async {
     setState(() {
-      errorMassage = null;
+      errorMessage = null;
       isLoading = true;
     });
 
-    CustomResponse currentResponse = await LoginService().logIn(_iinController.text, _passwordController.text);
-    if(currentResponse.code == 200){
+    CustomResponse currentResponse =
+    await LoginService().logIn(_iinController.text, _passwordController.text);
+
+    if (currentResponse.code == 200) {
       Navigator.pushReplacementNamed(context, '/app');
-    }else if(currentResponse.code == 500 && mounted){
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return ServerErrorDialog();
-        },
-      );
-    }else{
+    } else if (currentResponse.code == 500 && mounted) {
+      _showErrorDialog();
+    } else {
       print(currentResponse.code);
       print(currentResponse.body);
       setState(() {
         isLoading = false;
-        errorMassage = currentResponse.title;
+        errorMessage = currentResponse.title;
       });
     }
   }
 
-
-
+  void _showErrorDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return ServerErrorDialog();
+      },
+    );
+  }
 
   @override
   void dispose() {
@@ -89,66 +84,78 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: SingleChildScrollView(
+        child: Container(
+          margin: const EdgeInsets.only(top: 200),
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 70, child: Image.asset(AppImages.full_logo)),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Card(
+                    color: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                    elevation: 5,
+                    child: Padding(
+                      padding: const EdgeInsets.all(32.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(AppText.enterIIN),
+                          const SizedBox(height: 8,),
+                          CustomTextField(
+                            controller: _iinController,
+                            title: AppText.iin,
+                            suffix: false,
+                            keybordType: TextInputType.number,
+                          ),
+                          const SizedBox(height: 16,),
+                          Text(AppText.enterPassword),
+                          const SizedBox(height: 8,),
+                          CustomTextField(
+                            controller: _passwordController,
+                            title: AppText.password,
+                            suffix: true,
+                            keybordType: TextInputType.visiblePassword,
+                          ),
+                          const SizedBox(height: 8,),
 
-        body: SingleChildScrollView(
-          child: Container(
-            margin: const EdgeInsets.only(top: 200),
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                      height: 70,
-                      child: Image.asset(AppImages.full_logo)),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Card(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                      elevation: 5,
-                      child: Padding(
-                        padding: const EdgeInsets.all(32.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(AppText.enterIIN),
-                            const SizedBox(height: 8,),
-                            CustomTextField(controller: _iinController, title: AppText.iin, suffix: false, keybordType: TextInputType.number),
-                            const SizedBox(height: 16,),
-                            Text(AppText.enterPassword),
-                            const SizedBox(height: 8,),
-                            CustomTextField(controller: _passwordController, title: AppText.password, suffix: true , keybordType: TextInputType.visiblePassword),
-                            const SizedBox(height: 8,),
-
-                            if(errorMassage != null)
-                              Text(errorMassage!, style: const TextStyle(color: Colors.red),),
-                            const SizedBox(height: 8,),
-
-
-                            TextButton(
-                                onPressed: (){
-                                  Navigator.pushReplacementNamed(context, '/register');
-                                },
-                                child: Text(AppText.register, style: TextStyle(color: AppColors.colorButton),)
+                          if (errorMessage != null)
+                            Text(
+                              errorMessage!,
+                              style: const TextStyle(color: Colors.red),
                             ),
-                            const SizedBox(height: 8,),
+                          const SizedBox(height: 8,),
 
-                            LongButton(
-                              onPressed: isLoading ? (){} : onEnterButtonPressed,
-                              title: isLoading ? 'Loading...' : AppText.enter,
-                            )
-                          ],
-                        ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pushReplacementNamed(context, '/register');
+                            },
+                            child: Text(
+                              AppText.register,
+                              style: TextStyle(color: AppColors.colorButton),
+                            ),
+                          ),
+                          const SizedBox(height: 8,),
+
+                          LongButton(
+                            onPressed: isLoading ? () {} : _onEnterButtonPressed,
+                            title: isLoading ? 'Loading...' : AppText.enter,
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
+      ),
     );
   }
 }

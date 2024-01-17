@@ -8,7 +8,6 @@ import 'package:test_bilimlab_project/utils/TestFormatEnum.dart';
 
 import '../../domain/currentUser.dart';
 import '../../domain/result.dart';
-import '../../domain/resultSubject.dart';
 import '../../domain/typeSubject.dart';
 import '../Widgets/CustomAppBar.dart';
 

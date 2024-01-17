@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:test_bilimlab_project/data/service/balance_service.dart';
+import 'package:test_bilimlab_project/domain/customResponse.dart';
+import 'package:test_bilimlab_project/domain/wallet.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/ServerErrorDialog.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/SmallButton.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/Tariffs.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/TopUpYourBalance.dart';
@@ -22,6 +26,7 @@ class _ProfilePartState extends State<ProfilePart> {
 
   bool isLoading = true;
   TestUser? user;
+  Wallet? wallet;
 
   @override
   void initState() {
@@ -31,7 +36,7 @@ class _ProfilePartState extends State<ProfilePart> {
 
 
     getUserInfo();
-
+    getWalletInfo();
     super.initState();
   }
 
@@ -52,16 +57,13 @@ class _ProfilePartState extends State<ProfilePart> {
         isLoading = true;
       });
 
-      TestUser? testUser = await LoginService().userGetMe();
+      CustomResponse response = await LoginService().userGetMe();
 
-      if(testUser != null && mounted){
-
-        print('${testUser.permissionForTest}   ${testUser.permissionForModo}');
+      if (response.code == 200 && mounted) {
         setState(() {
-          user = testUser;
+          user = response.body;
         });
-      }else if(testUser == null && mounted ){
-
+      } else if(response.code == 401 && mounted ){
         if(CurrentUser.currentTestUser != null){
           LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
           Navigator.pushReplacementNamed(context, '/app');
@@ -69,6 +71,57 @@ class _ProfilePartState extends State<ProfilePart> {
           SharedPreferencesOperator.clearUserWithJwt();
           Navigator.pushReplacementNamed(context, '/');
         }
+      } else if(response.code == 500 && mounted){
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return ServerErrorDialog();
+          },
+        );
+      }
+
+
+    } finally {
+
+      if(mounted){
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
+  }
+
+
+  void getWalletInfo() async {
+    try {
+
+      setState(() {
+        isLoading = true;
+      });
+
+      CustomResponse response = await BalanceService().getBalance();
+
+      if (response.code == 200 && mounted) {
+        setState(() {
+          wallet = response.body;
+        });
+      } else if(response.code == 401 && mounted ){
+        if(CurrentUser.currentTestUser != null){
+          LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
+          Navigator.pushReplacementNamed(context, '/app');
+        }else {
+          SharedPreferencesOperator.clearUserWithJwt();
+          Navigator.pushReplacementNamed(context, '/');
+        }
+      } else if(response.code == 500 && mounted){
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return ServerErrorDialog();
+          },
+        );
       }
 
     } finally {
@@ -140,7 +193,7 @@ class _ProfilePartState extends State<ProfilePart> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                               Text(AppText.userBalance, style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.colorGrayButton.withOpacity(0.8))),
-                              Text('18 420.81 KZT', style: const TextStyle(fontSize: 30, color: Colors.white),),
+                              Text(wallet != null ? wallet!.balance : '0', style: const TextStyle(fontSize: 30, color: Colors.white),),
       
                               SizedBox(height: 16,),
                               Row(
@@ -280,3 +333,4 @@ class _ProfilePartState extends State<ProfilePart> {
     );
   }
 }
+

@@ -43,7 +43,7 @@ class LoginRepository {
     }
   }
 
-  Future<TestUser?> userGetMe() async {
+  Future<CustomResponse> userGetMe() async {
     try {
       dio.options.headers['Authorization'] = 'Bearer ${CurrentUser.currentTestUser?.accessToken}';
 
@@ -54,20 +54,22 @@ class LoginRepository {
       print(response.data);
 
       TestUser user = TestUser.fromJson(response.data);
-      return user;
+      return CustomResponse(200,'',user);
     } catch (e) {
       print(e);
-      return null;
+      return HandleErrorResponse.handleErrorResponse(e);
     }
   }
 
   Future<CustomResponse> refreshToken(String token) async {
     try {
 
+      dio.options.headers['Authorization'] = 'Bearer ${CurrentUser.currentTestUser?.accessToken}';
+
       final response = await dio.post(
         AppApiUrls.refreshToken,
         data: {
-          "refreshToken ": token
+          "refreshToken": token
         },
       );
 
@@ -79,7 +81,7 @@ class LoginRepository {
       return CustomResponse(200, '', null);
 
     } catch (e) {
-
+      print(e);
       return HandleErrorResponse.handleErrorResponse(e);
     }
   }

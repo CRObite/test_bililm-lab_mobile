@@ -9,10 +9,6 @@ import 'package:test_bilimlab_project/presentation/Widgets/LongButton.dart';
 import 'package:test_bilimlab_project/utils/TestFormatEnum.dart';
 import 'package:test_bilimlab_project/utils/TestTypeEnum.dart';
 
-import '../../domain/subOption.dart';
-import '../../domain/testCategory.dart';
-import '../../domain/testOption.dart';
-import '../../domain/testQuestion.dart';
 import '../../utils/AppColors.dart';
 import '../../utils/AppImages.dart';
 import '../../utils/AppTexts.dart';

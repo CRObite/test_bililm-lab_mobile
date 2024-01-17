@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test_bilimlab_project/data/repository/balance_repository.dart';
 import 'package:test_bilimlab_project/data/service/login_service.dart';
 import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/SmallButton.dart';
@@ -50,7 +51,11 @@ class _ReportDialogState extends State<ReportDialog> {
                 children: [
                   SmallButton(
                       onPressed: (){
+                        print(CurrentUser.currentTestUser!.refreshToken);
+                        LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
 
+
+                        // BalanceRepository().getBalance();
                       },
                       buttonColors: AppColors.colorButton,
                       innerElement: Text(AppText.send,style: TextStyle( color: Colors.white),),

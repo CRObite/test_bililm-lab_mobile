@@ -7,15 +7,21 @@ import '../domain/currentUser.dart';
 import '../presentation/Widgets/ServerErrorDialog.dart';
 
 class ResponseValidator{
-  static dynamic validation(CustomResponse currentResponse,BuildContext context, State mounted){
+  static dynamic validation(CustomResponse currentResponse,BuildContext context) async {
     if(currentResponse.code == 401){
       if(CurrentUser.currentTestUser != null){
-        LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
+        CustomResponse response = await LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
 
+        if(response.code == 200){
+          Navigator.pushReplacementNamed(context, '/app');
 
-        Navigator.pushReplacementNamed(context, '/app');
+          return null;
+        }else{
+          SharedPreferencesOperator.clearUserWithJwt();
+          Navigator.pushReplacementNamed(context, '/');
 
-        return null;
+          return null;
+        }
       }else {
         SharedPreferencesOperator.clearUserWithJwt();
         Navigator.pushReplacementNamed(context, '/');
