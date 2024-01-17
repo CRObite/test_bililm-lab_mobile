@@ -72,7 +72,7 @@ class _TestPageState extends State<TestPage> {
     });
 
     if(widget.format == TestFormatEnum.ENT){
-      _elapsedSeconds = 12600;
+      _elapsedSeconds = (widget.test.entTest!.timeLimitInMilliseconds/1000).round();
     }else if(widget.format == TestFormatEnum.SCHOOL){
       _elapsedSeconds = (widget.test.modoTest!.schoolClass.timeInMilliseconds/1000).round();
     }
@@ -109,8 +109,6 @@ class _TestPageState extends State<TestPage> {
         _endTest();
       }
     }
-
-
   }
 
 

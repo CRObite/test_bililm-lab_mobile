@@ -12,10 +12,11 @@ class EntTest {
   bool passed;
   String type;
   Map<String, TestCategory> questionsMap;
+  int timeLimitInMilliseconds;
 
 
   EntTest(this.id, this.startedDate, this.passedDate, this.passed, this.type,
-      this.questionsMap);
+      this.questionsMap, this.timeLimitInMilliseconds);
 
   factory EntTest.fromJson(Map<String, dynamic> json) => _$EntTestFromJson(json);
   Map<String, dynamic> toJson() => _$EntTestToJson(this);

@@ -64,11 +64,9 @@ class LoginRepository {
   Future<CustomResponse> refreshToken(String token) async {
     try {
 
-      dio.options.headers['Authorization'] = 'Bearer ${CurrentUser.currentTestUser?.accessToken}';
-
       final response = await dio.post(
         AppApiUrls.refreshToken,
-        data: {
+        queryParameters: {
           "refreshToken": token
         },
       );

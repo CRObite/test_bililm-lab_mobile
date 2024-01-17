@@ -15,6 +15,7 @@ EntTest _$EntTestFromJson(Map<String, dynamic> json) => EntTest(
       (json['questionsMap'] as Map<String, dynamic>).map(
         (k, e) => MapEntry(k, TestCategory.fromJson(e as Map<String, dynamic>)),
       ),
+      json['timeLimitInMilliseconds'] as int,
     );
 
 Map<String, dynamic> _$EntTestToJson(EntTest instance) => <String, dynamic>{
@@ -24,4 +25,5 @@ Map<String, dynamic> _$EntTestToJson(EntTest instance) => <String, dynamic>{
       'passed': instance.passed,
       'type': instance.type,
       'questionsMap': instance.questionsMap,
+      'timeLimitInMilliseconds': instance.timeLimitInMilliseconds,
     };
