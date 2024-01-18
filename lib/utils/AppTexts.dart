@@ -64,4 +64,8 @@ class AppText {
   static String enterSecondName = 'Тегіңізді енгізіңіз';
   static String enterNumber = 'Нөміріңізді енгізіңіз';
   static String number = 'Телефон нөмірі';
+  static String loading = 'Жүктеу...';
+  static String subscribe = 'Жазылу';
+  static String skip = 'Өткізу';
+  static String topUpBalance = 'Балансты толтыру';
 }

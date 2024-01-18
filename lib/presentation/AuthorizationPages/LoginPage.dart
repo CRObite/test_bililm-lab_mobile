@@ -144,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
 
                           LongButton(
                             onPressed: isLoading ? () {} : _onEnterButtonPressed,
-                            title: isLoading ? 'Loading...' : AppText.enter,
+                            title: isLoading ? AppText.loading : AppText.enter,
                           ),
                         ],
                       ),

@@ -51,8 +51,14 @@ class _AnalyticPartState extends State<AnalyticPart> {
       }else if(response.code == 401 && mounted ){
 
         if(CurrentUser.currentTestUser != null){
-          LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
-          Navigator.pushReplacementNamed(context, '/app');
+          CustomResponse response = await LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
+
+          if(response.code == 200){
+            Navigator.pushReplacementNamed(context, '/app');
+          }else{
+            SharedPreferencesOperator.clearUserWithJwt();
+            Navigator.pushReplacementNamed(context, '/');
+          }
         }else {
           SharedPreferencesOperator.clearUserWithJwt();
           Navigator.pushReplacementNamed(context, '/');

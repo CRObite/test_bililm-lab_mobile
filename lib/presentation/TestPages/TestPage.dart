@@ -728,20 +728,21 @@ class _TestPageState extends State<TestPage> {
                                                     });
                                                     currentQuestions[currentQuestion].options[index].subOption = currentQuestions[currentQuestion].subOptions![data];
 
-                                                    // TestService().comparisonAnswerEntTest(
-                                                    //     widget.test.entTest!.id,
-                                                    //     currentQuestions[currentQuestion].id,
-                                                    //     currentQuestions[currentQuestion].options[index].id,
-                                                    //     currentQuestions[currentQuestion].subOptions![data].id
-                                                    // );
+                                                    TestService().comparisonAnswerEntTest(
+                                                        widget.test.entTest!.id,
+                                                        currentQuestions[currentQuestion].id,
+                                                        currentQuestions[currentQuestion].options[index].id,
+                                                        currentQuestions[currentQuestion].subOptions![data].id
+                                                    );
+
                                                     currentQuestions[currentQuestion].options[i].subOption = currentQuestions[currentQuestion].subOptions![j!];
 
-                                                    // TestService().comparisonAnswerEntTest(
-                                                    //     widget.test.entTest!.id,
-                                                    //     currentQuestions[currentQuestion].id,
-                                                    //     currentQuestions[currentQuestion].options[i].id,
-                                                    //     currentQuestions[currentQuestion].subOptions![j].id
-                                                    // );
+                                                    TestService().comparisonAnswerEntTest(
+                                                        widget.test.entTest!.id,
+                                                        currentQuestions[currentQuestion].id,
+                                                        currentQuestions[currentQuestion].options[i].id,
+                                                        currentQuestions[currentQuestion].subOptions![j].id
+                                                    );
 
                                                   }else{
 
@@ -751,21 +752,21 @@ class _TestPageState extends State<TestPage> {
                                                     });
                                                     currentQuestions[currentQuestion].options[index].subOption = currentQuestions[currentQuestion].subOptions![data];
 
-                                                    // TestService().comparisonAnswerEntTest(
-                                                    //     widget.test.entTest!.id,
-                                                    //     currentQuestions[currentQuestion].id,
-                                                    //     currentQuestions[currentQuestion].options[index].id,
-                                                    //     currentQuestions[currentQuestion].subOptions![data].id
-                                                    // );
+                                                    TestService().comparisonAnswerEntTest(
+                                                        widget.test.entTest!.id,
+                                                        currentQuestions[currentQuestion].id,
+                                                        currentQuestions[currentQuestion].options[index].id,
+                                                        currentQuestions[currentQuestion].subOptions![data].id
+                                                    );
 
                                                     currentQuestions[currentQuestion].options[i].subOption = null;
 
-                                                    // TestService().comparisonDeleteAnswerEntTest(
-                                                    //     widget.test.entTest!.id,
-                                                    //     currentQuestions[currentQuestion].id,
-                                                    //     currentQuestions[currentQuestion].options[i].id,
-                                                    //     currentQuestions[currentQuestion].subOptions![data].id
-                                                    // );
+                                                    TestService().comparisonDeleteAnswerEntTest(
+                                                        widget.test.entTest!.id,
+                                                        currentQuestions[currentQuestion].id,
+                                                        currentQuestions[currentQuestion].options[i].id,
+                                                        currentQuestions[currentQuestion].subOptions![data].id
+                                                    );
 
                                                   }
                                                 }else{
@@ -774,12 +775,13 @@ class _TestPageState extends State<TestPage> {
                                                   });
                                                   currentQuestions[currentQuestion].options[index].subOption = currentQuestions[currentQuestion].subOptions![data];
 
-                                                  // TestService().comparisonAnswerEntTest(
-                                                  //     widget.test.entTest!.id,
-                                                  //     currentQuestions[currentQuestion].id,
-                                                  //     currentQuestions[currentQuestion].options[index].id,
-                                                  //     currentQuestions[currentQuestion].subOptions![data].id
-                                                  // );
+                                                  TestService().comparisonAnswerEntTest(
+                                                      widget.test.entTest!.id,
+                                                      currentQuestions[currentQuestion].id,
+                                                      currentQuestions[currentQuestion].options[index].id,
+                                                      currentQuestions[currentQuestion].subOptions![data].id
+                                                  );
+
                                                 }
                                               },
 

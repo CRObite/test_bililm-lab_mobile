@@ -177,7 +177,7 @@ class _ModoTestPartState extends State<ModoTestPart> {
                   width:250,
                   child: LongButton(
                     onPressed: isLoading ? (){} : onTestButtonPressed,
-                    title: isLoading ? 'Loading...' : AppText.startTest,
+                    title: isLoading ? AppText.loading  : AppText.startTest,
                   )
               )
 

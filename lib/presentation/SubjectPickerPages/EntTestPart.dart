@@ -254,7 +254,7 @@ class _EntTestPartState extends State<EntTestPart> {
                     width:250,
                     child: LongButton(
                       onPressed: isLoading ? (){} : onTestButtonPressed,
-                      title: isLoading ? 'Loading...' : AppText.startTest,
+                      title: isLoading ? AppText.loading  : AppText.startTest,
                     )
                 ),
                 const SizedBox(
@@ -279,7 +279,7 @@ class _EntTestPartState extends State<EntTestPart> {
                       ),
                       LongButton(
                         onPressed: isLoading ? (){} : onTestButtonPressedCreative,
-                        title: isLoading ? 'Loading...' : AppText.startTest,
+                        title: isLoading ? AppText.loading  : AppText.startTest,
                       )
                     ],
                   ),

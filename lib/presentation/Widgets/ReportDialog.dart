@@ -51,11 +51,7 @@ class _ReportDialogState extends State<ReportDialog> {
                 children: [
                   SmallButton(
                       onPressed: (){
-                        print(CurrentUser.currentTestUser!.refreshToken);
-                        LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
 
-
-                        // BalanceRepository().getBalance();
                       },
                       buttonColors: AppColors.colorButton,
                       innerElement: Text(AppText.send,style: TextStyle( color: Colors.white),),
