@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:searchfield/searchfield.dart';
 import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
+import 'package:test_bilimlab_project/data/service/dictionary_service.dart';
+import 'package:test_bilimlab_project/domain/city.dart';
 import 'package:test_bilimlab_project/domain/currentUser.dart';
+import 'package:test_bilimlab_project/domain/customResponse.dart';
+import 'package:test_bilimlab_project/domain/region.dart';
 import 'package:test_bilimlab_project/domain/userWithJwt.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
+
+import '../../domain/school.dart';
 import '../../utils/AppTexts.dart';
 import '../Widgets/CustomTextFields.dart';
 import '../Widgets/LongButton.dart';
@@ -23,10 +30,21 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _secondNameController = TextEditingController();
   final TextEditingController _numberController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  List<Region> regions = [];
+  List<City> cities = [];
+  List<School> schools = [];
+  Region? selectedRegion = null;
+  City? selectedCity = null;
+  School? selectedSchool = null;
 
   @override
   void initState() {
     super.initState();
+
+
+    makeSearchRequestRegion("");
+
     _checkCurrentUserInSP();
   }
 
@@ -92,6 +110,39 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
+  Future<void> makeSearchRequestRegion(String text) async {
+    CustomResponse response =  await DictionaryService().getRegions(text);
+    if(response.code == 200){
+      setState(() {
+        regions = response.body as List<Region>;
+      });
+    }else {
+      Navigator.pushReplacementNamed(context, '/');
+    }
+  }
+
+  Future<void> makeSearchRequestCity(int id,String text) async {
+    CustomResponse response =  await DictionaryService().getCities(id, text);
+    if(response.code == 200){
+      setState(() {
+        cities = response.body as List<City>;
+      });
+    }else {
+      Navigator.pushReplacementNamed(context, '/');
+    }
+  }
+
+  Future<void> makeSearchRequestSchool(int id,String text) async {
+    CustomResponse response =  await DictionaryService().getSchool(id, text);
+    if(response.code == 200){
+      setState(() {
+        schools = response.body as List<School>;
+      });
+    }else {
+      Navigator.pushReplacementNamed(context, '/');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -139,6 +190,14 @@ class _RegisterPageState extends State<RegisterPage> {
                             keyboardType: TextInputType.text,
                           ),
                           const SizedBox(height: 8,),
+                          Text(AppText.enterEmail),
+                          const SizedBox(height: 8,),
+                          _buildTextField(
+                            controller: _emailController,
+                            title: AppText.email,
+                            keyboardType: TextInputType.emailAddress,
+                          ),
+                          const SizedBox(height: 8,),
                           Text(AppText.enterNumber),
                           const SizedBox(height: 8,),
                           _buildPhoneNumberField(),
@@ -149,6 +208,35 @@ class _RegisterPageState extends State<RegisterPage> {
                             controller: _iinController,
                             title: AppText.iin,
                             keyboardType: TextInputType.number,
+                          ),
+                          const SizedBox(height: 8,),
+                          SearchField<Region>(
+                            hint: 'Region',
+                            onSearchTextChanged: (text){
+                               makeSearchRequestRegion(text);
+                               return null;
+                            },
+
+                            onSuggestionTap: (value) {
+                              setState(() {
+                                selectedRegion = value.item;
+                              });
+                            },
+                            suggestions: regions
+                                .map(
+                                  (e) => SearchFieldListItem<Region>(
+                                e.name,
+                                item: e,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      Text(e.name),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ).toList(),
                           ),
                           const SizedBox(height: 16,),
 

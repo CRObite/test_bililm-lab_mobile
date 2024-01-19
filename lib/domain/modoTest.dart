@@ -13,9 +13,18 @@ class ModoTest{
   bool passed;
   SchoolClass schoolClass;
   Map<String, Map <String, TestCategory> > typeSubjectQuestionMap;
+  int timeLimitInMilliseconds;
 
-  ModoTest(this.id, this.startedDate, this.passedDate, this.passed,
-      this.schoolClass, this.typeSubjectQuestionMap);
+
+  ModoTest(
+      this.id,
+      this.startedDate,
+      this.passedDate,
+      this.passed,
+      this.schoolClass,
+      this.typeSubjectQuestionMap,
+      this.timeLimitInMilliseconds);
+
 
   factory ModoTest.fromJson(Map<String, dynamic> json) => _$ModoTestFromJson(json);
   Map<String, dynamic> toJson() => _$ModoTestToJson(this);

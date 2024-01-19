@@ -3,6 +3,7 @@ class AppApiUrls{
   static String mainApi = '$url/api';
   static String userLogin = '$mainApi/user-login';
   static String getMe = '$mainApi/universal-get-me';
+  static String registration = '$mainApi/user-registration';
 
   static String getAllSub = '$mainApi/ent-test/subjects';
   static String getAllSubInMSS = '$mainApi/ent-test/subjects-in-mss';
@@ -31,5 +32,10 @@ class AppApiUrls{
 
   static String refreshToken = '$mainApi/user-refresh';
   static String getBalance = '$mainApi/user/get-balance';
+
+
+  static String getRegions = '$mainApi/dictionary/regions';
+  static String getCity = '$mainApi/dictionary/cities';
+  static String getSchool = '$mainApi/dictionary/schools';
 
 }

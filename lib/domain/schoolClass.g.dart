@@ -11,7 +11,7 @@ SchoolClass _$SchoolClassFromJson(Map<String, dynamic> json) => SchoolClass(
       json['name'] as String,
       json['testTimeLimit'] as String,
       json['createdDate'] as String,
-      json['timeInMilliseconds'] as int,
+      json['timeInMilliseconds'] as int?,
     );
 
 Map<String, dynamic> _$SchoolClassToJson(SchoolClass instance) =>

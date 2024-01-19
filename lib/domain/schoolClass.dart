@@ -9,7 +9,7 @@ class SchoolClass {
   String name;
   String testTimeLimit;
   String createdDate;
-  int timeInMilliseconds;
+  int? timeInMilliseconds;
 
   SchoolClass(this.id, this.name, this.testTimeLimit, this.createdDate,
       this.timeInMilliseconds);

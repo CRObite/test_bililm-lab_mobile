@@ -20,6 +20,7 @@ ModoTest _$ModoTestFromJson(Map<String, dynamic> json) => ModoTest(
                   MapEntry(k, TestCategory.fromJson(e as Map<String, dynamic>)),
             )),
       ),
+      json['timeLimitInMilliseconds'] as int,
     );
 
 Map<String, dynamic> _$ModoTestToJson(ModoTest instance) => <String, dynamic>{
@@ -29,4 +30,5 @@ Map<String, dynamic> _$ModoTestToJson(ModoTest instance) => <String, dynamic>{
       'passed': instance.passed,
       'schoolClass': instance.schoolClass,
       'typeSubjectQuestionMap': instance.typeSubjectQuestionMap,
+      'timeLimitInMilliseconds': instance.timeLimitInMilliseconds,
     };

@@ -123,7 +123,7 @@ class _SubjectPickerPageState extends State<SubjectPickerPage> {
         onConfirmBtnTap: () {
           if(format == TestFormatEnum.ENT){
             Navigator.pop(context);
-            Navigator.pushReplacementNamed(
+            Navigator.pushNamed(
               context,
               '/test',
               arguments: {
@@ -133,7 +133,7 @@ class _SubjectPickerPageState extends State<SubjectPickerPage> {
             );
           }else{
             Navigator.pop(context);
-            Navigator.pushReplacementNamed(
+            Navigator.pushNamed(
               context,
               '/test',
               arguments: {

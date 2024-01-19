@@ -68,4 +68,6 @@ class AppText {
   static String subscribe = 'Жазылу';
   static String skip = 'Өткізу';
   static String topUpBalance = 'Балансты толтыру';
+  static String email = 'Электрондық пошта';
+  static String enterEmail = 'Электрондық поштаны енгізіңіз';
 }
