@@ -13,6 +13,7 @@ import 'package:test_bilimlab_project/config/dependency_injection.dart';
 import 'package:test_bilimlab_project/presentation/AuthorizationPages/LoginPage.dart';
 import 'package:test_bilimlab_project/presentation/AuthorizationPages/RegisterPage.dart';
 import 'package:test_bilimlab_project/presentation/ErrorWorksPages/ErrorWorkTestPage.dart';
+import 'package:test_bilimlab_project/presentation/PostPages/InnerPostPage.dart';
 import 'package:test_bilimlab_project/presentation/ResoultPages/ResoultPage.dart';
 import 'package:test_bilimlab_project/presentation/SubjectPickerPages/SubjectPickerPage.dart';
 import 'package:test_bilimlab_project/presentation/TestPages/TestPage.dart';
@@ -147,6 +148,7 @@ class _MyAppState extends State<MyApp> {
     },
     '/user': (context) => const UserPage(),
     '/register': (context) => const RegisterPage(),
+    '/inner_post': (context) => const InnerPostPage(),
   };
 
   @override

@@ -38,4 +38,7 @@ class AppApiUrls{
   static String getCity = '$mainApi/dictionary/cities';
   static String getSchool = '$mainApi/dictionary/schools';
 
+  static String getAllPosts = '$mainApi/post/get-all';
+
+  static String getAllUniversity = '$mainApi/university/get-all';
 }

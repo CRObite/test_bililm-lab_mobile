@@ -1,5 +1,8 @@
 import 'package:test_bilimlab_project/data/repository/login_repository.dart';
+import 'package:test_bilimlab_project/domain/city.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
+import 'package:test_bilimlab_project/domain/region.dart';
+import 'package:test_bilimlab_project/domain/school.dart';
 import 'package:test_bilimlab_project/domain/testUser.dart';
 
 class LoginService{
@@ -13,5 +16,19 @@ class LoginService{
 
   Future<CustomResponse> refreshToken(String token) async {
     return await LoginRepository().refreshToken(token);
+  }
+
+  Future<CustomResponse> register(
+      String email,
+      int phoneNumber,
+      String firstName,
+      String? middleName,
+      String lastName,
+      String iin,
+      Region? region,
+      City? city,
+      School? school)  async {
+    return await LoginRepository().register(
+        email, phoneNumber, firstName, middleName, lastName,iin, region, city, school) ;
   }
 }

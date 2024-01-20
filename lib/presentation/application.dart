@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/presentation/ErrorWorksPages/ErrorWorksPart.dart';
+import 'package:test_bilimlab_project/presentation/PostPages/PostPage.dart';
 import 'package:test_bilimlab_project/presentation/SubjectPickerPages/SubjectPickerPage.dart';
+import 'package:test_bilimlab_project/presentation/UniversityPages/UniversityPage.dart';
 
 import 'package:test_bilimlab_project/presentation/UserPages/AnalyticPart.dart';
 import 'package:test_bilimlab_project/presentation/UserPages/ProfilePart.dart';
@@ -34,6 +36,8 @@ class _ApplicationState extends State<Application> {
       const SubjectPickerPage(),
       const ProfilePart(),
       const ErrorWorksPart(),
+      const UniversityPage(),
+      const PostPage(),
   ];
 
   @override
@@ -47,6 +51,8 @@ class _ApplicationState extends State<Application> {
 
       body: _parts[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
         selectedItemColor: AppColors.colorButton,
@@ -67,6 +73,14 @@ class _ApplicationState extends State<Application> {
           BottomNavigationBarItem(
             icon: Icon(Icons.edit),
             label: AppText.errorWork,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.school),
+            label: AppText.university,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.newspaper_rounded),
+            label: AppText.posts,
           ),
         ],
         onTap: (index) {

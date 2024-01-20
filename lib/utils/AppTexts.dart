@@ -70,4 +70,19 @@ class AppText {
   static String topUpBalance = 'Балансты толтыру';
   static String email = 'Электрондық пошта';
   static String enterEmail = 'Электрондық поштаны енгізіңіз';
+  static String regionOptional = 'Аймақ (міндетті емес)';
+  static String region = 'Аймақ ';
+  static String cityOptional = 'Қала (міндетті емес)';
+  static String city = 'Қала';
+  static String schoolOptional = 'Мектеп (міндетті емес)';
+  static String school = 'Мектеп';
+  static String regSuccess = 'Тіркелу сәтті өтті';
+  static String sendToEmail = 'Құпия сөзіңізді электрондық поштаңызға жібердік';
+  static String university = 'ЖОО';
+  static String posts = 'Жаңалықтар';
+  static String sendYourQuestion = 'Сіздің сұрағыңыз...';
+  static String writeAnswer = 'Жауап жазу';
+  static String byName = 'Аты бойынша';
+
+
 }

@@ -1,8 +1,11 @@
 
 import 'package:dio/dio.dart';
 import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
+import 'package:test_bilimlab_project/domain/city.dart';
 import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
+import 'package:test_bilimlab_project/domain/region.dart';
+import 'package:test_bilimlab_project/domain/school.dart';
 import 'package:test_bilimlab_project/domain/testUser.dart';
 import 'package:test_bilimlab_project/domain/userWithJwt.dart';
 import 'package:test_bilimlab_project/utils/AppApiUrls.dart';
@@ -77,6 +80,47 @@ class LoginRepository {
       await SharedPreferencesOperator.saveUserWithJwt(CurrentUser.currentTestUser!);
 
       return CustomResponse(200, '', null);
+
+    } catch (e) {
+      print(e);
+      return HandleErrorResponse.handleErrorResponse(e);
+    }
+  }
+
+
+  Future<CustomResponse> register(
+      String email,
+      int phoneNumber,
+      String firstName,
+      String? middleName,
+      String lastName,
+      String iin,
+      Region? region,
+      City? city,
+      School? school) async {
+
+    try {
+
+      final response = await dio.post(
+        AppApiUrls.registration,
+        data: {
+          "email": email,
+          "phoneNumber": phoneNumber,
+          "firstName": firstName,
+          "middleName": middleName,
+          "lastName": lastName,
+          "iin": iin,
+          "region": region,
+          "city": city,
+          "school": school,
+        },
+      );
+
+      print(response.data);
+
+
+      return CustomResponse(200, '', null);
+
 
     } catch (e) {
       print(e);

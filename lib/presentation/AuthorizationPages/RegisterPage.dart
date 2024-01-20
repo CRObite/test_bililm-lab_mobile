@@ -1,12 +1,18 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:searchfield/searchfield.dart';
 import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
 import 'package:test_bilimlab_project/data/service/dictionary_service.dart';
+import 'package:test_bilimlab_project/data/service/login_service.dart';
 import 'package:test_bilimlab_project/domain/city.dart';
 import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
 import 'package:test_bilimlab_project/domain/region.dart';
 import 'package:test_bilimlab_project/domain/userWithJwt.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/ServerErrorDialog.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
 
 import '../../domain/school.dart';
@@ -37,14 +43,13 @@ class _RegisterPageState extends State<RegisterPage> {
   Region? selectedRegion = null;
   City? selectedCity = null;
   School? selectedSchool = null;
+  late Timer _debounceTimer;
 
   @override
   void initState() {
     super.initState();
 
-
     makeSearchRequestRegion("");
-
     _checkCurrentUserInSP();
   }
 
@@ -58,8 +63,65 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
+  int convertPhoneNumberToInt(String phoneNumber) {
+    String numericString = phoneNumber.replaceAll(RegExp(r'\D'), '');
+    int phoneNumberInt = int.parse(numericString);
+
+    return phoneNumberInt;
+  }
+
   Future<void> _onEnterButtonPressed() async {
-    // TODO: Implement registration logic
+    QuickAlert.show(
+        context: context,
+        barrierDismissible: false,
+        type:QuickAlertType.success,
+        title: AppText.regSuccess,
+        text: AppText.sendToEmail,
+        confirmBtnText: AppText.enter,
+        onConfirmBtnTap: (){
+          Navigator.pushReplacementNamed(context, '/');
+        }
+
+    );
+    // setState(() {
+    //   errorMessage = null;
+    //   isLoading = true;
+    // });
+    //
+    // CustomResponse currentResponse =
+    // await LoginService().register(
+    //     _emailController.text,
+    //     convertPhoneNumberToInt(_numberController.text),
+    //     _nameController.text,
+    //     _secondNameController.text,
+    //     _lastNameController.text,
+    //     _iinController.text,
+    //     selectedRegion,
+    //     selectedCity,
+    //     selectedSchool);
+    //
+    // if (currentResponse.code == 200) {
+    //
+    // } else if (currentResponse.code == 500 && mounted) {
+    //   _showErrorDialog();
+    // } else {
+    //   print(currentResponse.code);
+    //   print(currentResponse.body);
+    //   setState(() {
+    //     isLoading = false;
+    //     errorMessage = currentResponse.title;
+    //   });
+    // }
+  }
+
+  void _showErrorDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return ServerErrorDialog();
+      },
+    );
   }
 
   @override
@@ -103,7 +165,7 @@ class _RegisterPageState extends State<RegisterPage> {
             controller: _numberController,
             title: AppText.number,
             keyboardType: TextInputType.phone,
-            isNumberField: true,
+            isNumberField: false,
           ),
         ),
       ],
@@ -148,7 +210,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          margin: const EdgeInsets.only(top: 100),
+          margin: const EdgeInsets.only(top: 70),
           child: Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -210,34 +272,174 @@ class _RegisterPageState extends State<RegisterPage> {
                             keyboardType: TextInputType.number,
                           ),
                           const SizedBox(height: 8,),
-                          SearchField<Region>(
-                            hint: 'Region',
-                            onSearchTextChanged: (text){
-                               makeSearchRequestRegion(text);
-                               return null;
-                            },
-
-                            onSuggestionTap: (value) {
-                              setState(() {
-                                selectedRegion = value.item;
-                              });
-                            },
-                            suggestions: regions
-                                .map(
-                                  (e) => SearchFieldListItem<Region>(
-                                e.name,
-                                item: e,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(e.name),
-                                    ],
-                                  ),
+                          Text(AppText.region),
+                          const SizedBox(height: 8,),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: SearchField<Region>(
+                              searchInputDecoration: InputDecoration(
+                                labelText: AppText.regionOptional,
+                                contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                                labelStyle: TextStyle(color: AppColors.colorTextFiledStoke),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: AppColors.colorTextFiledStoke),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: AppColors.colorButton),
+                                  borderRadius: BorderRadius.circular(10.0),
                                 ),
                               ),
-                            ).toList(),
+                              onSearchTextChanged: (text){
+                                setState(() {
+                                  selectedRegion = null;
+                                });
+                                _debounceTimer = Timer(Duration(milliseconds: 500), () {
+                                  makeSearchRequestRegion(text);
+                                });
+                                 return null;
+                              },
+                              onSuggestionTap: (value) {
+                                setState(() {
+                                  selectedRegion = value.item;
+                                });
+                              },
+                              suggestions: regions
+                                  .map(
+                                    (e) => SearchFieldListItem<Region>(
+                                  e.name,
+                                  item: e,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      children: [
+                                        Text(e.name),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ).toList(),
+                            ),
                           ),
+
+                          const SizedBox(height: 8,),
+                          Text(AppText.city),
+                          const SizedBox(height: 8,),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: IgnorePointer(
+                              ignoring: selectedRegion == null,
+                              child: SearchField<City>(
+                                searchInputDecoration: InputDecoration(
+                                  labelText: AppText.cityOptional,
+                                  contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                                  labelStyle: TextStyle(color: AppColors.colorTextFiledStoke),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: AppColors.colorTextFiledStoke),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: AppColors.colorButton),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                ),
+                                hint: AppText.cityOptional,
+                                onSearchTextChanged: (text){
+                                  setState(() {
+                                    selectedCity = null;
+                                  });
+                                  _debounceTimer = Timer(Duration(milliseconds: 500), () {
+                                    makeSearchRequestCity(selectedRegion!.id,text);
+                                  });
+                                  return null;
+                                },
+                                onSuggestionTap: (value) {
+                                  setState(() {
+                                    selectedCity = value.item;
+                                  });
+                                },
+                                suggestions: cities
+                                    .map(
+                                      (e) => SearchFieldListItem<City>(
+                                    e.name,
+                                    item: e,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(e.name),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ).toList(),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 8,),
+                          Text(AppText.school),
+                          const SizedBox(height: 8,),
+
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: IgnorePointer(
+                              ignoring: selectedCity == null,
+                              child: SearchField<School>(
+                                searchInputDecoration: InputDecoration(
+                                  labelText: AppText.schoolOptional,
+                                  contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                                  labelStyle: TextStyle(color: AppColors.colorTextFiledStoke),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: AppColors.colorTextFiledStoke),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: AppColors.colorButton),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                ),
+                                hint: AppText.schoolOptional,
+                                onSearchTextChanged: (text){
+
+                                  setState(() {
+                                    selectedSchool = null;
+                                  });
+                                  _debounceTimer = Timer(Duration(milliseconds: 500), () {
+                                    makeSearchRequestCity(selectedCity!.id,text);
+                                  });
+
+                                  return null;
+                                },
+                                onSuggestionTap: (value) {
+                                  setState(() {
+                                    selectedSchool = value.item;
+                                  });
+                                },
+                                suggestions: schools
+                                    .map(
+                                      (e) => SearchFieldListItem<School>(
+                                    e.name,
+                                    item: e,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(e.name),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ).toList(),
+                              ),
+                            ),
+                          ),
+
                           const SizedBox(height: 16,),
 
                           if(errorMessage != null)
@@ -254,7 +456,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                           LongButton(
                             onPressed: isLoading ? (){} : _onEnterButtonPressed,
-                            title: isLoading ? 'Loading...' : AppText.register,
+                            title: isLoading ? AppText.loading : AppText.register,
                           ),
                         ],
                       ),
