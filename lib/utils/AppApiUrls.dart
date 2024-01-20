@@ -39,6 +39,19 @@ class AppApiUrls{
   static String getSchool = '$mainApi/dictionary/schools';
 
   static String getAllPosts = '$mainApi/post/get-all';
+  static String getPostByID = '$mainApi/post/get-by-id/';
 
   static String getAllUniversity = '$mainApi/university/get-all';
+  static String getUniversityById = '$mainApi/university/get-by-id/';
+
+  static String getCommentsByUniversity = '$mainApi/comment/get-all-by-university/';
+  static String getCommentsBySpecialization = '$mainApi/comment/get-all-by-specialization/';
+  static String getCommentsByPost = '$mainApi/comment/get-all-by-post/';
+  static String saveComment = '$mainApi/comment/save';
+
+
+  static String getCommentsAnswersById = '$mainApi/comment-answer/get-by-id/';
+  static String saveCommentAnswer = '$mainApi/comment-answer/save';
+
+
 }

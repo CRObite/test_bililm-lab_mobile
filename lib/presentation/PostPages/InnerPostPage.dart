@@ -1,27 +1,115 @@
+
+
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:intl/intl.dart';
+import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
+import 'package:test_bilimlab_project/data/service/comments_service.dart';
+import 'package:test_bilimlab_project/data/service/login_service.dart';
+import 'package:test_bilimlab_project/data/service/media_service.dart';
+import 'package:test_bilimlab_project/domain/comment.dart';
+import 'package:test_bilimlab_project/domain/currentUser.dart';
+import 'package:test_bilimlab_project/domain/customResponse.dart';
+import 'package:test_bilimlab_project/domain/post.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/CustomCommentField.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/CustomCommentList.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/CustomTextFields.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/ServerErrorDialog.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/SmallButton.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
 import 'package:test_bilimlab_project/utils/AppImages.dart';
 import 'package:test_bilimlab_project/utils/AppTexts.dart';
 
 class InnerPostPage extends StatefulWidget {
-  const InnerPostPage({super.key});
+  const InnerPostPage({super.key, required this.post});
+
+  final Post post;
+
 
   @override
   State<InnerPostPage> createState() => _InnerPostPageState();
 }
 
 class _InnerPostPageState extends State<InnerPostPage> {
-  bool answeringStarted = false;
-  int? activatedIndex;
-  int? openedAnswersList;
-  TextEditingController _commentController = TextEditingController();
+
+  bool isLoading = false;
+  List<Comment> comments = [];
+
+  @override
+  void initState() {
+    getComments();
+    super.initState();
+  }
+
+  String extractDate(String dateTimeString) {
+    DateTime dateTime = DateFormat('dd.MM.yyyy HH:mm:ss').parse(dateTimeString);
+    return DateFormat('dd.MM.yyyy').format(dateTime);
+  }
+
+  void getComments() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      CustomResponse response = await CommentsService().getCommentsByPost(widget.post.id);
+
+      if (response.code == 200 && mounted) {
+        setState(() {
+          comments = response.body;
+        });
+      }else if(response.code == 401 && mounted ){
+        if(CurrentUser.currentTestUser != null){
+          CustomResponse response = await LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
+
+          if(response.code == 200){
+            Navigator.pushReplacementNamed(context, '/app');
+          }else{
+            SharedPreferencesOperator.clearUserWithJwt();
+            Navigator.pushReplacementNamed(context, '/');
+          }
+        }else {
+          SharedPreferencesOperator.clearUserWithJwt();
+          Navigator.pushReplacementNamed(context, '/');
+        }
+      }else if(response.code == 500 && mounted){
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return ServerErrorDialog();
+          },
+        );
+      }
+
+    } finally {
+      if(mounted){
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
+  }
+
+  Future<Uint8List?> setBytes(String id) async {
+    Uint8List? bytes =  await MediaService().getMediaById(id);
+    return bytes;
+  }
+
+  void ReDrawAfterSaved(){
+    setState(() {
+
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(widget.post.title ?? '',style: TextStyle(fontSize: 16), ),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -32,19 +120,37 @@ class _InnerPostPageState extends State<InnerPostPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+
+                  widget.post.mediaFiles!= null ?
                   Container(
                     color: AppColors.colorGrayButton,
-                    width: 250,
-                    child: Image.asset(AppImages.profile_image),
-                  ),
-                  Text('2 сағат бұрын', style: const TextStyle(fontSize: 12),),
+                    width: 300,
+                    child: FutureBuilder<Uint8List?>(
+                      future: setBytes(widget.post.mediaFiles!.id),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                          return Image.memory(
+                            snapshot.data!,
+                            fit: BoxFit.cover,
+                          );
+                        } else if (snapshot.hasError) {
+                          return Text('Error loading image');
+                        } else {
+                          return CircularProgressIndicator();
+                        }
+                      },
+                    ),
+                  ): Container(),
+                  Text(widget.post.dateTime != null  ?  extractDate(widget.post.dateTime!): '', style: const TextStyle(fontSize: 12),),
 
                 ],
               ),
               SizedBox(height: 16,),
-              Text('Как будет проходить ЕНТ в  2023 году?', style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+              Text(widget.post.title ?? '', style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
               SizedBox(height: 8,),
-              Text('Қаңтар ҰБТ-сы ақылы болғанын бәріміз білеміз. Ал Маусым ҰБТ-сы мектеп оқушыларына тегін болады. \n Айырмашылық неде? \n \n Қаңтар, Наурыз және Тамыз ҰБТ-сының сертификаттары университетке ақылы бөлімге түсуге мүмкіндік береді.\n Маусым ҰБТ-сының сертификаты грант конкурсына қатысуға мүмкіндік береді.\n Оқушылардың арасында жиі кездесетін қате пікір: «Мен Наурыз ҰБТ-ны тапсырсам Қаңтар ҰБТ-ның нәтижесі жойылып кетеді».\n Оқушы 4 ҰБТ-ны тапсырса, сол 4-еуінің де нәтижесі келесі оқу жылына дейін сақталады.\n Сәйкесінше, оқуға түсерде өзі қалаған сертификатты қолдана алады.\n ҰБТ-ның нәтижесін біздің приложениеден көруге болады. Ол үшін өз профиліңе кіріп, ЖСН (ИИН) енгізу керек.'),
+              Html(
+                data: '${widget.post.description}',
+              ),
               SizedBox(height: 8,),
               Container(
                 width: double.infinity,
@@ -63,201 +169,22 @@ class _InnerPostPageState extends State<InnerPostPage> {
                     children: [
                       Icon(Icons.remove_red_eye_outlined),
                       SizedBox(width: 8,),
-                      Text('324'),
+                      Text('0'),
                       SizedBox(width: 16,),
                       Icon(Icons.message_outlined),
                       SizedBox(width: 8,),
-                      Text('129'),
+                      Text('0'),
                     ],
                   ),
                 ),
               ),
 
-              Container(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                              color: AppColors.colorGrayButton,
-                              width: 1.0,
-                            ),
-                          ),
-                        ),
-                        child:Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  width: 35,
-                                  height: 35,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.colorGrayButton,
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Center(child: Text('AK',style: const TextStyle(fontSize: 14),)),
-                                ),
-                                const SizedBox(
-                                  width: 8,
-                                ),
-                                Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("Abdramanov K.", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),),
-                                    Text('Консультация калай алуға болады?', style: const TextStyle(fontSize: 12),),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            answeringStarted && activatedIndex == index ? Row(
-                              children: [
-                                Expanded(
-                                  child: CustomTextField(
-                                      controller: _commentController,
-                                      title: AppText.sendYourQuestion,
-                                      suffix: false,
-                                      keybordType: TextInputType.text
-                                  ),
-                                ),
-                                SizedBox(width: 8,),
-                                IconButton(
-                                  onPressed: (){
-                                    setState(() {
-                                      activatedIndex = null;
-                                      answeringStarted = false;
-                                    });
-                                  },
-                                  icon: Icon(Icons.send),
-                                ),
 
-                                IconButton(
-                                    onPressed: (){
-                                      setState(() {
-                                        activatedIndex = null;
-                                        answeringStarted = false;
-                                      });
-                                    },
-                                    icon: Icon(Icons.close),
-                                ),
-                              ],
-                            ): Row(
-                              children: [
-                                TextButton(
-                                    onPressed: (){
-                                      setState(() {
-                                        activatedIndex = index;
-                                        answeringStarted = true;
-                                      });
-                                    },
-                                    child: Text(AppText.writeAnswer, style: TextStyle(color: AppColors.colorButton),))
-                              ],
-                            ),
-
-                            SmallButton(
-                                onPressed: (){
-                                  setState(() {
-                                    if(openedAnswersList == index){
-                                      openedAnswersList = null;
-                                    }else{
-                                      openedAnswersList = index;
-                                    }
-
-                                  });
-                                }, 
-                                buttonColors: AppColors.colorButton, 
-                                innerElement: Row(
-                                  children: [
-                                    Text('Жауаптарды көру (6)',style: TextStyle(color: AppColors.colorButton),),
-                                    openedAnswersList == index ?
-                                      Icon(Icons.arrow_drop_up,color: AppColors.colorButton):
-                                      Icon(Icons.arrow_drop_down,color: AppColors.colorButton),
-                                  ],
-                                ), 
-                                isDisabled: false,
-                                isBordered: false
-                            ),
-
-                            if(openedAnswersList == index)
-                              ListView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                scrollDirection: Axis.vertical,
-                                itemCount: 6,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 16,horizontal: 8),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          width: 35,
-                                          height: 35,
-                                          decoration: BoxDecoration(
-                                            color: AppColors.colorGrayButton,
-                                            borderRadius: BorderRadius.circular(20),
-                                          ),
-                                          child: Center(child: Text('AK',style: const TextStyle(fontSize: 14),)),
-                                        ),
-                                        const SizedBox(
-                                          width: 8,
-                                        ),
-                                        Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment: MainAxisAlignment.end,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text("Abdramanov K.", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),),
-                                            Text('Консультация калай алуға болады?', style: const TextStyle(fontSize: 12),),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                })
-
-                          ],
-                        ),
-                      ),
-                    );
-                  }),
-              ),
+              CustomCommentList(comments: comments,),
 
               SizedBox(height: 16,),
 
-              Row(
-                children: [
-                  Expanded(
-                    child: CustomTextField(
-                        controller: _commentController,
-                        title: AppText.sendYourQuestion,
-                        suffix: false,
-                        keybordType: TextInputType.text
-                    ),
-                  ),
-                  SizedBox(width: 8,),
-                  SmallButton(
-                      onPressed: (){
-
-                      },
-                      buttonColors: AppColors.colorButton,
-                      innerElement: Text(AppText.send,style: TextStyle(color: Colors.white),),
-                      isDisabled: false,
-                      isBordered: true
-                  ),
-                ],
-              )
+              CustomCommentField(onPressed: ReDrawAfterSaved, id: widget.post.id, type: 'Post',),
             ],
           ),
         ),

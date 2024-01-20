@@ -83,6 +83,22 @@ class AppText {
   static String sendYourQuestion = 'Сіздің сұрағыңыз...';
   static String writeAnswer = 'Жауап жазу';
   static String byName = 'Аты бойынша';
+  static String description = 'Сипаттама';
+  static String specialties = 'Мамандықтар';
+  static String avrCost = 'Орташа бағасы';
+  static String status = 'Статус';
+  static String hostel = 'Жатақхана';
+  static String militaryDepartment = 'Әскери кафедра';
+  static String universities = 'Университеттер';
+  static String grantNumber = 'Грант саны';
+  static String code = 'Код';
+  static String minimalScoreForGrant = 'Грантқа шекті балл';
+  static String avrSalary = 'Орташа жалақы';
+  static String demand = 'Сұраныс';
+  static String noNewNews = 'Әзірге жаңа жаңалықтар жоқ';
+  static String specialtiesNumber = 'Мамандық саны:';
+  static String sawAnswers = 'Жауаптарды көру';
+
 
 
 }

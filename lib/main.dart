@@ -9,6 +9,8 @@ import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 import 'package:test_bilimlab_project/config/dependency_injection.dart';
+import 'package:test_bilimlab_project/domain/post.dart';
+import 'package:test_bilimlab_project/domain/university.dart';
 
 import 'package:test_bilimlab_project/presentation/AuthorizationPages/LoginPage.dart';
 import 'package:test_bilimlab_project/presentation/AuthorizationPages/RegisterPage.dart';
@@ -17,6 +19,8 @@ import 'package:test_bilimlab_project/presentation/PostPages/InnerPostPage.dart'
 import 'package:test_bilimlab_project/presentation/ResoultPages/ResoultPage.dart';
 import 'package:test_bilimlab_project/presentation/SubjectPickerPages/SubjectPickerPage.dart';
 import 'package:test_bilimlab_project/presentation/TestPages/TestPage.dart';
+import 'package:test_bilimlab_project/presentation/UniversityPages/SpecializationPage.dart';
+import 'package:test_bilimlab_project/presentation/UniversityPages/UniversityInfoPage.dart';
 import 'package:test_bilimlab_project/presentation/UserPages/UserPage.dart';
 import 'package:test_bilimlab_project/presentation/application.dart';
 import 'package:test_bilimlab_project/utils/TestFormatEnum.dart';
@@ -148,7 +152,16 @@ class _MyAppState extends State<MyApp> {
     },
     '/user': (context) => const UserPage(),
     '/register': (context) => const RegisterPage(),
-    '/inner_post': (context) => const InnerPostPage(),
+    '/university_info': (context) {
+      final university = ModalRoute.of(context)!.settings.arguments as University;
+      return UniversityInfoPage(university: university,);
+    },
+
+    '/specialization': (context) => const SpecializationPage(),
+    '/inner_post': (context) {
+      final post = ModalRoute.of(context)!.settings.arguments as Post;
+      return InnerPostPage(post: post);
+    },
   };
 
   @override

@@ -19,7 +19,7 @@ class University{
   String code;
   List<Specialization>? specializations;
   City city;
-  List<MediaFile>? mediaFiles;
+  MediaFile? mediaFiles;
 
   University(
       this.id,

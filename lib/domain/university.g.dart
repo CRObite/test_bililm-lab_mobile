@@ -20,9 +20,9 @@ University _$UniversityFromJson(Map<String, dynamic> json) => University(
           ?.map((e) => Specialization.fromJson(e as Map<String, dynamic>))
           .toList(),
       City.fromJson(json['city'] as Map<String, dynamic>),
-      (json['mediaFiles'] as List<dynamic>?)
-          ?.map((e) => MediaFile.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      json['mediaFiles'] == null
+          ? null
+          : MediaFile.fromJson(json['mediaFiles'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$UniversityToJson(University instance) =>

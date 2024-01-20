@@ -9,14 +9,13 @@ part 'post.g.dart';
 @JsonSerializable()
 class Post{
   int id;
-  String title;
+  String? title;
   String? description;
   String? dateTime;
-  List<MediaFile>? mediaFiles;
-  TestUser? appUser;
+  MediaFile? mediaFiles;
 
-  Post(this.id, this.title, this.description, this.dateTime, this.mediaFiles,
-      this.appUser);
+
+  Post(this.id, this.title, this.description, this.dateTime, this.mediaFiles);
 
   factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);
   Map<String, dynamic> toJson() => _$PostToJson(this);

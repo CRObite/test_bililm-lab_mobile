@@ -9,9 +9,11 @@ part of 'city.dart';
 City _$CityFromJson(Map<String, dynamic> json) => City(
       json['id'] as int,
       json['name'] as String,
-      Region.fromJson(json['region'] as Map<String, dynamic>),
-      (json['schools'] as List<dynamic>)
-          .map((e) => School.fromJson(e as Map<String, dynamic>))
+      json['region'] == null
+          ? null
+          : Region.fromJson(json['region'] as Map<String, dynamic>),
+      (json['schools'] as List<dynamic>?)
+          ?.map((e) => School.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

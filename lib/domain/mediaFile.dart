@@ -6,11 +6,11 @@ part 'mediaFile.g.dart';
 
 class MediaFile {
   String id;
-  String name;
-  String originalName;
-  String extensions;
+  String? name;
+  String? originalName;
+  String? extensions;
   String url;
-  String createdDate;
+  String? createdDate;
 
   MediaFile(this.id, this.name, this.originalName, this.extensions, this.url,
       this.createdDate);

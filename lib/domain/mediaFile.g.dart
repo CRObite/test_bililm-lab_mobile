@@ -8,11 +8,11 @@ part of 'mediaFile.dart';
 
 MediaFile _$MediaFileFromJson(Map<String, dynamic> json) => MediaFile(
       json['id'] as String,
-      json['name'] as String,
-      json['originalName'] as String,
-      json['extensions'] as String,
+      json['name'] as String?,
+      json['originalName'] as String?,
+      json['extensions'] as String?,
       json['url'] as String,
-      json['createdDate'] as String,
+      json['createdDate'] as String?,
     );
 
 Map<String, dynamic> _$MediaFileToJson(MediaFile instance) => <String, dynamic>{

@@ -8,8 +8,8 @@ part 'city.g.dart';
 class City{
   int id;
   String name;
-  Region region;
-  List<School> schools;
+  Region? region;
+  List<School>? schools;
 
   City(this.id, this.name, this.region, this.schools);
 

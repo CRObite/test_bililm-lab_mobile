@@ -1,5 +1,14 @@
 
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
+import 'package:test_bilimlab_project/data/service/login_service.dart';
+import 'package:test_bilimlab_project/data/service/media_service.dart';
+import 'package:test_bilimlab_project/data/service/post_service.dart';
+import 'package:test_bilimlab_project/domain/currentUser.dart';
+import 'package:test_bilimlab_project/domain/customResponse.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/ServerErrorDialog.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
 import 'package:test_bilimlab_project/utils/AppImages.dart';
 import 'package:test_bilimlab_project/utils/AppTexts.dart';
@@ -15,9 +24,112 @@ class PostPage extends StatefulWidget {
 
 class _PostPageState extends State<PostPage> {
 
-  bool isLoading = false;
+  bool isLoading = true;
   List<Post> posts = [];
+  bool pictureIsLoading = false;
 
+
+
+  @override
+  void initState() {
+    getAllPostData();
+    super.initState();
+  }
+
+  void getAllPostData() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      CustomResponse response = await PostService().getAllPosts();
+
+      if (response.code == 200 && mounted) {
+        setState(() {
+          posts = response.body;
+        });
+      }else if(response.code == 401 && mounted ){
+
+        if(CurrentUser.currentTestUser != null){
+          CustomResponse response = await LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
+
+          if(response.code == 200){
+            Navigator.pushReplacementNamed(context, '/app');
+          }else{
+            SharedPreferencesOperator.clearUserWithJwt();
+            Navigator.pushReplacementNamed(context, '/');
+          }
+        }else {
+          SharedPreferencesOperator.clearUserWithJwt();
+          Navigator.pushReplacementNamed(context, '/');
+        }
+      }else if(response.code == 500 && mounted){
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return ServerErrorDialog();
+          },
+        );
+      }
+
+    } finally {
+      if(mounted){
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
+  }
+  void getPostDataById(int id) async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      CustomResponse response = await PostService().getPostByID(id);
+
+      if (response.code == 200 && mounted) {
+          Post post = response.body;
+          Navigator.pushNamed(context, '/inner_post', arguments: post);
+      }else if(response.code == 401 && mounted ){
+        if(CurrentUser.currentTestUser != null){
+          CustomResponse response = await LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
+
+          if(response.code == 200){
+            Navigator.pushReplacementNamed(context, '/app');
+          }else{
+            SharedPreferencesOperator.clearUserWithJwt();
+            Navigator.pushReplacementNamed(context, '/');
+          }
+        }else {
+          SharedPreferencesOperator.clearUserWithJwt();
+          Navigator.pushReplacementNamed(context, '/');
+        }
+      }else if(response.code == 500 && mounted){
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return ServerErrorDialog();
+          },
+        );
+      }
+
+    } finally {
+      if(mounted){
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
+  }
+
+
+  Future<Uint8List?> setBytes(String id) async {
+    Uint8List? bytes =  await MediaService().getMediaById(id);
+    return bytes;
+  }
 
 
   @override
@@ -30,15 +142,18 @@ class _PostPageState extends State<PostPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(AppText.posts, style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-            ListView.builder(
+            posts.isNotEmpty? ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
-                itemCount: 10,
+                itemCount: posts.length,
                 itemBuilder: (context, index) {
+                    if(posts[index].mediaFiles!= null){
+                      setBytes(posts[index].mediaFiles!.id);
+                    }
                     return GestureDetector(
                       onTap: (){
-                        Navigator.pushNamed(context, '/inner_post');
+                        getPostDataById(posts[index].id);
                       },
                       child: Card(
                         child: Padding(
@@ -54,14 +169,28 @@ class _PostPageState extends State<PostPage> {
                                   Container(
                                       color: AppColors.colorGrayButton,
                                       width: 250,
-                                      child: Image.asset(AppImages.profile_image),
+                                      child: FutureBuilder<Uint8List?>(
+                                        future: setBytes(posts[index].mediaFiles!.id),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                                            return Image.memory(
+                                              snapshot.data!,
+                                              fit: BoxFit.cover,
+                                            );
+                                          } else if (snapshot.hasError) {
+                                            return Text('Error loading image');
+                                          } else {
+                                            return CircularProgressIndicator();
+                                          }
+                                        },
+                                      ),
                                   ),
-                                  Text('2 сағат бұрын', style: const TextStyle(fontSize: 12),),
+                                  // Text(posts[index].dateTime ?? '', style: const TextStyle(fontSize: 12),),
 
                                 ],
                               ),
                               SizedBox(height: 8,),
-                              Text('Как будет проходить ЕНТ в  2023 году?', style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+                              Text(posts[index].title ?? '', style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
                               SizedBox(height: 8,),
                               Container(
                                 width: double.infinity,
@@ -80,11 +209,11 @@ class _PostPageState extends State<PostPage> {
                                     children: [
                                       Icon(Icons.remove_red_eye_outlined),
                                       SizedBox(width: 8,),
-                                      Text('324'),
+                                      Text('0'),
                                       SizedBox(width: 16,),
                                       Icon(Icons.message_outlined),
                                       SizedBox(width: 8,),
-                                      Text('129'),
+                                      Text('0'),
                                     ],
                                   ),
                                 ),
@@ -94,7 +223,13 @@ class _PostPageState extends State<PostPage> {
                         ),
                       ),
                     );
-                })
+                }):
+            Container(
+              margin: EdgeInsets.only(top: 16),
+              child: Center(
+                child: Text(AppText.noNewNews, style: TextStyle(fontWeight: FontWeight.bold),),
+              ),
+            ),
           ],
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:test_bilimlab_project/domain/appUser.dart';
 import 'package:test_bilimlab_project/domain/post.dart';
 import 'package:test_bilimlab_project/domain/specialization.dart';
 import 'package:test_bilimlab_project/domain/testUser.dart';
@@ -15,7 +16,7 @@ class Comment{
   Post? post;
   University? university;
   Specialization? specialization;
-  TestUser appUser;
+  AppUser appUser;
 
   Comment(this.id, this.text, this.type, this.dateTime, this.post,
       this.university, this.specialization, this.appUser);

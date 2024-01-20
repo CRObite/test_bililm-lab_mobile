@@ -21,7 +21,7 @@ Comment _$CommentFromJson(Map<String, dynamic> json) => Comment(
           ? null
           : Specialization.fromJson(
               json['specialization'] as Map<String, dynamic>),
-      TestUser.fromJson(json['appUser'] as Map<String, dynamic>),
+      AppUser.fromJson(json['appUser'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$CommentToJson(Comment instance) => <String, dynamic>{
