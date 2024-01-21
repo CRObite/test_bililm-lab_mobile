@@ -14,6 +14,7 @@ import 'package:test_bilimlab_project/domain/specialization.dart';
 import 'package:test_bilimlab_project/domain/university.dart';
 
 import 'package:test_bilimlab_project/presentation/AuthorizationPages/LoginPage.dart';
+import 'package:test_bilimlab_project/presentation/AuthorizationPages/PasswordRecoverPage.dart';
 import 'package:test_bilimlab_project/presentation/AuthorizationPages/RegisterPage.dart';
 import 'package:test_bilimlab_project/presentation/ErrorWorksPages/ErrorWorkTestPage.dart';
 import 'package:test_bilimlab_project/presentation/PostPages/InnerPostPage.dart';
@@ -152,6 +153,7 @@ class _MyAppState extends State<MyApp> {
       }
     },
     '/user': (context) => const UserPage(),
+    '/recovery': (context) => const PasswordRecoveryPage(),
     '/register': (context) => const RegisterPage(),
     '/university_info': (context) {
       final university = ModalRoute.of(context)!.settings.arguments as University;

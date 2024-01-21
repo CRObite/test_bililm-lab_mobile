@@ -95,10 +95,6 @@ class CommentRepository {
     try {
       dio.options.headers['Authorization'] = 'Bearer ${CurrentUser.currentTestUser?.accessToken}';
 
-      print(Id);
-      print(text);
-      print(type);
-
       final response = await dio.post(
         '${AppApiUrls.saveComment}',
         data:{

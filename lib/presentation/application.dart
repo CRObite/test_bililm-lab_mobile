@@ -20,7 +20,7 @@ class Application extends StatefulWidget {
 
 class _ApplicationState extends State<Application> {
 
-  int _currentIndex = 1;
+  int _currentIndex = 0;
 
   @override
   void initState() {
@@ -63,7 +63,7 @@ class _ApplicationState extends State<Application> {
             label: AppText.analytics,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school_rounded),
+            icon: Icon(Icons.my_library_books_rounded),
             label: AppText.test,
           ),
           BottomNavigationBarItem(
@@ -75,7 +75,7 @@ class _ApplicationState extends State<Application> {
             label: AppText.errorWork,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school),
+            icon: Icon(Icons.school_rounded),
             label: AppText.university,
           ),
           BottomNavigationBarItem(

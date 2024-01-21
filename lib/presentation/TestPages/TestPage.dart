@@ -61,6 +61,12 @@ class _TestPageState extends State<TestPage> {
   bool _isLoading = true;
   bool pictureIsLoading = true;
   late List<int?> selectedValues;
+  final ScrollController _scrollDraggableController = ScrollController();
+
+  final _listViewKey = GlobalKey();
+  static const detectedRange = 100;
+  bool _isDragging = false;
+
 
   @override
   void initState() {
@@ -72,7 +78,12 @@ class _TestPageState extends State<TestPage> {
     });
 
     if(widget.format == TestFormatEnum.ENT){
-      _elapsedSeconds = (widget.test.entTest!.timeLimitInMilliseconds/1000).round();
+      if(widget.test.entTest!.timeLimitInMilliseconds != null){
+        _elapsedSeconds = (widget.test.entTest!.timeLimitInMilliseconds!/1000).round();
+      }else{
+        _elapsedSeconds = 12600;
+      }
+
     }else if(widget.format == TestFormatEnum.SCHOOL){
       _elapsedSeconds = (widget.test.modoTest!.timeLimitInMilliseconds/1000).round();
     }
@@ -94,6 +105,34 @@ class _TestPageState extends State<TestPage> {
     ComplexCheck();
   }
 
+
+  Widget _createListener(Widget child) {
+    return Listener(
+      child: child,
+      onPointerMove: (PointerMoveEvent event) {
+        if (!_isDragging) {
+          return;
+        }
+        RenderBox render =
+        _listViewKey.currentContext?.findRenderObject() as RenderBox;
+        Offset position = render.localToGlobal(Offset.zero);
+        double topY = position.dy;
+        double bottomY = topY + render.size.height;
+
+        const detectedRange = 80;
+        const moveDistance = 2;
+
+        if (event.position.dy < topY + detectedRange) {
+          var to = _scrollDraggableController.offset - moveDistance;
+          to = (to < 0) ? 0 : to;
+          _scrollDraggableController.jumpTo(to);
+        }
+        if (event.position.dy > bottomY - detectedRange) {
+          _scrollDraggableController.jumpTo(_scrollDraggableController.offset + moveDistance);
+        }
+      },
+    );
+  }
 
   @override
   void dispose() {
@@ -256,7 +295,7 @@ class _TestPageState extends State<TestPage> {
     QuickAlert.show(
         context: context,
         type:QuickAlertType.confirm,
-        text: AppText.areYouSureAboutThat,
+        text: goToResult ?AppText.endTestAndShowRes : AppText.areYouSureAboutThat,
         title: AppText.quittingTheTest,
         confirmBtnText: AppText.yes,
         cancelBtnText: AppText.no,
@@ -356,7 +395,7 @@ class _TestPageState extends State<TestPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               widget.format == TestFormatEnum.ENT ?
-              Text(currentSubjects[currentSubject],style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),):
+              SizedBox( width: 200, child: Text(currentSubjects[currentSubject],style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),)):
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -412,6 +451,7 @@ class _TestPageState extends State<TestPage> {
                               currentQuestion = index;
                               checkContext();
                               setBytes();
+                              checkComp();
                               setState(() {
 
                               });
@@ -422,246 +462,285 @@ class _TestPageState extends State<TestPage> {
                   },
                 ),
               ),
+              SizedBox(height: 8,),
 
               Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      if(content != null)
-                        Container(
-                          margin: const EdgeInsets.symmetric(vertical: 16),
-                          width: double.infinity,
-                          child: Html(
-                            data: '$content',
-                            style: {
-                              'body': Style(
-                                fontSize: FontSize(16),
-                              ),
-                            },
+                child: _createListener(SingleChildScrollView(
+                    key: _listViewKey,
+                    controller: _scrollDraggableController,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        if(content != null)
+                          Container(
+                            margin: const EdgeInsets.symmetric(vertical: 16),
+                            width: double.infinity,
+                            child: Html(
+                              data: '$content',
+                              style: {
+                                'body': Style(
+                                  fontSize: FontSize(16),
+                                ),
+                              },
+                            ),
                           ),
-                        ),
 
-                      Container(
-                          margin: const EdgeInsets.symmetric(vertical: 16),
-                          width: double.infinity,
-                          child: widget.format == TestFormatEnum.ENT ? Text(
-                            '${currentQuestion+1}. ${currentQuestions[currentQuestion].question}',
-                            style: const TextStyle(
-                              fontSize: 18,
-                            )
-                          ): Text(
-                              '${currentQuestion+1}. ${currentSchoolQuestions[currentQuestion].question}',
+                        Container(
+                            margin: const EdgeInsets.symmetric(vertical: 16),
+                            width: double.infinity,
+                            child: widget.format == TestFormatEnum.ENT ? Text(
+                              '${currentQuestion+1}. ${currentQuestions[currentQuestion].question}',
                               style: const TextStyle(
                                 fontSize: 18,
-                            )
-                          ),
-                      ),
-
-                      if (currentBytes != null)
-                        pictureIsLoading ?
-                        CircularProgressIndicator( color: AppColors.colorButton,):
-                        Container(
-                          margin: const EdgeInsets.symmetric(vertical: 16),
-                          width: double.infinity,
-                          child: Image.memory(currentBytes!),
+                              )
+                            ): Text(
+                                '${currentQuestion+1}. ${currentSchoolQuestions[currentQuestion].question}',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                              )
+                            ),
                         ),
 
-                      if(widget.format == TestFormatEnum.ENT && (currentQuestions[currentQuestion].subOptions == null  || currentQuestions[currentQuestion].subOptions!.isEmpty))
-                        Container(
-                          width: double.infinity,
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            itemCount: currentQuestions[currentQuestion].options.length,
-                            itemBuilder: (context, index) {
-                              if(!currentQuestions[currentQuestion].multipleAnswers){
-                                if(currentQuestions[currentQuestion].checkedAnswers !=null){
-                                  currentQuestions[currentQuestion].checkedAnswers!.isNotEmpty ?
-                                  selectedAnswerIndex = currentQuestions[currentQuestion].checkedAnswers![0]:
-                                  selectedAnswerIndex = null;
-                                }else{
-                                  currentQuestions[currentQuestion].checkedAnswers = [];
-                                }
-                              }else{
-                                selectedMultipleAnswerIndex = currentQuestions[currentQuestion].checkedAnswers;
-                              }
+                        if (currentBytes != null)
+                          pictureIsLoading ?
+                          CircularProgressIndicator( color: AppColors.colorButton,):
+                          Container(
+                            margin: const EdgeInsets.symmetric(vertical: 16),
+                            width: double.infinity,
+                            child: Image.memory(currentBytes!),
+                          ),
 
-                              return !currentQuestions[currentQuestion].multipleAnswers ?
-                              RadioListTile(
-                                activeColor: AppColors.colorButton,
-                                title: Text(currentQuestions[currentQuestion].options[index].text),
-                                value: currentQuestions[currentQuestion].options[index].id,
-                                groupValue: selectedAnswerIndex,
-                                onChanged: (int? value) {
-                                  if(value != null){
-                                    TestService().answerEntTest(widget.test.entTest!.id, currentQuestions[currentQuestion].id, currentQuestions[currentQuestion].options[index].id);
-                                    setState(() {
-                                      if(currentQuestions[currentQuestion].checkedAnswers!= null){
-                                        currentQuestions[currentQuestion].checkedAnswers!.isNotEmpty ?
-                                        currentQuestions[currentQuestion].checkedAnswers![0] = value:
-                                        currentQuestions[currentQuestion].checkedAnswers!.add(value);
-                                      }else{
-                                        currentQuestions[currentQuestion].checkedAnswers = [value];
-                                      }
-
-                                    });
+                        if(widget.format == TestFormatEnum.ENT && (currentQuestions[currentQuestion].subOptions == null  || currentQuestions[currentQuestion].subOptions!.isEmpty))
+                          Container(
+                            width: double.infinity,
+                            child: ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              scrollDirection: Axis.vertical,
+                              itemCount: currentQuestions[currentQuestion].options.length,
+                              itemBuilder: (context, index) {
+                                if(!currentQuestions[currentQuestion].multipleAnswers){
+                                  if(currentQuestions[currentQuestion].checkedAnswers !=null){
+                                    currentQuestions[currentQuestion].checkedAnswers!.isNotEmpty ?
+                                    selectedAnswerIndex = currentQuestions[currentQuestion].checkedAnswers![0]:
+                                    selectedAnswerIndex = null;
+                                  }else{
+                                    currentQuestions[currentQuestion].checkedAnswers = [];
                                   }
-                                },
-                                contentPadding: EdgeInsets.zero,
-                              ): CheckboxListTile(
+                                }else{
+                                  selectedMultipleAnswerIndex = currentQuestions[currentQuestion].checkedAnswers;
+                                }
+
+                                return !currentQuestions[currentQuestion].multipleAnswers ?
+                                RadioListTile(
                                   activeColor: AppColors.colorButton,
                                   title: Text(currentQuestions[currentQuestion].options[index].text),
-                                  value: currentQuestions[currentQuestion].checkedAnswers?.contains(currentQuestions[currentQuestion].options[index].id) ?? false,
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if(value != null && value){
-                                        print(value);
-                                        TestService().answerEntTest(widget.test.entTest!.id, currentQuestions[currentQuestion].id, currentQuestions[currentQuestion].options[index].id);
-                                        currentQuestions[currentQuestion].checkedAnswers?.add(currentQuestions[currentQuestion].options[index].id);
+                                  value: currentQuestions[currentQuestion].options[index].id,
+                                  groupValue: selectedAnswerIndex,
+                                  onChanged: (int? value) {
+                                    if(value != null){
+                                      TestService().answerEntTest(widget.test.entTest!.id, currentQuestions[currentQuestion].id, currentQuestions[currentQuestion].options[index].id);
+                                      setState(() {
+                                        if(currentQuestions[currentQuestion].checkedAnswers!= null){
+                                          currentQuestions[currentQuestion].checkedAnswers!.isNotEmpty ?
+                                          currentQuestions[currentQuestion].checkedAnswers![0] = value:
+                                          currentQuestions[currentQuestion].checkedAnswers!.add(value);
+                                        }else{
+                                          currentQuestions[currentQuestion].checkedAnswers = [value];
+                                        }
 
-                                        print(currentQuestions[currentQuestion].checkedAnswers);
-                                      }else if(value != null && !value){
-                                        print(value);
-                                        TestService().deleteAnswerEntTest(widget.test.entTest!.id, currentQuestions[currentQuestion].id, currentQuestions[currentQuestion].options[index].id);
-                                        currentQuestions[currentQuestion].checkedAnswers?.remove(currentQuestions[currentQuestion].options[index].id);
-
-                                        print(currentQuestions[currentQuestion].checkedAnswers);
-                                      }
-                                    });
+                                      });
+                                    }
                                   },
                                   contentPadding: EdgeInsets.zero,
-                                  controlAffinity: ListTileControlAffinity.leading
-                              );
-                            }
+                                ): CheckboxListTile(
+                                    activeColor: AppColors.colorButton,
+                                    title: Text(currentQuestions[currentQuestion].options[index].text),
+                                    value: currentQuestions[currentQuestion].checkedAnswers?.contains(currentQuestions[currentQuestion].options[index].id) ?? false,
+                                    onChanged: (bool? value) {
+                                      setState(() {
+                                        if(value != null && value){
+                                          print(value);
+                                          TestService().answerEntTest(widget.test.entTest!.id, currentQuestions[currentQuestion].id, currentQuestions[currentQuestion].options[index].id);
+                                          currentQuestions[currentQuestion].checkedAnswers?.add(currentQuestions[currentQuestion].options[index].id);
 
-                          )
-                        ),
-                      if(widget.format == TestFormatEnum.ENT && (currentQuestions[currentQuestion].subOptions != null  || currentQuestions[currentQuestion].subOptions!.isNotEmpty))
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  border: Border.all(
-                                    color: Colors.grey.withOpacity(0.5),
-                                    width: 2.0,
+                                          print(currentQuestions[currentQuestion].checkedAnswers);
+                                        }else if(value != null && !value){
+                                          print(value);
+                                          TestService().deleteAnswerEntTest(widget.test.entTest!.id, currentQuestions[currentQuestion].id, currentQuestions[currentQuestion].options[index].id);
+                                          currentQuestions[currentQuestion].checkedAnswers?.remove(currentQuestions[currentQuestion].options[index].id);
 
+                                          print(currentQuestions[currentQuestion].checkedAnswers);
+                                        }
+                                      });
+                                    },
+                                    contentPadding: EdgeInsets.zero,
+                                    controlAffinity: ListTileControlAffinity.leading
+                                );
+                              }
+
+                            )
+                          ),
+                        if(widget.format == TestFormatEnum.ENT && (currentQuestions[currentQuestion].subOptions != null))
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    border: Border.all(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      width: 2.0,
+
+                                    ),
+                                  ),
+                                  width: double.infinity,
+                                  child: ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: currentQuestions[currentQuestion].subOptions!.length,
+                                    itemBuilder: (context, index){
+                                      return  Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Draggable<int>(
+                                            data: index,
+                                            onDragStarted: () => _isDragging = true,
+                                            onDragEnd: (details) => _isDragging = false,
+                                            onDraggableCanceled: (velocity, offset) => _isDragging = false,
+                                            feedback: Card(
+                                                color: Colors.blue.withOpacity(0.5),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Text('${currentQuestions[currentQuestion].subOptions![index].text}', style: TextStyle( color:  Colors.white),),
+                                                )),
+                                            childWhenDragging:  Card(
+                                                color: Colors.blue.withOpacity(0.5),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Text('${currentQuestions[currentQuestion].subOptions![index].text}', style: TextStyle( color:  Colors.white),),
+                                                )),
+                                            child: Container(
+                                              decoration: const BoxDecoration(
+                                                color: Colors.blue,
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(10.0),
+                                                ),
+                                              ),
+                                              child: Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Text('${currentQuestions[currentQuestion].subOptions![index].text}', style: TextStyle( color:  Colors.white),)),
+                                            )
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
-                                width: double.infinity,
-                                child: ListView.builder(
-                                  physics: NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: currentQuestions[currentQuestion].subOptions!.length,
-                                  itemBuilder: (context, index){
-                                    return  Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Draggable<int>(
-                                          data: index,
-                                          feedback: Card(
-                                              color: Colors.blue.withOpacity(0.5),
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(8.0),
-                                                child: Text('${currentQuestions[currentQuestion].subOptions![index].text}', style: TextStyle( color:  Colors.white),),
-                                              )),
-                                          childWhenDragging:  Card(
-                                              color: Colors.blue.withOpacity(0.5),
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(8.0),
-                                                child: Text('${currentQuestions[currentQuestion].subOptions![index].text}', style: TextStyle( color:  Colors.white),),
-                                              )),
-                                          child: Container(
-                                            decoration: const BoxDecoration(
-                                              color: Colors.blue,
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(10.0),
-                                              ),
-                                            ),
-                                            child: Padding(
-                                                padding: const EdgeInsets.all(8.0),
-                                                child: Text('${currentQuestions[currentQuestion].subOptions![index].text}', style: TextStyle( color:  Colors.white),)),
-                                          )
-                                      ),
-                                    );
-                                  },
+                                const SizedBox(
+                                  height: 16,
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 16,
-                              ),
 
-                              Container(
-                                width: double.infinity,
-                                child: ListView.builder(
-                                    shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    itemCount: currentQuestions[currentQuestion].options.length,
-                                    itemBuilder: (context, index){
+                                Container(
+                                  width: double.infinity,
+                                  child: ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemCount: currentQuestions[currentQuestion].options.length,
+                                      itemBuilder: (context, index){
 
-                                      if(currentQuestions[currentQuestion].options[index].subOption != null){
-                                        selectedValues[index] = currentQuestions[currentQuestion].subOptions!.indexOf( currentQuestions[currentQuestion].options[index].subOption!);
-                                      }
+                                        if (currentQuestions[currentQuestion].options[index].subOption != null) {
+                                          int subOptionId = currentQuestions[currentQuestion].options[index].subOption!.id;
 
-                                      return  Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          SizedBox(
+                                          int position = currentQuestions[currentQuestion].subOptions!.indexWhere(
+                                                (subOption) => subOption.id == subOptionId,
+                                          );
 
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
+                                          if (position >= 0) {
+                                            selectedValues[index] = position;
+                                          }
+                                        }
+
+
+                                        return Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            SizedBox(
+
                                               child: Padding(
                                                 padding: const EdgeInsets.all(8.0),
-                                                child: Text(currentQuestions[currentQuestion].options[index].text),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Text(currentQuestions[currentQuestion].options[index].text),
+                                                ),
                                               ),
+                                              width: 150,
                                             ),
-                                            width: 150,
-                                          ),
 
-                                          Icon(Icons.remove),
+                                            Icon(Icons.remove),
 
-                                          SizedBox(
-                                            width: 160,
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: DragTarget<int>(
+                                            SizedBox(
+                                              width: 160,
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: DragTarget<int>(
 
-                                                  onAccept: (data){
-                                                    if(selectedValues.contains(data)){
+                                                    onAccept: (data){
+                                                      if(selectedValues.contains(data)){
 
-                                                      int i = selectedValues.indexOf(data);
-                                                      if(selectedValues[index]!= null){
+                                                        int i = selectedValues.indexOf(data);
+                                                        if(selectedValues[index]!= null){
 
-                                                        int? j = selectedValues[index];
-                                                        setState(() {
-                                                          selectedValues[index] = data;
-                                                          selectedValues[i] = j;
-                                                        });
-                                                        currentQuestions[currentQuestion].options[index].subOption = currentQuestions[currentQuestion].subOptions![data];
+                                                          int? j = selectedValues[index];
+                                                          setState(() {
+                                                            selectedValues[index] = data;
+                                                            selectedValues[i] = j;
+                                                          });
+                                                          currentQuestions[currentQuestion].options[index].subOption = currentQuestions[currentQuestion].subOptions![data];
 
-                                                        TestService().comparisonAnswerEntTest(
-                                                            widget.test.entTest!.id,
-                                                            currentQuestions[currentQuestion].id,
-                                                            currentQuestions[currentQuestion].options[index].id,
-                                                            currentQuestions[currentQuestion].subOptions![data].id
-                                                        );
+                                                          TestService().comparisonAnswerEntTest(
+                                                              widget.test.entTest!.id,
+                                                              currentQuestions[currentQuestion].id,
+                                                              currentQuestions[currentQuestion].options[index].id,
+                                                              currentQuestions[currentQuestion].subOptions![data].id
+                                                          );
 
-                                                        currentQuestions[currentQuestion].options[i].subOption = currentQuestions[currentQuestion].subOptions![j!];
+                                                          currentQuestions[currentQuestion].options[i].subOption = currentQuestions[currentQuestion].subOptions![j!];
 
-                                                        TestService().comparisonAnswerEntTest(
-                                                            widget.test.entTest!.id,
-                                                            currentQuestions[currentQuestion].id,
-                                                            currentQuestions[currentQuestion].options[i].id,
-                                                            currentQuestions[currentQuestion].subOptions![j].id
-                                                        );
+                                                          TestService().comparisonAnswerEntTest(
+                                                              widget.test.entTest!.id,
+                                                              currentQuestions[currentQuestion].id,
+                                                              currentQuestions[currentQuestion].options[i].id,
+                                                              currentQuestions[currentQuestion].subOptions![j].id
+                                                          );
 
+                                                        }else{
+
+                                                          setState(() {
+                                                            selectedValues[index] = data;
+                                                            selectedValues[i] = null;
+                                                          });
+                                                          currentQuestions[currentQuestion].options[index].subOption = currentQuestions[currentQuestion].subOptions![data];
+
+                                                          TestService().comparisonAnswerEntTest(
+                                                              widget.test.entTest!.id,
+                                                              currentQuestions[currentQuestion].id,
+                                                              currentQuestions[currentQuestion].options[index].id,
+                                                              currentQuestions[currentQuestion].subOptions![data].id
+                                                          );
+
+                                                          currentQuestions[currentQuestion].options[i].subOption = null;
+
+                                                          TestService().comparisonDeleteAnswerEntTest(
+                                                              widget.test.entTest!.id,
+                                                              currentQuestions[currentQuestion].id,
+                                                              currentQuestions[currentQuestion].options[i].id,
+                                                              currentQuestions[currentQuestion].subOptions![data].id
+                                                          );
+
+                                                        }
                                                       }else{
-
                                                         setState(() {
                                                           selectedValues[index] = data;
-                                                          selectedValues[i] = null;
                                                         });
                                                         currentQuestions[currentQuestion].options[index].subOption = currentQuestions[currentQuestion].subOptions![data];
 
@@ -669,153 +748,134 @@ class _TestPageState extends State<TestPage> {
                                                             widget.test.entTest!.id,
                                                             currentQuestions[currentQuestion].id,
                                                             currentQuestions[currentQuestion].options[index].id,
-                                                            currentQuestions[currentQuestion].subOptions![data].id
-                                                        );
-
-                                                        currentQuestions[currentQuestion].options[i].subOption = null;
-
-                                                        TestService().comparisonDeleteAnswerEntTest(
-                                                            widget.test.entTest!.id,
-                                                            currentQuestions[currentQuestion].id,
-                                                            currentQuestions[currentQuestion].options[i].id,
                                                             currentQuestions[currentQuestion].subOptions![data].id
                                                         );
 
                                                       }
-                                                    }else{
-                                                      setState(() {
-                                                        selectedValues[index] = data;
-                                                      });
-                                                      currentQuestions[currentQuestion].options[index].subOption = currentQuestions[currentQuestion].subOptions![data];
-
-                                                      TestService().comparisonAnswerEntTest(
-                                                          widget.test.entTest!.id,
-                                                          currentQuestions[currentQuestion].id,
-                                                          currentQuestions[currentQuestion].options[index].id,
-                                                          currentQuestions[currentQuestion].subOptions![data].id
-                                                      );
-
-                                                    }
-                                                  },
+                                                    },
 
 
-                                                  builder: (context, candidateData, rejectedData){
+                                                    builder: (context, candidateData, rejectedData){
 
-                                                    if(selectedValues[index] != null){
-                                                      return Container(
-                                                        decoration: const BoxDecoration(
-                                                          color: Colors.blue,
-                                                          borderRadius: BorderRadius.all(
-                                                            Radius.circular(10.0),
-                                                          ),
-                                                        ),
-                                                        child: Padding(
-                                                          padding: const EdgeInsets.all(8.0),
-                                                          child: Text('${currentQuestions[currentQuestion].subOptions![selectedValues[index]!].text}', style: const TextStyle(color: Colors.white),),
-                                                        ),
-                                                      );
-                                                    }else{
-                                                      return Container(
-                                                        decoration: BoxDecoration(
-                                                          color: AppColors.colorGrayButton,
-                                                          borderRadius: BorderRadius.all(
-                                                            Radius.circular(10.0),
-                                                          ),
-                                                        ),
-
-                                                        child: Padding(
-                                                          padding: const EdgeInsets.all(8.0),
-                                                          child: Center(
-                                                            child: Text(
-                                                              AppText.emptyFiled, style: TextStyle(color: Colors.blueGrey),
+                                                      if(selectedValues[index] != null){
+                                                        return Container(
+                                                          decoration: const BoxDecoration(
+                                                            color: Colors.blue,
+                                                            borderRadius: BorderRadius.all(
+                                                              Radius.circular(10.0),
                                                             ),
                                                           ),
-                                                        ),
-                                                      );
-                                                    }
+                                                          child: Padding(
+                                                            padding: const EdgeInsets.all(8.0),
+                                                            child: Text('${currentQuestions[currentQuestion].subOptions![selectedValues[index]!].text}', style: const TextStyle(color: Colors.white),),
+                                                          ),
+                                                        );
+                                                      }else{
+                                                        return Container(
+                                                          decoration: BoxDecoration(
+                                                            color: AppColors.colorGrayButton,
+                                                            borderRadius: BorderRadius.all(
+                                                              Radius.circular(10.0),
+                                                            ),
+                                                          ),
 
-                                                  }
+                                                          child: Padding(
+                                                            padding: const EdgeInsets.all(8.0),
+                                                            child: Center(
+                                                              child: Text(
+                                                                AppText.emptyFiled, style: TextStyle(color: Colors.blueGrey),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      }
+
+                                                    }
+                                                ),
                                               ),
                                             ),
-                                          )
 
-                                        ],
-                                      );
-                                    }
-                                ),
-                              ),
-                        ],
-                      ),
-
-
-                      if (widget.format == TestFormatEnum.SCHOOL)
-                        Container(
-                          width: double.infinity,
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            itemCount:  currentSchoolQuestions[currentQuestion].schoolOptions.length,
-                            itemBuilder: (context, index) {
-                              if(!currentSchoolQuestions[currentQuestion].multipleAnswers){
-                                if(currentSchoolQuestions[currentQuestion].checkedAnswers !=null){
-                                  currentSchoolQuestions[currentQuestion].checkedAnswers!.isNotEmpty ?
-                                  selectedAnswerIndex = currentSchoolQuestions[currentQuestion].checkedAnswers![0]:
-                                  selectedAnswerIndex = null;
-                                }else{
-                                  currentSchoolQuestions[currentQuestion].checkedAnswers = [];
-                                }
-                              }else{
-                                selectedMultipleAnswerIndex = currentSchoolQuestions[currentQuestion].checkedAnswers;
-                              }
-
-                              return !currentSchoolQuestions[currentQuestion].multipleAnswers ?
-                              RadioListTile(
-                                activeColor: AppColors.colorButton,
-                                title: Text(currentSchoolQuestions[currentQuestion].schoolOptions[index].text),
-                                value: currentSchoolQuestions[currentQuestion].schoolOptions[index].id,
-                                groupValue: selectedAnswerIndex,
-                                onChanged: (int? value) {
-                                  if(value != null){
-
-                                    TestService().answerSchoolTest(widget.test.modoTest!.id, currentSchoolQuestions[currentQuestion].id, currentSchoolQuestions[currentQuestion].schoolOptions[index].id);
-                                    setState(() {
-                                      if(currentSchoolQuestions[currentQuestion].checkedAnswers!= null){
-                                        currentSchoolQuestions[currentQuestion].checkedAnswers!.isNotEmpty ?
-                                        currentSchoolQuestions[currentQuestion].checkedAnswers![0] = value:
-                                        currentSchoolQuestions[currentQuestion].checkedAnswers!.add(value);
-                                      }else{
-                                        currentSchoolQuestions[currentQuestion].checkedAnswers = [value];
+                                          ],
+                                        );
                                       }
+                                  ),
+                                ),
 
-                                    });
+                          ],
+                        ),
+
+
+                        if (widget.format == TestFormatEnum.SCHOOL)
+                          Container(
+                            width: double.infinity,
+                            child: ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              scrollDirection: Axis.vertical,
+                              itemCount:  currentSchoolQuestions[currentQuestion].schoolOptions.length,
+                              itemBuilder: (context, index) {
+                                if(!currentSchoolQuestions[currentQuestion].multipleAnswers){
+                                  if(currentSchoolQuestions[currentQuestion].checkedAnswers !=null){
+                                    currentSchoolQuestions[currentQuestion].checkedAnswers!.isNotEmpty ?
+                                    selectedAnswerIndex = currentSchoolQuestions[currentQuestion].checkedAnswers![0]:
+                                    selectedAnswerIndex = null;
+                                  }else{
+                                    currentSchoolQuestions[currentQuestion].checkedAnswers = [];
                                   }
-                                },
-                                contentPadding: EdgeInsets.zero,
-                              ): CheckboxListTile(
+                                }else{
+                                  selectedMultipleAnswerIndex = currentSchoolQuestions[currentQuestion].checkedAnswers;
+                                }
+
+                                return !currentSchoolQuestions[currentQuestion].multipleAnswers ?
+                                RadioListTile(
                                   activeColor: AppColors.colorButton,
                                   title: Text(currentSchoolQuestions[currentQuestion].schoolOptions[index].text),
-                                  value: currentSchoolQuestions[currentQuestion].checkedAnswers?.contains(currentSchoolQuestions[currentQuestion].schoolOptions[index].id) ?? false,
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if(value != null && value){
+                                  value: currentSchoolQuestions[currentQuestion].schoolOptions[index].id,
+                                  groupValue: selectedAnswerIndex,
+                                  onChanged: (int? value) {
+                                    if(value != null){
 
-                                        TestService().answerSchoolTest(widget.test.modoTest!.id, currentSchoolQuestions[currentQuestion].id, currentSchoolQuestions[currentQuestion].schoolOptions[index].id);
-                                        currentSchoolQuestions[currentQuestion].checkedAnswers?.add(currentSchoolQuestions[currentQuestion].schoolOptions[index].id);
-                                      }else if(value != null && !value){
+                                      TestService().answerSchoolTest(widget.test.modoTest!.id, currentSchoolQuestions[currentQuestion].id, currentSchoolQuestions[currentQuestion].schoolOptions[index].id);
+                                      setState(() {
+                                        if(currentSchoolQuestions[currentQuestion].checkedAnswers!= null){
+                                          currentSchoolQuestions[currentQuestion].checkedAnswers!.isNotEmpty ?
+                                          currentSchoolQuestions[currentQuestion].checkedAnswers![0] = value:
+                                          currentSchoolQuestions[currentQuestion].checkedAnswers!.add(value);
+                                        }else{
+                                          currentSchoolQuestions[currentQuestion].checkedAnswers = [value];
+                                        }
 
-                                        TestService().deleteAnswerSchoolTest(widget.test.modoTest!.id, currentSchoolQuestions[currentQuestion].id, currentSchoolQuestions[currentQuestion].schoolOptions[index].id);
-                                        currentSchoolQuestions[currentQuestion].checkedAnswers?.remove(currentSchoolQuestions[currentQuestion].schoolOptions[index].id);
-                                      }
-                                    });
+                                      });
+                                    }
                                   },
                                   contentPadding: EdgeInsets.zero,
-                                  controlAffinity: ListTileControlAffinity.leading
-                              );
+                                ): CheckboxListTile(
+                                    activeColor: AppColors.colorButton,
+                                    title: Text(currentSchoolQuestions[currentQuestion].schoolOptions[index].text),
+                                    value: currentSchoolQuestions[currentQuestion].checkedAnswers?.contains(currentSchoolQuestions[currentQuestion].schoolOptions[index].id) ?? false,
+                                    onChanged: (bool? value) {
+                                      setState(() {
+                                        if(value != null && value){
 
-                            },
+                                          TestService().answerSchoolTest(widget.test.modoTest!.id, currentSchoolQuestions[currentQuestion].id, currentSchoolQuestions[currentQuestion].schoolOptions[index].id);
+                                          currentSchoolQuestions[currentQuestion].checkedAnswers?.add(currentSchoolQuestions[currentQuestion].schoolOptions[index].id);
+                                        }else if(value != null && !value){
+
+                                          TestService().deleteAnswerSchoolTest(widget.test.modoTest!.id, currentSchoolQuestions[currentQuestion].id, currentSchoolQuestions[currentQuestion].schoolOptions[index].id);
+                                          currentSchoolQuestions[currentQuestion].checkedAnswers?.remove(currentSchoolQuestions[currentQuestion].schoolOptions[index].id);
+                                        }
+                                      });
+                                    },
+                                    contentPadding: EdgeInsets.zero,
+                                    controlAffinity: ListTileControlAffinity.leading
+                                );
+
+                              },
+                            ),
                           ),
-                        ),
-                    ],
+                        SizedBox(height: 50,),
+                      ],
+                    ),
                   ),
                 ),
               ),

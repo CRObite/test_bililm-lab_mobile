@@ -5,6 +5,7 @@ import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:searchfield/searchfield.dart';
 import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
+import 'package:test_bilimlab_project/config/TextFiledValidator.dart';
 import 'package:test_bilimlab_project/data/service/dictionary_service.dart';
 import 'package:test_bilimlab_project/data/service/login_service.dart';
 import 'package:test_bilimlab_project/domain/city.dart';
@@ -64,54 +65,103 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   int convertPhoneNumberToInt(String phoneNumber) {
-    String numericString = phoneNumber.replaceAll(RegExp(r'\D'), '');
-    int phoneNumberInt = int.parse(numericString);
 
-    return phoneNumberInt;
+    if(phoneNumber != ''){
+      String numericString = phoneNumber.replaceAll(RegExp(r'\D'), '');
+      int phoneNumberInt = int.parse(numericString);
+
+      return phoneNumberInt;
+    }else{
+      return 1;
+    }
+
   }
 
   Future<void> _onEnterButtonPressed() async {
-    QuickAlert.show(
-        context: context,
-        barrierDismissible: false,
-        type:QuickAlertType.success,
-        title: AppText.regSuccess,
-        text: AppText.sendToEmail,
-        confirmBtnText: AppText.enter,
-        onConfirmBtnTap: (){
-          Navigator.pushReplacementNamed(context, '/');
-        }
 
-    );
-    // setState(() {
-    //   errorMessage = null;
-    //   isLoading = true;
-    // });
-    //
-    // CustomResponse currentResponse =
-    // await LoginService().register(
-    //     _emailController.text,
-    //     convertPhoneNumberToInt(_numberController.text),
-    //     _nameController.text,
-    //     _secondNameController.text,
-    //     _lastNameController.text,
-    //     _iinController.text,
-    //     selectedRegion,
-    //     selectedCity,
-    //     selectedSchool);
-    //
-    // if (currentResponse.code == 200) {
-    //
-    // } else if (currentResponse.code == 500 && mounted) {
-    //   _showErrorDialog();
-    // } else {
-    //   print(currentResponse.code);
-    //   print(currentResponse.body);
-    //   setState(() {
-    //     isLoading = false;
-    //     errorMessage = currentResponse.title;
-    //   });
-    // }
+    String? validationText = TextFieldValidator.validateIIN(_iinController.text);
+    if(validationText != null){
+      setState(() {
+        errorMessage = validationText;
+      });
+
+      return null;
+    }
+    validationText = TextFieldValidator.validateEmail(_emailController.text);
+    if(validationText != null){
+      setState(() {
+        errorMessage = validationText;
+      });
+
+      return null;
+    }
+    validationText = TextFieldValidator.validateRequired(_nameController.text);
+    if(validationText != null){
+      setState(() {
+        errorMessage = validationText;
+      });
+
+      return null;
+    }
+    validationText = TextFieldValidator.validateEmail(_lastNameController.text);
+    if(validationText != null){
+      setState(() {
+        errorMessage = validationText;
+      });
+
+      return null;
+    }
+    validationText = TextFieldValidator.validateEmail(_numberController.text);
+    if(validationText != null){
+      setState(() {
+        errorMessage = validationText;
+      });
+
+      return null;
+    }
+
+
+
+
+    setState(() {
+      errorMessage = null;
+      isLoading = true;
+    });
+
+    CustomResponse currentResponse =
+    await LoginService().register(
+        _emailController.text,
+        convertPhoneNumberToInt(_numberController.text),
+        _nameController.text,
+        _secondNameController.text != '' ? _secondNameController.text : null,
+        _lastNameController.text,
+        _iinController.text,
+        selectedRegion,
+        selectedCity,
+        selectedSchool);
+
+    if (currentResponse.code == 200) {
+      QuickAlert.show(
+          context: context,
+          barrierDismissible: false,
+          type:QuickAlertType.success,
+          title: AppText.regSuccess,
+          text: AppText.sendToEmail,
+          confirmBtnText: AppText.enter,
+          onConfirmBtnTap: (){
+            Navigator.pushReplacementNamed(context, '/');
+          }
+
+      );
+    } else if (currentResponse.code == 500 && mounted) {
+      _showErrorDialog();
+    } else {
+
+      setState(() {
+        isLoading = false;
+        errorMessage = currentResponse.title;
+      });
+    }
   }
 
   void _showErrorDialog() {
@@ -156,11 +206,8 @@ class _RegisterPageState extends State<RegisterPage> {
           '+7',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
-        Expanded(child: SizedBox()),
-        ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: 260,
-          ),
+        SizedBox(width: 16,),
+        Expanded(
           child: _buildTextField(
             controller: _numberController,
             title: AppText.number,

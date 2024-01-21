@@ -18,6 +18,11 @@ class LoginService{
     return await LoginRepository().refreshToken(token);
   }
 
+  Future<CustomResponse> recoverPassword(String email, String iin) async {
+    return await LoginRepository().recoverPassword(email, iin);
+  }
+
+
   Future<CustomResponse> register(
       String email,
       int phoneNumber,

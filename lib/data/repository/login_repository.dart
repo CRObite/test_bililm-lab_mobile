@@ -87,6 +87,31 @@ class LoginRepository {
     }
   }
 
+  Future<CustomResponse> recoverPassword(String email, String iin) async {
+    try {
+
+      print(email);
+      print(iin);
+
+
+      final response = await dio.put(
+        AppApiUrls.recoverPassword,
+        data:{
+          "email": email,
+          "iin": iin
+        },
+      );
+
+      print(response.data);
+
+      return CustomResponse(200, '', null);
+
+    } catch (e) {
+      print(e);
+      return HandleErrorResponse.handleErrorResponse(e);
+    }
+  }
+
 
   Future<CustomResponse> register(
       String email,
@@ -127,6 +152,8 @@ class LoginRepository {
       return HandleErrorResponse.handleErrorResponse(e);
     }
   }
+
+
 
 
 }

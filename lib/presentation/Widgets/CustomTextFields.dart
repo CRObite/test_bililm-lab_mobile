@@ -29,7 +29,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   );
 
   List<TextInputFormatter> _getInputFormatters(TextInputType type) {
-    print(type == TextInputType.phone);
+
     if(type == TextInputType.phone){
       return [_maskFormatter];
     }else{

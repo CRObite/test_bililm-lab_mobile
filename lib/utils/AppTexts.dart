@@ -56,6 +56,7 @@ class AppText {
   static String serverError = 'Cервер қатесі';
   static String tryLater = 'Серверде қате пайда болды кейінірек көріңіз';
   static String register = 'Тіркеу';
+  static String passwordRecovery = 'Құпия сөзді өзгерту';
   static String name = 'Аты';
   static String enterName = 'Атыңызды енгізіңіз';
   static String lastName = 'Жөні';
@@ -78,6 +79,8 @@ class AppText {
   static String school = 'Мектеп';
   static String regSuccess = 'Тіркелу сәтті өтті';
   static String sendToEmail = 'Құпия сөзіңізді электрондық поштаңызға жібердік';
+  static String recoverSuccess = 'Құпия сөзді өзгерту сәтті өтті';
+  static String sendNewToEmail = 'Жаңа құпия сөзіңізді электрондық поштаңызға жібердік';
   static String university = 'ЖОО';
   static String posts = 'Жаңалықтар';
   static String sendYourQuestion = 'Сіздің сұрағыңыз...';
@@ -100,7 +103,18 @@ class AppText {
   static String sawAnswers = 'Жауаптарды көру';
   static String merged = 'Бірлескен';
   static String subjects = 'Пәндер';
-
+  static String noUniversity = 'Тізімде әлі университеттер жоқ';
+  static String beFirst = 'Бірінші боп сұрақ қалдырыңыз';
+  static String low = 'Төмен';
+  static String average = 'Орташа';
+  static String high = 'Жоғары';
+  static String recover = 'Жаңарту';
+  static String exit = 'Есептік жазбадан шығу';
+  static String exitFromLogin = 'Есептік жазбадан шыққыңыз келе ме ?';
+  static String enterValidEmail = 'Жарамды электрондық пошта енгізіңіз';
+  static String fillAll = 'Барлық мәтін жолақтарын толтырыңыз';
+  static String iinMustContain = 'ИИН 12 таңбалы болуы керек';
+  static String endTestAndShowRes = 'Тестті аяқтап, нәтижелерді көргіңіз келе ме?';
 
 
 }

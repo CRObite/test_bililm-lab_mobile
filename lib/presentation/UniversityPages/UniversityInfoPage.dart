@@ -258,7 +258,17 @@ class _UniversityInfoPageState extends State<UniversityInfoPage> {
                     SizedBox(height: 16,),
                     Text(widget.university.description),
                     SizedBox(height: 16,),
-                    CustomCommentList(comments: comments),
+                    comments.isNotEmpty ?
+                    CustomCommentList(comments: comments,):
+                    Row(
+                      children: [
+                        SizedBox(height: 20,),
+                        Text(AppText.beFirst, style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,  color: Colors.grey),),
+                        SizedBox(height: 20,),
+                      ],
+                    ),
+
+                    SizedBox(height: 16,),
 
                     CustomCommentField(type: 'University', onPressed: ReDrawAfterSaved, id: widget.university.id,),
                   ],

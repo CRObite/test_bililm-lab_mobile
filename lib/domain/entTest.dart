@@ -12,7 +12,7 @@ class EntTest {
   bool passed;
   String type;
   Map<String, TestCategory> questionsMap;
-  int timeLimitInMilliseconds;
+  int? timeLimitInMilliseconds;
 
 
   EntTest(this.id, this.startedDate, this.passedDate, this.passed, this.type,

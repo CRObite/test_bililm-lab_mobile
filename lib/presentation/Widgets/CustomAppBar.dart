@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
-import 'package:test_bilimlab_project/domain/language.dart';
 import 'package:test_bilimlab_project/domain/testUser.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/ReportDialog.dart';
+import 'package:test_bilimlab_project/utils/AppTexts.dart';
 
 import '../../utils/AppColors.dart';
 import '../../utils/AppImages.dart';
@@ -19,7 +20,23 @@ class CustomAppBar extends StatefulWidget {
 
 class _CustomAppBarState extends State<CustomAppBar> {
 
-
+  void areYouSureAboutThis(){
+    QuickAlert.show(
+        context: context,
+        type:QuickAlertType.confirm,
+        text: AppText.exitFromLogin,
+        title: AppText.exit,
+        confirmBtnText: AppText.yes,
+        cancelBtnText: AppText.no,
+        onCancelBtnTap:(){
+          Navigator.pop(context);
+        },
+        onConfirmBtnTap: () async {
+          await SharedPreferencesOperator.clearUserWithJwt();
+          Navigator.pushReplacementNamed(context, '/');
+        }
+    );
+  }
 
 
   @override
@@ -45,9 +62,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 child: Image.asset(AppImages.full_logo)
             ),
             GestureDetector(
-              onTap: () async {
-                await SharedPreferencesOperator.clearUserWithJwt();
-                Navigator.pushReplacementNamed(context, '/');
+              onTap: () {
+                areYouSureAboutThis();
               },
               child: Row(
                 mainAxisSize: MainAxisSize.min,

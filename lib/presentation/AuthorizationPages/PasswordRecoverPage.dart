@@ -1,49 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:test_bilimlab_project/config/TextFiledValidator.dart';
 import 'package:test_bilimlab_project/data/service/login_service.dart';
-import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
-import 'package:test_bilimlab_project/domain/userWithJwt.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/CustomTextFields.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/LongButton.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/ServerErrorDialog.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
-import '../../utils/AppImages.dart';
-import '../../utils/AppTexts.dart';
-import '../Widgets/CustomTextFields.dart';
-import '../Widgets/LongButton.dart';
-import '../Widgets/ServerErrorDialog.dart';
+import 'package:test_bilimlab_project/utils/AppImages.dart';
+import 'package:test_bilimlab_project/utils/AppTexts.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class PasswordRecoveryPage extends StatefulWidget {
+  const PasswordRecoveryPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<PasswordRecoveryPage> createState() => _PasswordRecoveryPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
   bool isLoading = false;
   String? errorMessage;
 
   final TextEditingController _iinController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    _checkCurrentUserInSP();
-  }
-
-  Future<void> _checkCurrentUserInSP() async {
-    if (await SharedPreferencesOperator.containsUserWithJwt()) {
-      UserWithJwt? user = await SharedPreferencesOperator.getUserWithJwt();
-      if (user != null) {
-        CurrentUser.currentTestUser = user;
-        Navigator.pushReplacementNamed(context, '/app');
-      }
-    }
-  }
 
   Future<void> _onEnterButtonPressed() async {
-
 
     String? validationText = TextFieldValidator.validateIIN(_iinController.text);
     if(validationText != null){
@@ -53,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
 
       return null;
     }
-    validationText = TextFieldValidator.validateRequired(_passwordController.text);
+    validationText = TextFieldValidator.validateEmail(_emailController.text);
     if(validationText != null){
       setState(() {
         errorMessage = validationText;
@@ -69,14 +52,24 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     CustomResponse currentResponse =
-    await LoginService().logIn(_iinController.text, _passwordController.text);
+    await LoginService().recoverPassword(_emailController.text, _iinController.text);
 
     if (currentResponse.code == 200) {
-      Navigator.pushReplacementNamed(context, '/app');
+      QuickAlert.show(
+          context: context,
+          barrierDismissible: false,
+          type:QuickAlertType.success,
+          title: AppText.recoverSuccess,
+          text: AppText.sendNewToEmail,
+          confirmBtnText: AppText.enter,
+          onConfirmBtnTap: (){
+            Navigator.pushReplacementNamed(context, '/');
+          }
+
+      );
     } else if (currentResponse.code == 500 && mounted) {
       _showErrorDialog();
     } else {
-
       setState(() {
         isLoading = false;
         errorMessage = currentResponse.title;
@@ -97,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void dispose() {
     _iinController.dispose();
-    _passwordController.dispose();
+    _emailController.dispose();
     super.dispose();
   }
 
@@ -111,7 +104,6 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(height: 70, child: Image.asset(AppImages.full_logo)),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Card(
@@ -134,13 +126,13 @@ class _LoginPageState extends State<LoginPage> {
                             keybordType: TextInputType.number,
                           ),
                           const SizedBox(height: 16,),
-                          Text(AppText.enterPassword),
+                          Text(AppText.enterEmail),
                           const SizedBox(height: 8,),
                           CustomTextField(
-                            controller: _passwordController,
-                            title: AppText.password,
-                            suffix: true,
-                            keybordType: TextInputType.visiblePassword,
+                            controller: _emailController,
+                            title: AppText.email,
+                            suffix: false,
+                            keybordType: TextInputType.emailAddress,
                           ),
                           const SizedBox(height: 8,),
 
@@ -151,35 +143,22 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           const SizedBox(height: 8,),
 
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pushReplacementNamed(context, '/register');
-                                },
-                                child: Text(
-                                  AppText.register,
-                                  style: TextStyle(color: AppColors.colorButton),
-                                ),
-                              ),
-
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pushReplacementNamed(context, '/recovery');
-                                },
-                                child: Text(
-                                  AppText.passwordRecovery,
-                                  style: TextStyle(color: AppColors.colorButton),
-                                ),
-                              ),
-                            ],
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pushReplacementNamed(context, '/');
+                            },
+                            child: Text(
+                              AppText.enter,
+                              style: TextStyle(color: AppColors.colorButton),
+                            ),
                           ),
                           const SizedBox(height: 8,),
 
                           LongButton(
-                            onPressed: isLoading ? () {} : _onEnterButtonPressed,
-                            title: isLoading ? AppText.loading : AppText.enter,
+                            onPressed: isLoading
+                                ? () {}
+                                : _onEnterButtonPressed,
+                            title: isLoading ? AppText.loading : AppText.recover,
                           ),
                         ],
                       ),

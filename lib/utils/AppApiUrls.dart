@@ -4,6 +4,7 @@ class AppApiUrls{
   static String userLogin = '$mainApi/user-login';
   static String getMe = '$mainApi/universal-get-me';
   static String registration = '$mainApi/user-registration';
+  static String recoverPassword = '$mainApi/user-recover-password';
 
   static String getAllSub = '$mainApi/ent-test/subjects';
   static String getAllSubInMSS = '$mainApi/ent-test/subjects-in-mss';

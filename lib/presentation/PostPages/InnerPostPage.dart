@@ -116,41 +116,44 @@ class _InnerPostPageState extends State<InnerPostPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+              widget.post.mediaFiles!= null ?
+              Container(
+                width: double.infinity,
+                color: AppColors.colorGrayButton,
+                child: FutureBuilder<Uint8List?>(
+                  future: setBytes(widget.post.mediaFiles!.id),
+                  builder: (context, snapshot) {
 
-                  widget.post.mediaFiles!= null ?
-                  Container(
-                    color: AppColors.colorGrayButton,
-                    width: 300,
-                    child: FutureBuilder<Uint8List?>(
-                      future: setBytes(widget.post.mediaFiles!.id),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-                          return Image.memory(
-                            snapshot.data!,
-                            fit: BoxFit.cover,
-                          );
-                        } else if (snapshot.hasError) {
-                          return Text('Error loading image');
-                        } else {
-                          return CircularProgressIndicator();
-                        }
-                      },
-                    ),
-                  ): Container(),
-                  Text(widget.post.dateTime != null  ?  extractDate(widget.post.dateTime!): '', style: const TextStyle(fontSize: 12),),
 
-                ],
-              ),
+                    if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                      return Image.memory(
+                        snapshot.data!,
+                        fit: BoxFit.cover,
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text('Error loading image');
+                    } else {
+                      return CircularProgressIndicator();
+                    }
+                  },
+                ),
+              ): Container(),
               SizedBox(height: 16,),
               Text(widget.post.title ?? '', style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
               SizedBox(height: 8,),
               Html(
                 data: '${widget.post.description}',
               ),
+
+              SizedBox(height: 16,),
+              widget.post.dateTime != null ? Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(extractDate(widget.post.dateTime!), style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+                ],
+              ): Container(),
+              SizedBox(height: 16,),
+
               SizedBox(height: 8,),
               Container(
                 width: double.infinity,
@@ -180,7 +183,16 @@ class _InnerPostPageState extends State<InnerPostPage> {
               ),
 
 
-              CustomCommentList(comments: comments,),
+
+              comments.isNotEmpty ? 
+                CustomCommentList(comments: comments,): 
+                Row(
+                  children: [
+                    SizedBox(height: 20,),
+                    Text(AppText.beFirst, style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,  color: Colors.grey),),
+                    SizedBox(height: 20,),
+                  ],
+                ),
 
               SizedBox(height: 16,),
 

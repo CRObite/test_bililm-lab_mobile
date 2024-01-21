@@ -161,7 +161,7 @@ class _UniversityPageState extends State<UniversityPage> {
 
             SizedBox(height: 16,),
 
-            ListView.builder(
+            university.isNotEmpty?ListView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               scrollDirection: Axis.vertical,
@@ -213,7 +213,7 @@ class _UniversityPageState extends State<UniversityPage> {
                     ),
                   ),
                 );
-              })
+              }): Center(child: Text(AppText.noUniversity, style: TextStyle(fontWeight: FontWeight.bold),),),
           ],
         )
       ),
