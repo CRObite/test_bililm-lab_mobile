@@ -98,6 +98,8 @@ class AppText {
   static String noNewNews = 'Әзірге жаңа жаңалықтар жоқ';
   static String specialtiesNumber = 'Мамандық саны:';
   static String sawAnswers = 'Жауаптарды көру';
+  static String merged = 'Бірлескен';
+  static String subjects = 'Пәндер';
 
 
 

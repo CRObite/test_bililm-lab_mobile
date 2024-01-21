@@ -54,4 +54,8 @@ class AppApiUrls{
   static String saveCommentAnswer = '$mainApi/comment-answer/save';
 
 
+  static String getAllSpecialization = '$mainApi/specialization/get-all';
+  static String getSpecializationById = '$mainApi/specialization/get-by-id/';
+
+
 }

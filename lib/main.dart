@@ -10,6 +10,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 import 'package:test_bilimlab_project/config/dependency_injection.dart';
 import 'package:test_bilimlab_project/domain/post.dart';
+import 'package:test_bilimlab_project/domain/specialization.dart';
 import 'package:test_bilimlab_project/domain/university.dart';
 
 import 'package:test_bilimlab_project/presentation/AuthorizationPages/LoginPage.dart';
@@ -157,7 +158,11 @@ class _MyAppState extends State<MyApp> {
       return UniversityInfoPage(university: university,);
     },
 
-    '/specialization': (context) => const SpecializationPage(),
+    '/specialization': (context) {
+      final specialization = ModalRoute.of(context)!.settings.arguments as Specialization;
+      return SpecializationPage(specialization: specialization);
+    },
+
     '/inner_post': (context) {
       final post = ModalRoute.of(context)!.settings.arguments as Post;
       return InnerPostPage(post: post);

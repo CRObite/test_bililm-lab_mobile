@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test_bilimlab_project/domain/specialization.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/CustomCommentField.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/CustomCommentList.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/SmallButton.dart';
@@ -6,7 +7,9 @@ import 'package:test_bilimlab_project/utils/AppColors.dart';
 import 'package:test_bilimlab_project/utils/AppTexts.dart';
 
 class SpecializationPage extends StatefulWidget {
-  const SpecializationPage({super.key});
+  const SpecializationPage({super.key, required this.specialization});
+
+  final Specialization specialization;
 
   @override
   State<SpecializationPage> createState() => _SpecializationPageState();
@@ -19,7 +22,7 @@ class _SpecializationPageState extends State<SpecializationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ақпараттық технологиялар',style: TextStyle(fontSize: 16), ),
+        title: Text(widget.specialization.name,style: TextStyle(fontSize: 16), ),
       ),
 
       body: SingleChildScrollView(
@@ -28,7 +31,7 @@ class _SpecializationPageState extends State<SpecializationPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Пәндер: Математика, Информатика',style: TextStyle(color: Colors.grey),),
+              Text('${AppText.subjects}: Математика, Информатика',style: TextStyle(color: Colors.grey),),
               SizedBox(height: 16,),
 
               Row(
@@ -69,7 +72,7 @@ class _SpecializationPageState extends State<SpecializationPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(AppText.code, style: TextStyle(color: AppColors.colorButton),),
-                        Text('B057'),
+                        Text(widget.specialization.code),
                       ],
                     ),
                     SizedBox(height: 8,),
@@ -77,7 +80,7 @@ class _SpecializationPageState extends State<SpecializationPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(AppText.grantNumber, style: TextStyle(color: AppColors.colorButton),),
-                        Text('3498'),
+                        Text('${widget.specialization.grandCount}'),
                       ],
                     ),
 
@@ -86,7 +89,7 @@ class _SpecializationPageState extends State<SpecializationPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(AppText.minimalScoreForGrant, style: TextStyle(color: AppColors.colorButton),),
-                        Text('104'),
+                        Text('${widget.specialization.grandScore}'),
                       ],
                     ),
 
@@ -95,7 +98,7 @@ class _SpecializationPageState extends State<SpecializationPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(AppText.avrSalary, style: TextStyle(color: AppColors.colorButton),),
-                        Text('400 000 тг'),
+                        Text('${widget.specialization.averageSalary}'),
                       ],
                     ),
                     SizedBox(height: 8,),
@@ -103,13 +106,12 @@ class _SpecializationPageState extends State<SpecializationPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(AppText.demand, style: TextStyle(color: AppColors.colorButton),),
-                        Text('жоғары'),
+                        Text('${widget.specialization.demand}'),
                       ],
                     ),
 
                     SizedBox(height: 16,),
-
-                    Text('Біз көрсететін Грант саны - ЖАЛПЫ ГРАНТ конкурсында ойнатылатын грант саны. Бұл жерде «педагогикалық квота», «медициналық квота», «серпін» секілді квоталық гранттар көрсетілмеген. IT маман – компьютерлік жүйелерді әзірлейді. Бағдарлама жасайды, компьютерге қатысты жұмыстарды істейді. Олар – электроника инженерлері, байланыс және аспап жасаушы инженерлер, өнеркәсіптік роботтарға техникалық қызмет көрсетуші. Жұмысы жайлы: IT маманы әлемдегі ең керекті және перспективті мамандықтардың бірі. IT мамандығына түсу арқылы сіз JAVA, C++, PYTHON, HTML жүйесінде код жазып үйрене аласыз. Осы білімді алдағы уақытта жаңа программалар және веб-сайттар жасау үшін қолдана аласыз. Кез-келген компанияға осындай қызметтер қажет болғандықтан, жұмыс табу қиын болмайды. Сондай-ақ егер сіз бөгде адамға бағынғыңыз келмей, еркін жұмыс жасағыңыз келсе, онда фрилансерлік жұмыс атқара аласыз. Фрилансер дегеніміз интернеттегі түрлі тапсырыстарды белгілі бір уақытқа қабылдап, орындайтын жұмысшыларды айтамыз. Осындай тапсырыстардың қатарына веб-сайттар мен программалар жасау жатады. Басты қасиеттері: - Компьютердің нағыз маманы; - Ағылшын тілінде еркін сөйлеу; - JAVA, C++, PYTHON және т.б. программаларда еркін код жаза алу; - Логикалық өй-өрісі дамыған болу; - Күні бойы компьютер алдында отыруға дайын болу.'),
+                    Text(widget.specialization.description),
                     SizedBox(height: 16,),
                     // CustomCommentList(),
 
