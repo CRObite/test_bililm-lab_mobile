@@ -22,6 +22,7 @@ class SmallButton extends StatelessWidget {
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
             elevation: isBordered ? 1 : 0,
+            shadowColor: isBordered ? null : Colors.transparent,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),

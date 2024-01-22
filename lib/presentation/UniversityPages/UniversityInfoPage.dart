@@ -10,8 +10,10 @@ import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
 import 'package:test_bilimlab_project/domain/specialization.dart';
 import 'package:test_bilimlab_project/domain/university.dart';
+import 'package:test_bilimlab_project/domain/universityItem.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/CustomCommentField.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/CustomCommentList.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/ImageBuilder.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/ServerErrorDialog.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/SmallButton.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
@@ -21,7 +23,7 @@ import 'package:test_bilimlab_project/utils/AppTexts.dart';
 class UniversityInfoPage extends StatefulWidget {
   const UniversityInfoPage({super.key, required this.university});
 
-  final University university;
+  final UniversityItem university;
 
   @override
   State<UniversityInfoPage> createState() => _UniversityInfoPageState();
@@ -152,21 +154,7 @@ class _UniversityInfoPageState extends State<UniversityInfoPage> {
                   widget.university.mediaFiles != null ?
                   SizedBox(
                       width: 150,
-                      child: FutureBuilder<Uint8List?>(
-                        future: setBytes(widget.university.mediaFiles!.id),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-                            return Image.memory(
-                              snapshot.data!,
-                              fit: BoxFit.cover,
-                            );
-                          } else if (snapshot.hasError) {
-                            return Text('Error loading image');
-                          } else {
-                            return CircularProgressIndicator();
-                          }
-                        },
-                      ),
+                      child: ImageBuilder(mediaID: widget.university.mediaFiles!.id),
                   ): Container(),
                   SizedBox(width: 8,),
                   Expanded(
@@ -176,7 +164,7 @@ class _UniversityInfoPageState extends State<UniversityInfoPage> {
                       children: [
                         Text(widget.university.name, style: TextStyle(fontWeight: FontWeight.bold),),
                         Text('${AppText.code}: ${widget.university.code}',style: TextStyle(color: Colors.grey),),
-                        Text(widget.university.address,style: TextStyle(color: Colors.grey),),
+                        Text('${widget.university.city.name}, ${widget.university.address}',style: TextStyle(color: Colors.grey),),
                       ],
                     ),
                   )
@@ -225,7 +213,7 @@ class _UniversityInfoPageState extends State<UniversityInfoPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(AppText.avrCost, style: TextStyle(color: AppColors.colorButton),),
-                        Text('${widget.university.middlePrice}'),
+                        Text('${widget.university.middlePrice} тг'),
                       ],
                     ),
                     SizedBox(height: 8,),
@@ -258,19 +246,19 @@ class _UniversityInfoPageState extends State<UniversityInfoPage> {
                     SizedBox(height: 16,),
                     Text(widget.university.description),
                     SizedBox(height: 16,),
-                    comments.isNotEmpty ?
-                    CustomCommentList(comments: comments,):
-                    Row(
-                      children: [
-                        SizedBox(height: 20,),
-                        Text(AppText.beFirst, style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,  color: Colors.grey),),
-                        SizedBox(height: 20,),
-                      ],
-                    ),
-
-                    SizedBox(height: 16,),
-
-                    CustomCommentField(type: 'University', onPressed: ReDrawAfterSaved, id: widget.university.id,),
+                    // comments.isNotEmpty ?
+                    // CustomCommentList(comments: comments,):
+                    // Row(
+                    //   children: [
+                    //     SizedBox(height: 20,),
+                    //     Text(AppText.beFirst, style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,  color: Colors.grey),),
+                    //     SizedBox(height: 20,),
+                    //   ],
+                    // ),
+                    //
+                    // SizedBox(height: 16,),
+                    //
+                    // CustomCommentField(type: 'University', onPressed: ReDrawAfterSaved, id: widget.university.id,),
                   ],
                 ),
               ): Container(

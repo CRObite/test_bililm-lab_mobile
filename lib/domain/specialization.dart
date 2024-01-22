@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:test_bilimlab_project/domain/subject.dart';
 import 'package:test_bilimlab_project/domain/university.dart';
+import 'package:test_bilimlab_project/domain/universityItem.dart';
 
 part 'specialization.g.dart';
 
@@ -15,7 +16,7 @@ class Specialization {
   String code;
   String description;
   List<Subject> subjects;
-  List<University>? universities;
+  List<UniversityItem>? universities;
 
   Specialization(
       this.id,

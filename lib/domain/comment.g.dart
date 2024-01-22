@@ -13,7 +13,7 @@ Comment _$CommentFromJson(Map<String, dynamic> json) => Comment(
       json['dateTime'] as String,
       json['post'] == null
           ? null
-          : Post.fromJson(json['post'] as Map<String, dynamic>),
+          : PostItem.fromJson(json['post'] as Map<String, dynamic>),
       json['university'] == null
           ? null
           : University.fromJson(json['university'] as Map<String, dynamic>),

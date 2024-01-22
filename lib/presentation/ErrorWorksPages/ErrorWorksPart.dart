@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:test_bilimlab_project/config/ExtractDate.dart';
 import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
 import 'package:test_bilimlab_project/domain/revision.dart';
+import 'package:test_bilimlab_project/domain/revisionItem.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/ServerErrorDialog.dart';
 
 import '../../data/service/login_service.dart';
@@ -28,7 +30,9 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
 
   final ScrollController _controller = ScrollController();
 
+
   Revision? revisions;
+  List<RevisionItem> items = [];
 
   bool isLoading = false;
   bool firstLoading = true;
@@ -62,6 +66,7 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
       if (response.code == 200 && mounted) {
         setState(() {
           revisions = response.body;
+          items.addAll(revisions!.items);
         });
       } else if(response.code == 401 && mounted ){
         if(CurrentUser.currentTestUser != null){
@@ -106,8 +111,6 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
   Future getNextPage() async {
 
     if(hasNextPage){
-
-
       try {
         setState(() {
           isLoading = true;
@@ -119,6 +122,7 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
         if (response.code == 200 && mounted) {
           setState(() {
             revisions = response.body;
+            items.addAll(revisions!.items);
           });
         }
 
@@ -137,13 +141,20 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
   }
 
   Future onRefresh() async {
+    pageNum = 1;
     CustomResponse response = await TestService().getAllByUser(pageNum,8);
 
     if (response.code == 200 && mounted) {
       setState(() {
         revisions = response.body;
+        items = revisions!.items;
       });
     }
+
+    if(pageNum != revisions!.totalPages){
+      hasNextPage = true;
+    }
+
   }
 
 
@@ -177,16 +188,6 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
 
   }
 
-  String formatDate(String dateStr) {
-    String formattedDate = '';
-
-
-    DateTime date = DateFormat('dd.MM.yyyy HH:mm:ss').parse(dateStr);
-    String changed = DateFormat('dd.MM.yyyy').format(date);
-    formattedDate = changed ;
-
-    return formattedDate;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -226,7 +227,7 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
             width: double.infinity,
             child:  Padding(
               padding: const EdgeInsets.only(top: 8,left: 8,right: 8),
-              child: revisions!.items.isEmpty?Center(child: Text(AppText.noErrorWorkTests, style: TextStyle(color: Colors.white, fontSize: 24),),) : RefreshIndicator(
+              child: items.isEmpty ? Center(child: Text(AppText.noErrorWorkTests, style: TextStyle(color: Colors.white, fontSize: 24),),) : RefreshIndicator(
                 onRefresh: onRefresh,
                 child: GridView.builder(
                   controller: _controller,
@@ -235,11 +236,11 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
                     crossAxisSpacing: 8.0,
                     mainAxisSpacing: 8.0,
                   ),
-                  itemCount: revisions!= null? revisions!.items.length: 0,
+                  itemCount: items.length,
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
                       onTap: (){
-                        goToMistakes(revisions!.items[index].id);
+                        goToMistakes(items[index].id);
                       },
                       child: Card(
                         color: Colors.white,
@@ -260,7 +261,7 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
                                 children: [
 
                                   Text(
-                                    '${revisions!.items[index].totalResult.score}/${revisions!.items[index].totalResult.maxScore}',
+                                    '${items[index].totalResult.score}/${items[index].totalResult.maxScore}',
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20,
@@ -269,7 +270,7 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
 
                                   const SizedBox(height: 8),
                                   Text(
-                                    revisions!.items[index].subjects.join(', '),
+                                    items[index].subjects.join(', '),
                                     style: const TextStyle(
                                       fontSize: 9,
                                     ),
@@ -277,7 +278,7 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
-                                    formatDate(revisions!.items[index].passedDate),
+                                    ExtractDate.extractDate(items[index].passedDate),
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold
                                     ),
@@ -296,11 +297,15 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
           ),
         ),
 
+
+
         if(isLoading)
           const Padding(
             padding: EdgeInsets.all(8.0),
             child: Center(child: CircularProgressIndicator(color: Colors.black,)),
           ),
+
+
       ],
     );
   }

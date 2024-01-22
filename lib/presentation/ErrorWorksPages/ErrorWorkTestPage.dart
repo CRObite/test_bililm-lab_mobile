@@ -2,8 +2,15 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:get/get.dart';
 
 import 'package:test_bilimlab_project/data/service/media_service.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/ComparativeDraggableBuild.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/ImageBuilder.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/TestContentBuilder.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/TestNumbersBuilder.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/TestQuestionBuilder.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/TestRadioList.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
 import '../../domain/test.dart';
 import '../../domain/testQuestion.dart';
@@ -11,6 +18,7 @@ import '../../utils/AppTexts.dart';
 import '../../utils/TestFormatEnum.dart';
 import '../Widgets/QuestionCircle.dart';
 import '../Widgets/SmallButton.dart';
+import '../Widgets/TestCheckBoxListTitle.dart';
 
 class ErrorWorkTestPage extends StatefulWidget {
   const ErrorWorkTestPage({super.key, required this.test, required this.format});
@@ -37,8 +45,11 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
   List<String> allContents = [];
   List<int> allLength = [];
   int? startedIndex;
-  Uint8List? currentBytes;
   late List<int?> selectedValues;
+  final ScrollController _scrollDraggableController = ScrollController();
+  final _listViewKey = GlobalKey();
+  static const detectedRange = 100;
+  bool _isDragging = false;
 
   @override
   void initState() {
@@ -54,26 +65,45 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
   }
 
 
+  Widget _createListener(Widget child) {
+    return Listener(
+      child: child,
+      onPointerMove: (PointerMoveEvent event) {
+        if (!_isDragging) {
+          return;
+        }
+        RenderBox render =
+        _listViewKey.currentContext?.findRenderObject() as RenderBox;
+        Offset position = render.localToGlobal(Offset.zero);
+        double topY = position.dy;
+        double bottomY = topY + render.size.height;
+
+        const detectedRange = 80;
+        const moveDistance = 2;
+
+        if (event.position.dy < topY + detectedRange) {
+          var to = _scrollDraggableController.offset - moveDistance;
+          to = (to < 0) ? 0 : to;
+          _scrollDraggableController.jumpTo(to);
+        }
+        if (event.position.dy > bottomY - detectedRange) {
+          _scrollDraggableController.jumpTo(_scrollDraggableController.offset + moveDistance);
+        }
+      },
+    );
+  }
+
   void ComplexCheck(){
     currentQuestions = widget.test.entTest!.questionsMap[currentSubjects[currentSubject]]!.getAllQuestions();
     allContents = widget.test.entTest!.questionsMap[currentSubjects[currentSubject]]!.getAllContextContents();
     allLength = widget.test.entTest!.questionsMap[currentSubjects[currentSubject]]!.getLengthsOfContextQuestions();
     startedIndex = widget.test.entTest!.questionsMap[currentSubjects[currentSubject]]!.getStartedContextQuestionsIndex();
 
-    setBytes();
     checkContext();
     checkComp();
   }
 
 
-  Future<void> setBytes() async {
-    if(currentQuestions[currentQuestion].mediaFiles.isNotEmpty) {
-      currentBytes = await MediaService().getMediaById(currentQuestions[currentQuestion].mediaFiles[0].id);
-    }else{
-      currentBytes = null;
-    }
-
-  }
 
   void checkComp(){
     if(currentQuestions[currentQuestion].subOptions != null){
@@ -164,6 +194,21 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
     );
   }
 
+
+  void onTapNumber(int index){
+    currentQuestion = index;
+    checkContext();
+    checkComp();
+    setState(() {
+
+    });
+  }
+
+  void setDraggable(bool value){
+    _isDragging = value;
+  }
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -190,290 +235,250 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            SizedBox(
-              height: 40,
-              child: ListView.builder(
-                controller: _scrollController,
-                scrollDirection: Axis.horizontal,
-                itemCount: currentQuestions.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    margin: const EdgeInsets.only(right: 8),
-                    child: GestureDetector(
-                        onTap: (){
-                          setState(() {
-                            currentQuestion = index;
-                          });
-                        },
-                        child: QuestionCircle(qusetionNuber: index+1, roundColor: getCircleColor(currentQuestions[currentQuestion].answeredType ?? "NO_CORRECT" )  , itsFocusedQuestion: index == currentQuestion,)
-                    ),
-                  );
-                },
-              ),
+
+
+            TestNumbersBuilder(
+              count: currentQuestions.length,
+              scrollController: _scrollController,
+              onTapNumber: (int index){onTapNumber(index); },
+              currentQuestion: currentQuestion,
+              color: getCircleColor(currentQuestions[currentQuestion].answeredType ?? "NO_CORRECT"),
             ),
 
             Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    if(content != null)
-                      Container(
-                        margin: const EdgeInsets.symmetric(vertical: 16),
-                        width: double.infinity,
-                        child: Html(
-                          data: '$content',
-                          style: {
-                            'body': Style(
-                              fontSize: FontSize(16),
-                            ),
-                          },
-                        ),
+              child: _createListener(SingleChildScrollView(
+                  key: _listViewKey,
+                  controller: _scrollDraggableController,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      if(content != null)
+                        TestContentBuilder(content: content!),
+
+                      TestQuestionBuilder(currentQuestion: currentQuestion,
+                          question: currentQuestions[currentQuestion].question
                       ),
 
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 16),
-                      width: double.infinity,
-                      child: Text(
-                          '${currentQuestion+1}. ${currentQuestions[currentQuestion].question}',
-                          style: const TextStyle(
-                            fontSize: 18,
-                          )
-                      )
-                    ),
+                      if (widget.format == TestFormatEnum.ENT && currentQuestions[currentQuestion].mediaFiles.isNotEmpty)
+                        ImageBuilder(mediaID: currentQuestions[currentQuestion].mediaFiles[0].id),
 
-                    if (currentBytes != null)
-                      Container(
-                        margin: const EdgeInsets.symmetric(vertical: 16),
-                        width: double.infinity,
-                        child: Image.memory(currentBytes!),
-                      ),
-
-                    if (currentQuestions[currentQuestion].subOptions == null  || currentQuestions[currentQuestion].subOptions!.isEmpty)
-
+                      if(currentQuestions[currentQuestion].subOptions == null  || currentQuestions[currentQuestion].subOptions!.isEmpty)
                         Container(
-                          width: double.infinity,
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            itemCount: currentQuestions[currentQuestion].options.length,
-                            itemBuilder: (context, index) {
-                              if(!currentQuestions[currentQuestion].multipleAnswers){
-                                if(currentQuestions[currentQuestion].checkedAnswers !=null){
-                                  currentQuestions[currentQuestion].checkedAnswers!.isNotEmpty ?
-                                  selectedAnswerIndex = currentQuestions[currentQuestion].checkedAnswers![0]:
-                                  selectedAnswerIndex = null;
-                                }
-                              }else{
-                                selectedMultipleAnswerIndex = currentQuestions[currentQuestion].checkedAnswers;
-                              }
-
-                              return Container(
-
-                                decoration: BoxDecoration(
-                                    color: getRadioBackgroundColor(index),
-                                    borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                child: !currentQuestions[currentQuestion].multipleAnswers ?
-                                RadioListTile(
-
-                                  title: Text(currentQuestions[currentQuestion].options[index].text),
-                                  value: currentQuestions[currentQuestion].options[index].id,
-                                  groupValue: selectedAnswerIndex,
-                                  activeColor: AppColors.colorButton,
-                                  onChanged: (int? value) {
-                                  },
-                                  contentPadding: EdgeInsets.zero,
-                                ): CheckboxListTile(
-                                    title: Text(currentQuestions[currentQuestion].options[index].text),
-                                    value: currentQuestions[currentQuestion].checkedAnswers?.contains(currentQuestions[currentQuestion].options[index].id) ?? false,
-                                    activeColor: AppColors.colorButton,
-                                    onChanged: (bool? value) {
-                                    },
-                                    contentPadding: EdgeInsets.zero,
-                                    controlAffinity: ListTileControlAffinity.leading
-                                )
-                              );
-
-                            },
-                          ),
-                        )else Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
-                              border: Border.all(
-                                color: Colors.grey.withOpacity(0.5),
-                                width: 2.0,
-
-                              ),
-                            ),
                             width: double.infinity,
                             child: ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: currentQuestions[currentQuestion].subOptions!.length,
-                              itemBuilder: (context, index){
-                                return  Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Draggable<int>(
-
-                                      data: index,
-
-                                      feedback: Card(
-                                          color: Colors.blue.withOpacity(0.5),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Text('${currentQuestions[currentQuestion].subOptions![index].text}', style: TextStyle( color:  Colors.white),),
-                                          )),
-                                      childWhenDragging:  Card(
-                                          color: Colors.blue.withOpacity(0.5),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Text('${currentQuestions[currentQuestion].subOptions![index].text}', style: TextStyle( color:  Colors.white),),
-                                          )),
-                                      child: Container(
-                                        decoration: const BoxDecoration(
-                                          color: Colors.blue,
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(10.0),
-                                          ),
-                                        ),
-                                        child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Text('${currentQuestions[currentQuestion].subOptions![index].text}', style: TextStyle( color:  Colors.white),)),
-                                      ),
-                                      ignoringFeedbackPointer: true,
-                                      ignoringFeedbackSemantics: true,
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-
-                          Container(
-                            width: double.infinity,
-                            child: ListView.builder(
-                                shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                scrollDirection: Axis.vertical,
                                 itemCount: currentQuestions[currentQuestion].options.length,
-                                itemBuilder: (context, index){
-
-                                  if(currentQuestions[currentQuestion].options[index].subOption != null){
-                                    selectedValues[index] = currentQuestions[currentQuestion].subOptions!.indexOf( currentQuestions[currentQuestion].options[index].subOption!);
+                                itemBuilder: (context, index) {
+                                  if(!currentQuestions[currentQuestion].multipleAnswers){
+                                    if(currentQuestions[currentQuestion].checkedAnswers !=null){
+                                      currentQuestions[currentQuestion].checkedAnswers!.isNotEmpty ?
+                                      selectedAnswerIndex = currentQuestions[currentQuestion].checkedAnswers![0]:
+                                      selectedAnswerIndex = null;
+                                    }else{
+                                      currentQuestions[currentQuestion].checkedAnswers = [];
+                                    }
+                                  }else{
+                                    selectedMultipleAnswerIndex = currentQuestions[currentQuestion].checkedAnswers;
                                   }
 
-                                  return  Container(
-                                    color: getRadioBackgroundColor(index),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        SizedBox(
+                                  return !currentQuestions[currentQuestion].multipleAnswers ?
 
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: Text(currentQuestions[currentQuestion].options[index].text),
-                                            ),
-                                          ),
-                                          width: 150,
-                                        ),
-
-                                        Icon(Icons.remove),
-
-                                        SizedBox(
-                                          width: 160,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: DragTarget<int>(
-
-                                                onAccept: (data){
-                                                },
-                                                builder: (context, candidateData, rejectedData){
-
-                                                  if(selectedValues[index] != null){
-                                                    return Container(
-                                                      decoration: const BoxDecoration(
-                                                        color: Colors.blue,
-                                                        borderRadius: BorderRadius.all(
-                                                          Radius.circular(10.0),
-                                                        ),
-                                                      ),
-                                                      child: Padding(
-                                                        padding: const EdgeInsets.all(8.0),
-                                                        child: Text('${currentQuestions[currentQuestion].subOptions![selectedValues[index]!].text}', style: const TextStyle(color: Colors.white),),
-                                                      ),
-                                                    );
-                                                  }else{
-                                                    return Container(
-                                                      decoration: BoxDecoration(
-                                                        color: AppColors.colorGrayButton,
-                                                        borderRadius: BorderRadius.all(
-                                                          Radius.circular(10.0),
-                                                        ),
-                                                      ),
-
-                                                      child: Padding(
-                                                        padding: const EdgeInsets.all(8.0),
-                                                        child: Center(
-                                                          child: Text(
-                                                            AppText.emptyFiled, style: TextStyle(color: Colors.blueGrey),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    );
-                                                  }
-
-                                                }
-                                            ),
-                                          ),
-                                        )
-
-                                      ],
-                                    ),
+                                  TestRadioList(
+                                    color: Colors.transparent,
+                                    title: currentQuestions[currentQuestion].options[index].text,
+                                    id: currentQuestions[currentQuestion].options[index].id,
+                                    onSelected: (int? value){},
+                                    selectedAnswerIndex: selectedAnswerIndex,):
+                                  TestCheckBoxListTitle(
+                                    color: Colors.transparent,
+                                    title: currentQuestions[currentQuestion].options[index].text,
+                                    isSelected: currentQuestions[currentQuestion].checkedAnswers?.contains(currentQuestions[currentQuestion].options[index].id) ?? false,
+                                    onSelected: (bool value) {},
                                   );
                                 }
-                            ),
-                          ),
-
-                          ],
-                        ),
-
-                    SizedBox(height: 16,),
-
-                    Row(
-                      children: [
-                        Text(AppText.recommendation,
-                            style: const TextStyle(
-                              fontSize: 16,
                             )
                         ),
-                      ],
-                    ),
 
-                    SizedBox(height: 8,),
-                    Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: AppColors.colorGrayButton,
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: currentQuestions[currentQuestion].recommendation != null ?
-                          Text(currentQuestions[currentQuestion].recommendation!) :
-                          Text('${AppText.recommendation} жоқ'),
-                        )
-                    ),
-                    SizedBox(height: 16,)
+                        if(currentQuestions[currentQuestion].subOptions != null)
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  border: Border.all(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    width: 2.0,
 
-                  ],
+                                  ),
+                                ),
+                                width: double.infinity,
+                                child: ListView.builder(
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: currentQuestions[currentQuestion].subOptions!.length,
+                                  itemBuilder: (context, index){
+                                    return  Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Draggable<int>(
+                                          data: index,
+                                          onDragStarted: () => _isDragging = true,
+                                          onDragEnd: (details) => _isDragging = false,
+                                          onDraggableCanceled: (velocity, offset) => _isDragging = false,
+                                          feedback: Card(
+                                              color: Colors.blue.withOpacity(0.5),
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: Text('${currentQuestions[currentQuestion].subOptions![index].text}', style: TextStyle( color:  Colors.white),),
+                                              )),
+                                          childWhenDragging:  Card(
+                                              color: Colors.blue.withOpacity(0.5),
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: Text('${currentQuestions[currentQuestion].subOptions![index].text}', style: TextStyle( color:  Colors.white),),
+                                              )),
+                                          child: Container(
+                                            decoration: const BoxDecoration(
+                                              color: Colors.blue,
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(10.0),
+                                              ),
+                                            ),
+                                            child: Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: Text('${currentQuestions[currentQuestion].subOptions![index].text}', style: TextStyle( color:  Colors.white),)),
+                                          )
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 16,
+                              ),
+
+                              Container(
+                                width: double.infinity,
+                                child: ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: currentQuestions[currentQuestion].options.length,
+                                    itemBuilder: (context, index){
+
+                                      if(currentQuestions[currentQuestion].options[index].subOption != null){
+                                        selectedValues[index] = currentQuestions[currentQuestion].subOptions!.indexOf( currentQuestions[currentQuestion].options[index].subOption!);
+                                      }
+
+                                      return  Container(
+                                        color: getRadioBackgroundColor(index),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            SizedBox(
+
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Text(currentQuestions[currentQuestion].options[index].text),
+                                                ),
+                                              ),
+                                              width: 150,
+                                            ),
+
+                                            Icon(Icons.remove),
+
+                                            SizedBox(
+                                              width: 160,
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: DragTarget<int>(
+
+                                                    onAccept: (data){
+                                                    },
+                                                    builder: (context, candidateData, rejectedData){
+
+                                                      if(selectedValues[index] != null){
+                                                        return Container(
+                                                          decoration: const BoxDecoration(
+                                                            color: Colors.blue,
+                                                            borderRadius: BorderRadius.all(
+                                                              Radius.circular(10.0),
+                                                            ),
+                                                          ),
+                                                          child: Padding(
+                                                            padding: const EdgeInsets.all(8.0),
+                                                            child: Text('${currentQuestions[currentQuestion].subOptions![selectedValues[index]!].text}', style: const TextStyle(color: Colors.white),),
+                                                          ),
+                                                        );
+                                                      }else{
+                                                        return Container(
+                                                          decoration: BoxDecoration(
+                                                            color: AppColors.colorGrayButton,
+                                                            borderRadius: BorderRadius.all(
+                                                              Radius.circular(10.0),
+                                                            ),
+                                                          ),
+
+                                                          child: Padding(
+                                                            padding: const EdgeInsets.all(8.0),
+                                                            child: Center(
+                                                              child: Text(
+                                                                AppText.emptyFiled, style: TextStyle(color: Colors.blueGrey),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      }
+
+                                                    }
+                                                ),
+                                              ),
+                                            )
+
+                                          ],
+                                        ),
+                                      );
+                                    }
+                                ),
+                              ),
+
+                              ],
+                          ),
+
+                      SizedBox(height: 16,),
+
+                      Row(
+                        children: [
+                          Text(AppText.recommendation,
+                              style: const TextStyle(
+                                fontSize: 16,
+                              )
+                          ),
+                        ],
+                      ),
+
+                      SizedBox(height: 8,),
+                      Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: currentQuestions[currentQuestion].recommendation != null ?
+                            Text(currentQuestions[currentQuestion].recommendation!) :
+                            Text('${AppText.recommendation} жоқ'),
+                          )
+                      ),
+                      SizedBox(height: 16,)
+
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -494,7 +499,6 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
 
                             currentQuestion-=1;
                             checkContext();
-                            setBytes();
                             checkComp();
 
                             setState(() {
@@ -520,7 +524,6 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
 
                             currentQuestion+=1;
                             checkContext();
-                            setBytes();
                             checkComp();
                             setState(() {
                             });

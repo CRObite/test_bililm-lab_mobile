@@ -141,17 +141,8 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
                               errorMessage!,
                               style: const TextStyle(color: Colors.red),
                             ),
-                          const SizedBox(height: 8,),
 
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pushReplacementNamed(context, '/');
-                            },
-                            child: Text(
-                              AppText.enter,
-                              style: TextStyle(color: AppColors.colorButton),
-                            ),
-                          ),
+
                           const SizedBox(height: 8,),
 
                           LongButton(
@@ -159,6 +150,25 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
                                 ? () {}
                                 : _onEnterButtonPressed,
                             title: isLoading ? AppText.loading : AppText.recover,
+                          ),
+
+                          const SizedBox(height: 8,),
+
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              GestureDetector(
+
+                                child: Text(
+                                  AppText.goBack,
+                                  style: TextStyle(color: AppColors.colorButton),
+                                ),
+                                onTap: (){
+                                  Navigator.pushReplacementNamed(context, '/');
+                                },
+                              ),
+                            ],
                           ),
                         ],
                       ),

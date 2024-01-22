@@ -4,6 +4,7 @@ import 'package:test_bilimlab_project/config/handleErrorResponse.dart';
 import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
 import 'package:test_bilimlab_project/domain/post.dart';
+import 'package:test_bilimlab_project/domain/postItem.dart';
 import 'package:test_bilimlab_project/utils/AppApiUrls.dart';
 
 class PostRepository{
@@ -16,18 +17,20 @@ class PostRepository{
     );
   }
 
-  Future<CustomResponse> getAllPosts() async {
+  Future<CustomResponse> getAllPosts(int page,int size ) async {
     try {
       dio.options.headers['Authorization'] = 'Bearer ${CurrentUser.currentTestUser?.accessToken}';
 
       final response = await dio.get(
         '${AppApiUrls.getAllPosts}',
-
+        queryParameters: {
+          'page': page,
+          'size': size,
+        }
       );
-      print(response.data['items']);
+      print(response.data);
 
-      List<Post> posts = (response.data['items'] as List<dynamic>)
-          .map((postsData) => Post.fromJson(postsData)).toList();
+      Post posts = Post.fromJson(response.data);
 
       print(posts);
       return CustomResponse(200, '', posts);
@@ -45,10 +48,10 @@ class PostRepository{
       );
       print(response.data);
 
-      Post post = Post.fromJson(response.data);
+      PostItem item = PostItem.fromJson(response.data);
 
-      print(post);
-      return CustomResponse(200, '', post);
+      print(item);
+      return CustomResponse(200, '', item);
     } catch (e) {
       print('$e');
       return HandleErrorResponse.handleErrorResponse(e);

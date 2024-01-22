@@ -7,19 +7,15 @@ part of 'post.dart';
 // **************************************************************************
 
 Post _$PostFromJson(Map<String, dynamic> json) => Post(
-      json['id'] as int,
-      json['title'] as String?,
-      json['description'] as String?,
-      json['dateTime'] as String?,
-      json['mediaFiles'] == null
-          ? null
-          : MediaFile.fromJson(json['mediaFiles'] as Map<String, dynamic>),
+      json['totalCount'] as int,
+      json['totalPages'] as int,
+      (json['items'] as List<dynamic>)
+          .map((e) => PostItem.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$PostToJson(Post instance) => <String, dynamic>{
-      'id': instance.id,
-      'title': instance.title,
-      'description': instance.description,
-      'dateTime': instance.dateTime,
-      'mediaFiles': instance.mediaFiles,
+      'totalCount': instance.totalCount,
+      'totalPages': instance.totalPages,
+      'items': instance.items,
     };

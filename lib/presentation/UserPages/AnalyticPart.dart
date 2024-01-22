@@ -96,22 +96,6 @@ class _AnalyticPartState extends State<AnalyticPart> {
      }
   }
 
-  List<String> formatDates(List<String?> dates) {
-    List<String> formattedDates = [];
-
-
-    for (String? dateStr in dates) {
-      if(dateStr!=null){
-        DateTime date = DateFormat('dd.MM.yyyy HH:mm:ss').parse(dateStr);
-        String formattedDate = DateFormat('dd/MM/yy').format(date);
-        formattedDates.add(formattedDate);
-      }
-
-    }
-
-    return formattedDates;
-  }
-
 
   Color getColorForBar(int index){
     if(index % 2 != 0){
@@ -145,7 +129,7 @@ class _AnalyticPartState extends State<AnalyticPart> {
                 children: [
                   CustomGreyRoundedContainer(title:  AppText.passedTests,num: datas!=null ?  datas!.general.scores.length : 0,icon: const Icon(Icons.all_inbox_rounded),),
                   const SizedBox(width: 8,),
-                  CustomGreyRoundedContainer(title: AppText.lastPassedTest,num: datas!=null ?datas!.general.scores.last:0,icon: const Icon(Icons.hourglass_top_rounded),),
+                  CustomGreyRoundedContainer(title: AppText.lastPassedTest,num: datas!=null ?datas!.general.scores.first :0,icon: const Icon(Icons.hourglass_top_rounded),),
                   const SizedBox(width: 8,),
                   CustomGreyRoundedContainer(title: AppText.averageScore,num: getAverageScore(),icon: const Icon(Icons.align_vertical_bottom_rounded),),
                 ],

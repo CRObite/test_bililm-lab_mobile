@@ -1,6 +1,7 @@
 
 import 'package:json_annotation/json_annotation.dart';
 import 'package:test_bilimlab_project/domain/mediaFile.dart';
+import 'package:test_bilimlab_project/domain/postItem.dart';
 import 'package:test_bilimlab_project/domain/testUser.dart';
 
 
@@ -8,14 +9,12 @@ part 'post.g.dart';
 
 @JsonSerializable()
 class Post{
-  int id;
-  String? title;
-  String? description;
-  String? dateTime;
-  MediaFile? mediaFiles;
+  int totalCount;
+  int totalPages;
+  List<PostItem> items;
 
 
-  Post(this.id, this.title, this.description, this.dateTime, this.mediaFiles);
+  Post(this.totalCount, this.totalPages, this.items);
 
   factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);
   Map<String, dynamic> toJson() => _$PostToJson(this);

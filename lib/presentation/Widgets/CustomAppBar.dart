@@ -70,14 +70,14 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
 
-                  IconButton(
-                      onPressed: (){
-                        showDialog(
-                          context: context,
-                          builder: (context) => ReportDialog(),
-                        );
-                      },
-                      icon: Icon(Icons.notifications_none),),
+                  // IconButton(
+                  //     onPressed: (){
+                  //       showDialog(
+                  //         context: context,
+                  //         builder: (context) => ReportDialog(),
+                  //       );
+                  //     },
+                  //     icon: Icon(Icons.notifications_none),),
 
 
                   Container(

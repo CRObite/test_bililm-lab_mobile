@@ -493,17 +493,25 @@ class _RegisterPageState extends State<RegisterPage> {
                             Text(errorMessage!, style: const TextStyle(color: Colors.red),),
                           const SizedBox(height: 8,),
 
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pushReplacementNamed(context, '/');
-                            },
-                            child: Text(AppText.enter, style: TextStyle(color: AppColors.colorButton),),
-                          ),
-                          const SizedBox(height: 8,),
-
                           LongButton(
                             onPressed: isLoading ? (){} : _onEnterButtonPressed,
                             title: isLoading ? AppText.loading : AppText.register,
+                          ),
+                          const SizedBox(height: 8,),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              GestureDetector(
+
+                                child: Text(
+                                  AppText.goBack,
+                                  style: TextStyle(color: AppColors.colorButton),
+                                ),
+                                onTap: (){
+                                  Navigator.pushReplacementNamed(context, '/');
+                                },
+                              ),
+                            ],
                           ),
                         ],
                       ),

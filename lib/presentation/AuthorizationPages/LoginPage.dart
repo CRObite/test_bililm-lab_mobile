@@ -152,20 +152,11 @@ class _LoginPageState extends State<LoginPage> {
                           const SizedBox(height: 8,),
 
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pushReplacementNamed(context, '/register');
-                                },
-                                child: Text(
-                                  AppText.register,
-                                  style: TextStyle(color: AppColors.colorButton),
-                                ),
-                              ),
 
-                              TextButton(
-                                onPressed: () {
+                              GestureDetector(
+                                onTap: (){
                                   Navigator.pushReplacementNamed(context, '/recovery');
                                 },
                                 child: Text(
@@ -173,6 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                                   style: TextStyle(color: AppColors.colorButton),
                                 ),
                               ),
+
                             ],
                           ),
                           const SizedBox(height: 8,),
@@ -181,6 +173,28 @@ class _LoginPageState extends State<LoginPage> {
                             onPressed: isLoading ? () {} : _onEnterButtonPressed,
                             title: isLoading ? AppText.loading : AppText.enter,
                           ),
+
+                          SizedBox(height: 8,),
+                          Row(
+
+                            children: [
+
+                              Text(AppText.doYouHaveAcc),
+                              SizedBox(width: 8,),
+                              GestureDetector(
+
+                                child: Text(
+                                  AppText.register,
+                                  style: TextStyle(color: AppColors.colorButton),
+                                ),
+                                onTap: (){
+                                  Navigator.pushReplacementNamed(context, '/register');
+                                },
+                              ),
+
+
+                            ],
+                          )
                         ],
                       ),
                     ),

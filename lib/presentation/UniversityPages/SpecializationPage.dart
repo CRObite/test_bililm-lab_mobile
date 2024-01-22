@@ -10,10 +10,12 @@ import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
 import 'package:test_bilimlab_project/domain/specialization.dart';
 import 'package:test_bilimlab_project/domain/university.dart';
+import 'package:test_bilimlab_project/domain/universityItem.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/CustomCommentField.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/CustomCommentList.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/ServerErrorDialog.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/SmallButton.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/UniversityCard.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
 import 'package:test_bilimlab_project/utils/AppTexts.dart';
 
@@ -44,7 +46,7 @@ class _SpecializationPageState extends State<SpecializationPage> {
           id);
 
       if (response.code == 200 && mounted) {
-        University univ = response.body as University;
+        UniversityItem univ = response.body as UniversityItem;
 
         Navigator.pushNamedAndRemoveUntil(
           context,
@@ -247,74 +249,29 @@ class _SpecializationPageState extends State<SpecializationPage> {
                     Text(widget.specialization.description),
                     SizedBox(height: 16,),
 
-                    comments.isNotEmpty ?
-                    CustomCommentList(comments: comments,):
-                    Row(
-                      children: [
-                        SizedBox(height: 20,),
-                        Text(AppText.beFirst, style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,  color: Colors.grey),),
-                        SizedBox(height: 20,),
-                      ],
-                    ),
-
-                    SizedBox(height: 16,),
-
-                    CustomCommentField(onPressed: ReDrawAfterSaved, type: 'Specialization', id: widget.specialization.id,),
+                    // comments.isNotEmpty ?
+                    // CustomCommentList(comments: comments,):
+                    // Row(
+                    //   children: [
+                    //     SizedBox(height: 20,),
+                    //     Text(AppText.beFirst, style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,  color: Colors.grey),),
+                    //     SizedBox(height: 20,),
+                    //   ],
+                    // ),
+                    //
+                    // SizedBox(height: 16,),
+                    //
+                    // CustomCommentField(onPressed: ReDrawAfterSaved, type: 'Specialization', id: widget.specialization.id,),
                   ],
                 ),
               ): Container(
-                  child:widget.specialization.universities != null ? ListView.builder(
+                  child: widget.specialization.universities != null ? ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     scrollDirection: Axis.vertical,
                     itemCount: widget.specialization.universities!.length,
                     itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: (){
-                            getUniversityById(widget.specialization.universities![index].id);
-                          },
-                          child: Card(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  widget.specialization.universities![index].mediaFiles != null?
-                                  SizedBox(
-                                    width: 150,
-                                    child: FutureBuilder<Uint8List?>(
-                                      future: setBytes(widget.specialization.universities![index].mediaFiles!.id),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-                                          return Image.memory(
-                                            snapshot.data!,
-                                            fit: BoxFit.cover,
-                                          );
-                                        } else if (snapshot.hasError) {
-                                          return Text('Error loading image');
-                                        } else {
-                                          return CircularProgressIndicator();
-                                        }
-                                      },
-                                    ),
-                                  ): Container(),
-                                  SizedBox(width: 8,),
-                                  Expanded(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(widget.specialization.universities![index].name, style: TextStyle(fontWeight: FontWeight.bold),),
-                                        Text('${AppText.specialtiesNumber} ${widget.specialization.universities![index].specializations != null ? widget.specialization.universities![index].specializations!.length: 0}',style: TextStyle(color: Colors.grey),),
-                                        Text(widget.specialization.universities![index].address,style: TextStyle(color: Colors.grey),),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
+                      return UniversityCard(university: widget.specialization.universities != null ? widget.specialization.universities! : [], index: index, onSelectUniversity: (int value) { getUniversityById(value); },);
                     }
                   ): Container()
               )

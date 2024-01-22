@@ -59,7 +59,7 @@ class _ApplicationState extends State<Application> {
         selectedLabelStyle: TextStyle(color: AppColors.colorButton,),
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.find_in_page_rounded),
+            icon: Icon(Icons.analytics),
             label: AppText.analytics,
           ),
           BottomNavigationBarItem(

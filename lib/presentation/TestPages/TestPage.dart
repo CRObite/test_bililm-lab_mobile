@@ -14,8 +14,14 @@ import 'package:test_bilimlab_project/domain/customResponse.dart';
 import 'package:test_bilimlab_project/domain/modoResult.dart';
 import 'package:test_bilimlab_project/domain/result.dart';
 import 'package:test_bilimlab_project/domain/schoolQuestion.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/ImageBuilder.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/QuestionCircle.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/SmallButton.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/TestCheckBoxListTitle.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/TestContentBuilder.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/TestNumbersBuilder.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/TestQuestionBuilder.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/TestRadioList.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
 import 'package:test_bilimlab_project/utils/AppTexts.dart';
 import 'package:test_bilimlab_project/utils/TestFormatEnum.dart';
@@ -170,7 +176,6 @@ class _TestPageState extends State<TestPage> {
       startedIndex = widget.test.modoTest!.typeSubjectQuestionMap[currentTypeSubjects[currentTypeSubject]]![currentSubjects[currentSubject]]!.getStartedContextQuestionsIndex();
     }
 
-    setBytes();
     checkContext();
     if(widget.format == TestFormatEnum.ENT){
       checkComp();
@@ -184,31 +189,7 @@ class _TestPageState extends State<TestPage> {
   }
 
 
-  Future<void> setBytes() async {
 
-    setState(() {
-      pictureIsLoading = true;
-    });
-
-    if(widget.format == TestFormatEnum.ENT){
-      if(currentQuestions[currentQuestion].mediaFiles.isNotEmpty) {
-        currentBytes = await MediaService().getMediaById(currentQuestions[currentQuestion].mediaFiles[0].id);
-      }else{
-        currentBytes = null;
-      }
-    }else if(widget.format == TestFormatEnum.SCHOOL){
-      if(currentSchoolQuestions[currentQuestion].mediaFiles.isNotEmpty) {
-        currentBytes = await MediaService().getMediaById(currentSchoolQuestions[currentQuestion].mediaFiles[0].id);
-      }else{
-        currentBytes = null;
-      }
-    }
-
-
-    setState(() {
-      pictureIsLoading = false;
-    });
-  }
 
   List<String> getAllTypeSubject() {
     List<String> categoryNames = [];
@@ -373,6 +354,15 @@ class _TestPageState extends State<TestPage> {
     }
   }
 
+  void onTapNumber(int index){
+    currentQuestion = index;
+    checkContext();
+    checkComp();
+    setState(() {
+
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -437,30 +427,12 @@ class _TestPageState extends State<TestPage> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              SizedBox(
-                height: 40,
-                child: ListView.builder(
-                  controller: _scrollController,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: widget.format == TestFormatEnum.ENT ? currentQuestions.length: currentSchoolQuestions.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                        margin: const EdgeInsets.only(right: 8),
-                        child: GestureDetector(
-                            onTap: (){
-                              currentQuestion = index;
-                              checkContext();
-                              setBytes();
-                              checkComp();
-                              setState(() {
-
-                              });
-                            },
-                            child: QuestionCircle(qusetionNuber: index+1, roundColor: AppColors.colorButton , itsFocusedQuestion: index == currentQuestion,)
-                        ),
-                    );
-                  },
-                ),
+              TestNumbersBuilder(
+                  count: widget.format == TestFormatEnum.ENT ? currentQuestions.length: currentSchoolQuestions.length,
+                  scrollController: _scrollController,
+                  onTapNumber: (int index){onTapNumber(index); },
+                  currentQuestion: currentQuestion,
+                  color: AppColors.colorButton,
               ),
               SizedBox(height: 8,),
 
@@ -473,43 +445,20 @@ class _TestPageState extends State<TestPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         if(content != null)
-                          Container(
-                            margin: const EdgeInsets.symmetric(vertical: 16),
-                            width: double.infinity,
-                            child: Html(
-                              data: '$content',
-                              style: {
-                                'body': Style(
-                                  fontSize: FontSize(16),
-                                ),
-                              },
-                            ),
-                          ),
+                          TestContentBuilder(content: content!),
 
-                        Container(
-                            margin: const EdgeInsets.symmetric(vertical: 16),
-                            width: double.infinity,
-                            child: widget.format == TestFormatEnum.ENT ? Text(
-                              '${currentQuestion+1}. ${currentQuestions[currentQuestion].question}',
-                              style: const TextStyle(
-                                fontSize: 18,
-                              )
-                            ): Text(
-                                '${currentQuestion+1}. ${currentSchoolQuestions[currentQuestion].question}',
-                                style: const TextStyle(
-                                  fontSize: 18,
-                              )
-                            ),
+
+                        TestQuestionBuilder(currentQuestion: currentQuestion,
+                            question: widget.format == TestFormatEnum.ENT ?
+                              currentQuestions[currentQuestion].question:
+                              currentSchoolQuestions[currentQuestion].question
                         ),
 
-                        if (currentBytes != null)
-                          pictureIsLoading ?
-                          CircularProgressIndicator( color: AppColors.colorButton,):
-                          Container(
-                            margin: const EdgeInsets.symmetric(vertical: 16),
-                            width: double.infinity,
-                            child: Image.memory(currentBytes!),
-                          ),
+
+                        if (widget.format == TestFormatEnum.ENT && currentQuestions[currentQuestion].mediaFiles.isNotEmpty)
+                          ImageBuilder(mediaID: currentQuestions[currentQuestion].mediaFiles[0].id),
+                        if(widget.format == TestFormatEnum.SCHOOL && currentSchoolQuestions[currentQuestion].mediaFiles.isNotEmpty)
+                          ImageBuilder(mediaID: currentSchoolQuestions[currentQuestion].mediaFiles[0].id),
 
                         if(widget.format == TestFormatEnum.ENT && (currentQuestions[currentQuestion].subOptions == null  || currentQuestions[currentQuestion].subOptions!.isEmpty))
                           Container(
@@ -533,40 +482,39 @@ class _TestPageState extends State<TestPage> {
                                 }
 
                                 return !currentQuestions[currentQuestion].multipleAnswers ?
-                                RadioListTile(
-                                  activeColor: AppColors.colorButton,
-                                  title: Text(currentQuestions[currentQuestion].options[index].text),
-                                  value: currentQuestions[currentQuestion].options[index].id,
-                                  groupValue: selectedAnswerIndex,
-                                  onChanged: (int? value) {
-                                    if(value != null){
-                                      TestService().answerEntTest(widget.test.entTest!.id, currentQuestions[currentQuestion].id, currentQuestions[currentQuestion].options[index].id);
-                                      setState(() {
-                                        if(currentQuestions[currentQuestion].checkedAnswers!= null){
-                                          currentQuestions[currentQuestion].checkedAnswers!.isNotEmpty ?
-                                          currentQuestions[currentQuestion].checkedAnswers![0] = value:
-                                          currentQuestions[currentQuestion].checkedAnswers!.add(value);
-                                        }else{
-                                          currentQuestions[currentQuestion].checkedAnswers = [value];
-                                        }
 
-                                      });
-                                    }
-                                  },
-                                  contentPadding: EdgeInsets.zero,
-                                ): CheckboxListTile(
-                                    activeColor: AppColors.colorButton,
-                                    title: Text(currentQuestions[currentQuestion].options[index].text),
-                                    value: currentQuestions[currentQuestion].checkedAnswers?.contains(currentQuestions[currentQuestion].options[index].id) ?? false,
-                                    onChanged: (bool? value) {
+                                TestRadioList(
+                                    color: Colors.transparent,
+                                    title: currentQuestions[currentQuestion].options[index].text,
+                                    id: currentQuestions[currentQuestion].options[index].id,
+                                    onSelected: (int? value){
+                                      if(value != null){
+                                        TestService().answerEntTest(widget.test.entTest!.id, currentQuestions[currentQuestion].id, currentQuestions[currentQuestion].options[index].id);
+                                        setState(() {
+                                          if(currentQuestions[currentQuestion].checkedAnswers!= null){
+                                            currentQuestions[currentQuestion].checkedAnswers!.isNotEmpty ?
+                                            currentQuestions[currentQuestion].checkedAnswers![0] = value:
+                                            currentQuestions[currentQuestion].checkedAnswers!.add(value);
+                                          }else{
+                                            currentQuestions[currentQuestion].checkedAnswers = [value];
+                                          }
+                                        });
+                                      }
+                                    },
+                                  selectedAnswerIndex: selectedAnswerIndex,):
+                                  TestCheckBoxListTitle(
+                                    color: Colors.transparent,
+                                    title: currentQuestions[currentQuestion].options[index].text,
+                                    isSelected: currentQuestions[currentQuestion].checkedAnswers?.contains(currentQuestions[currentQuestion].options[index].id) ?? false,
+                                    onSelected: (bool value) {
                                       setState(() {
-                                        if(value != null && value){
+                                        if(value){
                                           print(value);
                                           TestService().answerEntTest(widget.test.entTest!.id, currentQuestions[currentQuestion].id, currentQuestions[currentQuestion].options[index].id);
                                           currentQuestions[currentQuestion].checkedAnswers?.add(currentQuestions[currentQuestion].options[index].id);
 
                                           print(currentQuestions[currentQuestion].checkedAnswers);
-                                        }else if(value != null && !value){
+                                        }else if(!value){
                                           print(value);
                                           TestService().deleteAnswerEntTest(widget.test.entTest!.id, currentQuestions[currentQuestion].id, currentQuestions[currentQuestion].options[index].id);
                                           currentQuestions[currentQuestion].checkedAnswers?.remove(currentQuestions[currentQuestion].options[index].id);
@@ -575,11 +523,8 @@ class _TestPageState extends State<TestPage> {
                                         }
                                       });
                                     },
-                                    contentPadding: EdgeInsets.zero,
-                                    controlAffinity: ListTileControlAffinity.leading
-                                );
+                                  );
                               }
-
                             )
                           ),
                         if(widget.format == TestFormatEnum.ENT && (currentQuestions[currentQuestion].subOptions != null))
@@ -896,7 +841,6 @@ class _TestPageState extends State<TestPage> {
 
                                 currentQuestion-=1;
                                 checkContext();
-                                setBytes();
                                 if(widget.format == TestFormatEnum.ENT){
                                   checkComp();
                                 }
@@ -924,7 +868,6 @@ class _TestPageState extends State<TestPage> {
 
                                 currentQuestion+=1;
                                 checkContext();
-                                setBytes();
                                 checkComp();
                                 setState(() {
                                 });
@@ -946,7 +889,6 @@ class _TestPageState extends State<TestPage> {
                             if(currentQuestion != currentSchoolQuestions.length-1){
                               currentQuestion+=1;
                               checkContext();
-                              setBytes();
                               setState(() {
                               });
                               _scrollToElement(currentQuestion);

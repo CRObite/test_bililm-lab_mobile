@@ -56,7 +56,7 @@ class AppText {
   static String serverError = 'Cервер қатесі';
   static String tryLater = 'Серверде қате пайда болды кейінірек көріңіз';
   static String register = 'Тіркеу';
-  static String passwordRecovery = 'Құпия сөзді өзгерту';
+  static String passwordRecovery = 'Құпия сөзді ұмыттыңыз ба?';
   static String name = 'Аты';
   static String enterName = 'Атыңызды енгізіңіз';
   static String lastName = 'Жөні';
@@ -68,7 +68,7 @@ class AppText {
   static String loading = 'Жүктеу...';
   static String subscribe = 'Жазылу';
   static String skip = 'Өткізу';
-  static String topUpBalance = 'Балансты толтыру';
+  static String topUpBalance = 'Толтыру';
   static String email = 'Электрондық пошта';
   static String enterEmail = 'Электрондық поштаны енгізіңіз';
   static String regionOptional = 'Аймақ (міндетті емес)';
@@ -115,6 +115,8 @@ class AppText {
   static String fillAll = 'Барлық мәтін жолақтарын толтырыңыз';
   static String iinMustContain = 'ИИН 12 таңбалы болуы керек';
   static String endTestAndShowRes = 'Тестті аяқтап, нәтижелерді көргіңіз келе ме?';
+  static String doYouHaveAcc = 'Аккаунтыңыз жоқ па?';
+  static String goBack = 'Артқа оралу';
 
 
 }

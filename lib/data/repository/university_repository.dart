@@ -3,6 +3,7 @@ import 'package:test_bilimlab_project/config/handleErrorResponse.dart';
 import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
 import 'package:test_bilimlab_project/domain/university.dart';
+import 'package:test_bilimlab_project/domain/universityItem.dart';
 import 'package:test_bilimlab_project/utils/AppApiUrls.dart';
 
 class UniversityRepository {
@@ -15,19 +16,22 @@ class UniversityRepository {
     );
   }
 
-  Future<CustomResponse> getAllUniversity() async {
+  Future<CustomResponse> getAllUniversity(int page,int size , {String query = ''} ) async {
     try {
       dio.options.headers['Authorization'] =
       'Bearer ${CurrentUser.currentTestUser?.accessToken}';
 
       final response = await dio.get(
         '${AppApiUrls.getAllUniversity}',
-
+        queryParameters: {
+          'query': query,
+          'page': page,
+          'size': size,
+        }
       );
-      print(response.data['items']);
+      print(response.data);
 
-      List<University> university = (response.data['items'] as List<dynamic>)
-          .map((postsData) => University.fromJson(postsData)).toList();
+      University university = University.fromJson(response.data);
 
       print(university);
       return CustomResponse(200, '', university);
@@ -47,10 +51,10 @@ class UniversityRepository {
       );
       print(response.data);
 
-      University university = University.fromJson(response.data);
+      UniversityItem universityItem = UniversityItem.fromJson(response.data);
 
-      print(university);
-      return CustomResponse(200, '', university);
+      print(universityItem);
+      return CustomResponse(200, '', universityItem);
     } catch (e) {
       print('$e');
       return HandleErrorResponse.handleErrorResponse(e);

@@ -20,7 +20,7 @@ Specialization _$SpecializationFromJson(Map<String, dynamic> json) =>
           .map((e) => Subject.fromJson(e as Map<String, dynamic>))
           .toList(),
       (json['universities'] as List<dynamic>?)
-          ?.map((e) => University.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => UniversityItem.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
