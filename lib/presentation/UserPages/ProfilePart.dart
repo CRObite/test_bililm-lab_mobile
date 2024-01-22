@@ -182,79 +182,79 @@ class _ProfilePartState extends State<ProfilePart> {
                     const SizedBox(height: 16,),
       
       
-                    Container(
-                      width: 350,
-
-                      decoration:  BoxDecoration(
-                        color: AppColors.darkerBlue,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(20.0),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                              Text(AppText.userBalance, style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.colorGrayButton.withOpacity(0.8))),
-                              Text(wallet != null ? wallet!.balance : '0', style: const TextStyle(fontSize: 30, color: Colors.white),),
+                    // Container(
+                    //   width: 350,
+                    //
+                    //   decoration:  BoxDecoration(
+                    //     color: AppColors.darkerBlue,
+                    //     borderRadius: BorderRadius.all(
+                    //       Radius.circular(20.0),
+                    //     ),
+                    //   ),
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.all(16.0),
+                    //     child: Column(
+                    //       mainAxisAlignment: MainAxisAlignment.center,
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       mainAxisSize: MainAxisSize.min,
+                    //       children: [
+                    //           Text(AppText.userBalance, style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.colorGrayButton.withOpacity(0.8))),
+                    //           Text(wallet != null ? wallet!.balance : '0', style: const TextStyle(fontSize: 30, color: Colors.white),),
+                    //
+                    //           SizedBox(height: 16,),
+                    //           Row(
+                    //             children: [
+                    //               Expanded(
+                    //                 child: SmallButton(
+                    //                     onPressed: (){
+                    //                       showDialog(
+                    //                         context: context,
+                    //                         builder: (context) => TopUpYourBalance(),
+                    //                       );
+                    //                     },
+                    //                     buttonColors: AppColors.colorButton,
+                    //                     innerElement: Row(
+                    //                       children: [
+                    //                         Icon(Icons.account_balance_wallet_rounded, color: Colors.white,),
+                    //                         SizedBox(width: 8,),
+                    //                         Text(AppText.replenish, style: TextStyle(color: Colors.white),),
+                    //                       ],
+                    //                     ),
+                    //                     isDisabled: false,
+                    //                     isBordered: true),
+                    //               ),
+                    //
+                    //               SizedBox(width: 8,),
+                    //
+                    //               Expanded(
+                    //                 child: SmallButton(
+                    //                     onPressed: (){
+                    //                       showDialog(
+                    //                         context: context,
+                    //                         builder: (context) => Tariffs(),
+                    //                       );
+                    //                     },
+                    //                     buttonColors: Colors.white,
+                    //                     innerElement: Row(
+                    //                       children: [
+                    //                         Icon(Icons.ad_units_outlined,),
+                    //                         SizedBox(width: 8,),
+                    //                         Text(AppText.tariffs),
+                    //                       ],
+                    //                     ),
+                    //                     isDisabled: false,
+                    //                     isBordered: true),
+                    //               ),
+                    //             ],
+                    //           )
+                    //
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
       
-                              SizedBox(height: 16,),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: SmallButton(
-                                        onPressed: (){
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) => TopUpYourBalance(),
-                                          );
-                                        },
-                                        buttonColors: AppColors.colorButton,
-                                        innerElement: Row(
-                                          children: [
-                                            Icon(Icons.account_balance_wallet_rounded, color: Colors.white,),
-                                            SizedBox(width: 8,),
-                                            Text(AppText.replenish, style: TextStyle(color: Colors.white),),
-                                          ],
-                                        ),
-                                        isDisabled: false,
-                                        isBordered: true),
-                                  ),
       
-                                  SizedBox(width: 8,),
-      
-                                  Expanded(
-                                    child: SmallButton(
-                                        onPressed: (){
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) => Tariffs(),
-                                          );
-                                        },
-                                        buttonColors: Colors.white,
-                                        innerElement: Row(
-                                          children: [
-                                            Icon(Icons.ad_units_outlined,),
-                                            SizedBox(width: 8,),
-                                            Text(AppText.tariffs),
-                                          ],
-                                        ),
-                                        isDisabled: false,
-                                        isBordered: true),
-                                  ),
-                                ],
-                              )
-      
-                          ],
-                        ),
-                      ),
-                    ),
-      
-      
-                    const SizedBox(height: 16,),
+                    // const SizedBox(height: 16,),
       
                     Container(
                       width: 350,

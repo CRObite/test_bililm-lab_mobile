@@ -22,6 +22,7 @@ TestQuestion _$TestQuestionFromJson(Map<String, dynamic> json) => TestQuestion(
           .toList(),
       json['recommendation'] as String?,
       json['answeredType'] as String?,
+      json['type'] as String?,
     );
 
 Map<String, dynamic> _$TestQuestionToJson(TestQuestion instance) =>
@@ -35,4 +36,5 @@ Map<String, dynamic> _$TestQuestionToJson(TestQuestion instance) =>
       'subOptions': instance.subOptions,
       'recommendation': instance.recommendation,
       'answeredType': instance.answeredType,
+      'type': instance.type,
     };

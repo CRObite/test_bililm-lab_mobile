@@ -263,7 +263,7 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
                       if (widget.format == TestFormatEnum.ENT && currentQuestions[currentQuestion].mediaFiles.isNotEmpty)
                         ImageBuilder(mediaID: currentQuestions[currentQuestion].mediaFiles[0].id),
 
-                      if(currentQuestions[currentQuestion].subOptions == null  || currentQuestions[currentQuestion].subOptions!.isEmpty)
+                      if(currentQuestions[currentQuestion].type != "COMPARISON")
                         Container(
                             width: double.infinity,
                             child: ListView.builder(
@@ -287,13 +287,13 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
                                   return !currentQuestions[currentQuestion].multipleAnswers ?
 
                                   TestRadioList(
-                                    color: Colors.transparent,
+                                    color: getRadioBackgroundColor(index) ?? Colors.transparent,
                                     title: currentQuestions[currentQuestion].options[index].text,
                                     id: currentQuestions[currentQuestion].options[index].id,
                                     onSelected: (int? value){},
                                     selectedAnswerIndex: selectedAnswerIndex,):
                                   TestCheckBoxListTitle(
-                                    color: Colors.transparent,
+                                    color: getRadioBackgroundColor(index) ?? Colors.transparent,
                                     title: currentQuestions[currentQuestion].options[index].text,
                                     isSelected: currentQuestions[currentQuestion].checkedAnswers?.contains(currentQuestions[currentQuestion].options[index].id) ?? false,
                                     onSelected: (bool value) {},
@@ -302,60 +302,11 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
                             )
                         ),
 
-                        if(currentQuestions[currentQuestion].subOptions != null)
+                        if(currentQuestions[currentQuestion].type == "COMPARISON")
                           Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  border: Border.all(
-                                    color: Colors.grey.withOpacity(0.5),
-                                    width: 2.0,
 
-                                  ),
-                                ),
-                                width: double.infinity,
-                                child: ListView.builder(
-                                  physics: NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: currentQuestions[currentQuestion].subOptions!.length,
-                                  itemBuilder: (context, index){
-                                    return  Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Draggable<int>(
-                                          data: index,
-                                          onDragStarted: () => _isDragging = true,
-                                          onDragEnd: (details) => _isDragging = false,
-                                          onDraggableCanceled: (velocity, offset) => _isDragging = false,
-                                          feedback: Card(
-                                              color: Colors.blue.withOpacity(0.5),
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(8.0),
-                                                child: Text('${currentQuestions[currentQuestion].subOptions![index].text}', style: TextStyle( color:  Colors.white),),
-                                              )),
-                                          childWhenDragging:  Card(
-                                              color: Colors.blue.withOpacity(0.5),
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(8.0),
-                                                child: Text('${currentQuestions[currentQuestion].subOptions![index].text}', style: TextStyle( color:  Colors.white),),
-                                              )),
-                                          child: Container(
-                                            decoration: const BoxDecoration(
-                                              color: Colors.blue,
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(10.0),
-                                              ),
-                                            ),
-                                            child: Padding(
-                                                padding: const EdgeInsets.all(8.0),
-                                                child: Text('${currentQuestions[currentQuestion].subOptions![index].text}', style: TextStyle( color:  Colors.white),)),
-                                          )
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
                               const SizedBox(
                                 height: 16,
                               ),
@@ -368,12 +319,12 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
                                     itemCount: currentQuestions[currentQuestion].options.length,
                                     itemBuilder: (context, index){
 
-                                      if(currentQuestions[currentQuestion].options[index].subOption != null){
-                                        selectedValues[index] = currentQuestions[currentQuestion].subOptions!.indexOf( currentQuestions[currentQuestion].options[index].subOption!);
-                                      }
 
                                       return  Container(
-                                        color: getRadioBackgroundColor(index),
+                                        decoration: BoxDecoration(
+                                          color: getRadioBackgroundColor(index),
+                                          borderRadius: BorderRadius.circular(10.0),
+                                        ),
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
@@ -401,7 +352,7 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
                                                     },
                                                     builder: (context, candidateData, rejectedData){
 
-                                                      if(selectedValues[index] != null){
+                                                      if(currentQuestions[currentQuestion].options[index].subOption != null){
                                                         return Container(
                                                           decoration: const BoxDecoration(
                                                             color: Colors.blue,
@@ -411,7 +362,7 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
                                                           ),
                                                           child: Padding(
                                                             padding: const EdgeInsets.all(8.0),
-                                                            child: Text('${currentQuestions[currentQuestion].subOptions![selectedValues[index]!].text}', style: const TextStyle(color: Colors.white),),
+                                                            child: Text('${currentQuestions[currentQuestion].options[index].subOption!.text}', style: const TextStyle(color: Colors.white),),
                                                           ),
                                                         );
                                                       }else{

@@ -18,6 +18,7 @@ class TestQuestion {
   List<SubOption>? subOptions;
   String? recommendation;
   String? answeredType;
+  String? type;
 
 
   TestQuestion(
@@ -29,7 +30,8 @@ class TestQuestion {
       this.options,
       this.subOptions,
       this.recommendation,
-      this.answeredType);
+      this.answeredType,
+      this.type);
 
   factory TestQuestion.fromJson(Map<String, dynamic> json) => _$TestQuestionFromJson(json);
   Map<String, dynamic> toJson() => _$TestQuestionToJson(this);
