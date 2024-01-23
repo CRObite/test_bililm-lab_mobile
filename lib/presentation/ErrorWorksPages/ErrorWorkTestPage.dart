@@ -155,29 +155,15 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
     }
   }
 
-  Color getCircleColor(String isRight){
 
-
-      if(isRight == "FULL_CORRECTLY"){
-          return Colors.green;
-      }else if(isRight == "HALF_CORRECTLY"){
-          return Colors.yellow;
-      }else if(isRight == "NO_CORRECT"){
-          return Colors.red;
-      }else{
-          return Colors.blue;
-      }
-  }
 
   Color? getRadioBackgroundColor(int index){
 
     if(currentQuestions[currentQuestion].options[index].isRight != null ){
       if(currentQuestions[currentQuestion].options[index].isRight!){
         return Colors.green.withOpacity(0.2);
-      }else if(currentQuestions[currentQuestion].checkedAnswers!=null){
-        if(currentQuestions[currentQuestion].checkedAnswers!.contains(currentQuestions[currentQuestion].options[index].id) && !currentQuestions[currentQuestion].options[index].isRight!){
-          return Colors.red.withOpacity(0.2);
-        }
+      }else if(!currentQuestions[currentQuestion].options[index].isRight!){
+        return Colors.red.withOpacity(0.2);
       }
     }
     return null;
@@ -240,9 +226,9 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
             TestNumbersBuilder(
               count: currentQuestions.length,
               scrollController: _scrollController,
-              onTapNumber: (int index){onTapNumber(index); },
+              onTapNumber: (int index){onTapNumber(index);},
               currentQuestion: currentQuestion,
-              color: getCircleColor(currentQuestions[currentQuestion].answeredType ?? "NO_CORRECT"),
+              questions: currentQuestions,
             ),
 
             Expanded(
@@ -320,77 +306,80 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
                                     itemBuilder: (context, index){
 
 
-                                      return  Container(
-                                        decoration: BoxDecoration(
-                                          color: getRadioBackgroundColor(index),
-                                          borderRadius: BorderRadius.circular(10.0),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            SizedBox(
+                                      return  Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: getRadioBackgroundColor(index),
+                                            borderRadius: BorderRadius.circular(10.0),
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              SizedBox(
 
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(8.0),
                                                 child: Padding(
                                                   padding: const EdgeInsets.all(8.0),
-                                                  child: Text(currentQuestions[currentQuestion].options[index].text),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: Text(currentQuestions[currentQuestion].options[index].text),
+                                                  ),
                                                 ),
+                                                width: 150,
                                               ),
-                                              width: 150,
-                                            ),
 
-                                            Icon(Icons.remove),
+                                              Icon(Icons.remove),
 
-                                            SizedBox(
-                                              width: 160,
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(8.0),
-                                                child: DragTarget<int>(
+                                              SizedBox(
+                                                width: 160,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: DragTarget<int>(
 
-                                                    onAccept: (data){
-                                                    },
-                                                    builder: (context, candidateData, rejectedData){
+                                                      onAccept: (data){
+                                                      },
+                                                      builder: (context, candidateData, rejectedData){
 
-                                                      if(currentQuestions[currentQuestion].options[index].subOption != null){
-                                                        return Container(
-                                                          decoration: const BoxDecoration(
-                                                            color: Colors.blue,
-                                                            borderRadius: BorderRadius.all(
-                                                              Radius.circular(10.0),
-                                                            ),
-                                                          ),
-                                                          child: Padding(
-                                                            padding: const EdgeInsets.all(8.0),
-                                                            child: Text('${currentQuestions[currentQuestion].options[index].subOption!.text}', style: const TextStyle(color: Colors.white),),
-                                                          ),
-                                                        );
-                                                      }else{
-                                                        return Container(
-                                                          decoration: BoxDecoration(
-                                                            color: AppColors.colorGrayButton,
-                                                            borderRadius: BorderRadius.all(
-                                                              Radius.circular(10.0),
-                                                            ),
-                                                          ),
-
-                                                          child: Padding(
-                                                            padding: const EdgeInsets.all(8.0),
-                                                            child: Center(
-                                                              child: Text(
-                                                                AppText.emptyFiled, style: TextStyle(color: Colors.blueGrey),
+                                                        if(currentQuestions[currentQuestion].options[index].subOption != null){
+                                                          return Container(
+                                                            decoration: const BoxDecoration(
+                                                              color: Colors.blue,
+                                                              borderRadius: BorderRadius.all(
+                                                                Radius.circular(10.0),
                                                               ),
                                                             ),
-                                                          ),
-                                                        );
+                                                            child: Padding(
+                                                              padding: const EdgeInsets.all(8.0),
+                                                              child: Text('${currentQuestions[currentQuestion].options[index].subOption!.text}', style: const TextStyle(color: Colors.white),),
+                                                            ),
+                                                          );
+                                                        }else{
+                                                          return Container(
+                                                            decoration: BoxDecoration(
+                                                              color: AppColors.colorGrayButton,
+                                                              borderRadius: BorderRadius.all(
+                                                                Radius.circular(10.0),
+                                                              ),
+                                                            ),
+
+                                                            child: Padding(
+                                                              padding: const EdgeInsets.all(8.0),
+                                                              child: Center(
+                                                                child: Text(
+                                                                  AppText.emptyFiled, style: TextStyle(color: Colors.blueGrey),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          );
+                                                        }
+
                                                       }
-
-                                                    }
+                                                  ),
                                                 ),
-                                              ),
-                                            )
+                                              )
 
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       );
                                     }

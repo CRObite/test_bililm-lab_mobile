@@ -203,7 +203,7 @@ class _UniversityPageState extends State<UniversityPage> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(16.0),
         child: isLoading ? Center(child: CircularProgressIndicator(color: AppColors.colorButton,),) :  Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

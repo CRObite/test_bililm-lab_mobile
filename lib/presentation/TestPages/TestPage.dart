@@ -357,7 +357,10 @@ class _TestPageState extends State<TestPage> {
   void onTapNumber(int index){
     currentQuestion = index;
     checkContext();
-    checkComp();
+
+    if(widget.format == TestFormatEnum.ENT){
+      checkComp();
+    }
     setState(() {
 
     });
@@ -432,7 +435,7 @@ class _TestPageState extends State<TestPage> {
                   scrollController: _scrollController,
                   onTapNumber: (int index){onTapNumber(index); },
                   currentQuestion: currentQuestion,
-                  color: AppColors.colorButton,
+                  questions: currentQuestions,
               ),
               SizedBox(height: 8,),
 
@@ -469,8 +472,9 @@ class _TestPageState extends State<TestPage> {
                               scrollDirection: Axis.vertical,
                               itemCount: currentQuestions[currentQuestion].options.length,
                               itemBuilder: (context, index) {
+
                                 if(!currentQuestions[currentQuestion].multipleAnswers){
-                                  if(currentQuestions[currentQuestion].checkedAnswers !=null){
+                                  if(currentQuestions[currentQuestion].checkedAnswers != null){
                                     currentQuestions[currentQuestion].checkedAnswers!.isNotEmpty ?
                                     selectedAnswerIndex = currentQuestions[currentQuestion].checkedAnswers![0]:
                                     selectedAnswerIndex = null;
@@ -507,21 +511,22 @@ class _TestPageState extends State<TestPage> {
                                     title: currentQuestions[currentQuestion].options[index].text,
                                     isSelected: currentQuestions[currentQuestion].checkedAnswers?.contains(currentQuestions[currentQuestion].options[index].id) ?? false,
                                     onSelected: (bool value) {
+                                      if(currentQuestions[currentQuestion].checkedAnswers == null){
+                                        currentQuestions[currentQuestion].checkedAnswers = [];
+                                      }
                                       setState(() {
                                         if(value){
-                                          print(value);
+                                          print(currentQuestions[currentQuestion].checkedAnswers);
                                           TestService().answerEntTest(widget.test.entTest!.id, currentQuestions[currentQuestion].id, currentQuestions[currentQuestion].options[index].id);
                                           currentQuestions[currentQuestion].checkedAnswers?.add(currentQuestions[currentQuestion].options[index].id);
 
-                                          print(currentQuestions[currentQuestion].checkedAnswers);
                                         }else if(!value){
-                                          print(value);
+                                          print(currentQuestions[currentQuestion].checkedAnswers);
                                           TestService().deleteAnswerEntTest(widget.test.entTest!.id, currentQuestions[currentQuestion].id, currentQuestions[currentQuestion].options[index].id);
                                           currentQuestions[currentQuestion].checkedAnswers?.remove(currentQuestions[currentQuestion].options[index].id);
-
-                                          print(currentQuestions[currentQuestion].checkedAnswers);
                                         }
                                       });
+
                                     },
                                   );
                               }
@@ -642,6 +647,14 @@ class _TestPageState extends State<TestPage> {
                                                           });
                                                           currentQuestions[currentQuestion].options[index].subOption = currentQuestions[currentQuestion].subOptions![data];
 
+
+                                                          print(i);
+                                                          print(j);
+                                                          print(widget.test.entTest!.id);
+                                                          print(currentQuestions[currentQuestion].id);
+                                                          print(currentQuestions[currentQuestion].options[index].id);
+                                                          print(currentQuestions[currentQuestion].subOptions![data].id);
+
                                                           TestService().comparisonAnswerEntTest(
                                                               widget.test.entTest!.id,
                                                               currentQuestions[currentQuestion].id,
@@ -651,6 +664,11 @@ class _TestPageState extends State<TestPage> {
 
                                                           currentQuestions[currentQuestion].options[i].subOption = currentQuestions[currentQuestion].subOptions![j!];
 
+                                                          print(widget.test.entTest!.id);
+                                                          print(currentQuestions[currentQuestion].id);
+                                                          print(currentQuestions[currentQuestion].options[i].id);
+                                                          print(currentQuestions[currentQuestion].subOptions![j].id);
+
                                                           TestService().comparisonAnswerEntTest(
                                                               widget.test.entTest!.id,
                                                               currentQuestions[currentQuestion].id,
@@ -659,6 +677,8 @@ class _TestPageState extends State<TestPage> {
                                                           );
 
                                                         }else{
+
+                                                          print(i);
 
                                                           setState(() {
                                                             selectedValues[index] = data;
@@ -675,6 +695,7 @@ class _TestPageState extends State<TestPage> {
 
                                                           currentQuestions[currentQuestion].options[i].subOption = null;
 
+
                                                           TestService().comparisonDeleteAnswerEntTest(
                                                               widget.test.entTest!.id,
                                                               currentQuestions[currentQuestion].id,
@@ -688,6 +709,7 @@ class _TestPageState extends State<TestPage> {
                                                           selectedValues[index] = data;
                                                         });
                                                         currentQuestions[currentQuestion].options[index].subOption = currentQuestions[currentQuestion].subOptions![data];
+
 
                                                         TestService().comparisonAnswerEntTest(
                                                             widget.test.entTest!.id,

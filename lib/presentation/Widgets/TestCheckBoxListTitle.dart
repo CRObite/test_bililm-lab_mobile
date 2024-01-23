@@ -17,22 +17,25 @@ class TestCheckBoxListTitle extends StatefulWidget {
 class _TestCheckBoxListTitleState extends State<TestCheckBoxListTitle> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: widget.color,
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: CheckboxListTile(
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: widget.color,
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: CheckboxListTile(
           activeColor: AppColors.colorButton,
           title: Text(widget.title),
           value: widget.isSelected,
           onChanged: (bool? value) {
-            if(value!=null){
-              widget.onSelected(!widget.isSelected);
+            if (value != null) {
+              widget.onSelected(value);
             }
           },
           contentPadding: EdgeInsets.zero,
-          controlAffinity: ListTileControlAffinity.leading
+          controlAffinity: ListTileControlAffinity.leading,
+        ),
       ),
     );
   }

@@ -20,22 +20,25 @@ class _TestRadioListState extends State<TestRadioList> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: widget.color,
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: RadioListTile(
-        activeColor: AppColors.colorButton,
-        title: Text(widget.title),
-        value: widget.id,
-        groupValue: widget.selectedAnswerIndex,
-        onChanged: (int? value) {
-          if(value!= null){
-            widget.onSelected(value);
-          }
-        },
-        contentPadding: EdgeInsets.zero,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: widget.color,
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: RadioListTile(
+          activeColor: AppColors.colorButton,
+          title: Text(widget.title),
+          value: widget.id,
+          groupValue: widget.selectedAnswerIndex,
+          onChanged: (int? value) {
+            if(value!= null){
+              widget.onSelected(value);
+            }
+          },
+          contentPadding: EdgeInsets.zero,
+        ),
       ),
     );
   }
