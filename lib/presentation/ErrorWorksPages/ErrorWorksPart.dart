@@ -3,7 +3,10 @@ import 'package:test_bilimlab_project/config/ExtractDate.dart';
 import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
 import 'package:test_bilimlab_project/domain/revision.dart';
 import 'package:test_bilimlab_project/domain/revisionItem.dart';
+import 'package:test_bilimlab_project/presentation/ErrorWorksPages/ErrorWorkTestPage.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/ServerErrorDialog.dart';
+import 'package:test_bilimlab_project/utils/AnimationDirection.dart';
+import 'package:test_bilimlab_project/utils/CrateAnimatedRoute.dart';
 
 import '../../data/service/login_service.dart';
 import '../../data/service/test_service.dart';
@@ -173,14 +176,13 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
     });
     if(response.code == 200){
       EntTest entTest = response.body as EntTest;
-      Navigator.pushNamed(
-        context,
-        '/mistake',
-        arguments: {
-          'test': Test(entTest, null),
-          'testFormatEnum': TestFormatEnum.ENT,
-        },
+
+      Route route = CrateAnimatedRoute.createRoute(() => ErrorWorkTestPage(
+        test: Test(entTest, null),
+        format: TestFormatEnum.ENT,),
+          AnimationDirection.open
       );
+      Navigator.of(context).push(route);
 
     }else if(response.code == 401 && mounted ){
       Navigator.pushReplacementNamed(context, '/');

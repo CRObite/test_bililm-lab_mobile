@@ -6,6 +6,7 @@ import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
 import 'package:test_bilimlab_project/domain/userWithJwt.dart';
 import 'package:test_bilimlab_project/presentation/application.dart';
+import 'package:test_bilimlab_project/utils/AnimationDirection.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
 import 'package:test_bilimlab_project/utils/CrateAnimatedRoute.dart';
 import '../../utils/AppImages.dart';
@@ -76,8 +77,8 @@ class _LoginPageState extends State<LoginPage> {
     await LoginService().logIn(_iinController.text, _passwordController.text);
 
     if (currentResponse.code == 200) {
-      Route route = CrateAnimatedRoute.createRoute(() => const Application());
-      Navigator.of(context).push(route);
+      Route route = CrateAnimatedRoute.createRoute(() => const Application(), AnimationDirection.up);
+      Navigator.of(context).pushReplacement(route);
 
     } else if (currentResponse.code == 500 && mounted) {
       _showErrorDialog();

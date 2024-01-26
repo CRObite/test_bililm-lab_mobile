@@ -10,11 +10,14 @@ import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
 import 'package:test_bilimlab_project/domain/specialization.dart';
 import 'package:test_bilimlab_project/domain/universityItem.dart';
+import 'package:test_bilimlab_project/presentation/UniversityPages/SpecializationPage.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/ImageBuilder.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/ServerErrorDialog.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/SmallButton.dart';
+import 'package:test_bilimlab_project/utils/AnimationDirection.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
 import 'package:test_bilimlab_project/utils/AppTexts.dart';
+import 'package:test_bilimlab_project/utils/CrateAnimatedRoute.dart';
 
 class UniversityInfoPage extends StatefulWidget {
   const UniversityInfoPage({super.key, required this.university});
@@ -91,7 +94,12 @@ class _UniversityInfoPageState extends State<UniversityInfoPage> {
 
       if (response.code == 200 && mounted) {
         Specialization sp = response.body;
-        Navigator.pushNamed(context, '/specialization',arguments: sp);
+        Route route = CrateAnimatedRoute.createRoute(() => SpecializationPage(
+            specialization: sp,),
+            AnimationDirection.open
+        );
+        Navigator.of(context).push(route);
+
       }else if(response.code == 401 && mounted ){
         if(CurrentUser.currentTestUser != null){
           CustomResponse response = await LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);

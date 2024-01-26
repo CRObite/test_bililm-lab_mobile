@@ -8,11 +8,14 @@ import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
 import 'package:test_bilimlab_project/domain/university.dart';
 import 'package:test_bilimlab_project/domain/universityItem.dart';
+import 'package:test_bilimlab_project/presentation/UniversityPages/UniversityInfoPage.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/CustomTextFields.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/ServerErrorDialog.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/UniversityCard.dart';
+import 'package:test_bilimlab_project/utils/AnimationDirection.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
 import 'package:test_bilimlab_project/utils/AppTexts.dart';
+import 'package:test_bilimlab_project/utils/CrateAnimatedRoute.dart';
 
 class UniversityPage extends StatefulWidget {
   const UniversityPage({super.key});
@@ -165,8 +168,11 @@ class _UniversityPageState extends State<UniversityPage> {
 
       if (response.code == 200 && mounted) {
         UniversityItem univ = response.body as UniversityItem;
-
-        Navigator.pushNamed(context, '/university_info', arguments: univ);
+        Route route = CrateAnimatedRoute.createRoute(() => UniversityInfoPage(
+            university: univ),
+            AnimationDirection.open
+        );
+        Navigator.of(context).push(route);
 
       } else if (response.code == 401 && mounted) {
         if (CurrentUser.currentTestUser != null) {

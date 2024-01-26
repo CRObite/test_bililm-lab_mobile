@@ -7,10 +7,13 @@ import 'package:test_bilimlab_project/data/service/post_service.dart';
 import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
 import 'package:test_bilimlab_project/domain/postItem.dart';
+import 'package:test_bilimlab_project/presentation/PostPages/InnerPostPage.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/ImageBuilder.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/ServerErrorDialog.dart';
+import 'package:test_bilimlab_project/utils/AnimationDirection.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
 import 'package:test_bilimlab_project/utils/AppTexts.dart';
+import 'package:test_bilimlab_project/utils/CrateAnimatedRoute.dart';
 
 import '../../domain/post.dart';
 
@@ -164,7 +167,11 @@ class _PostPageState extends State<PostPage> {
 
       if (response.code == 200 && mounted) {
           PostItem post = response.body;
-          Navigator.pushNamed(context, '/inner_post', arguments: post);
+          Route route = CrateAnimatedRoute.createRoute(() => InnerPostPage(
+            post: post,),
+              AnimationDirection.open
+          );
+          Navigator.of(context).push(route);
       }else if(response.code == 401 && mounted ){
         if(CurrentUser.currentTestUser != null){
           CustomResponse response = await LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);

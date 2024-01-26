@@ -3,6 +3,7 @@ import 'package:quickalert/quickalert.dart';
 import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
 import 'package:test_bilimlab_project/domain/testUser.dart';
 import 'package:test_bilimlab_project/presentation/AuthorizationPages/LoginPage.dart';
+import 'package:test_bilimlab_project/utils/AnimationDirection.dart';
 import 'package:test_bilimlab_project/utils/AppTexts.dart';
 import 'package:test_bilimlab_project/utils/CrateAnimatedRoute.dart';
 
@@ -34,8 +35,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
         },
         onConfirmBtnTap: () async {
           await SharedPreferencesOperator.clearUserWithJwt();
-          Route route = CrateAnimatedRoute.createRoute(() => const LoginPage());
-          Navigator.of(context).push(route);
+          Route route = CrateAnimatedRoute.createRoute(() => const LoginPage(), AnimationDirection.down);
+          Navigator.of(context).pushReplacement(route);
         }
     );
   }

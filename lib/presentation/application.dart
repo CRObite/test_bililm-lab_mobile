@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:test_bilimlab_project/domain/currentUser.dart';
+import 'package:test_bilimlab_project/presentation/AuthorizationPages/LoginPage.dart';
 import 'package:test_bilimlab_project/presentation/ErrorWorksPages/ErrorWorksPart.dart';
 import 'package:test_bilimlab_project/presentation/PostPages/PostPage.dart';
 import 'package:test_bilimlab_project/presentation/SubjectPickerPages/SubjectPickerPage.dart';
@@ -7,6 +8,8 @@ import 'package:test_bilimlab_project/presentation/UniversityPages/UniversityPag
 
 import 'package:test_bilimlab_project/presentation/UserPages/AnalyticPart.dart';
 import 'package:test_bilimlab_project/presentation/UserPages/ProfilePart.dart';
+import 'package:test_bilimlab_project/utils/AnimationDirection.dart';
+import 'package:test_bilimlab_project/utils/CrateAnimatedRoute.dart';
 import '../utils/AppColors.dart';
 import '../utils/AppTexts.dart';
 import 'Widgets/CustomAppBar.dart';
@@ -25,7 +28,8 @@ class _ApplicationState extends State<Application> {
   @override
   void initState() {
     if(CurrentUser.currentTestUser == null){
-      Navigator.pushReplacementNamed(context, '/');
+      Route route = CrateAnimatedRoute.createRoute(() => const LoginPage(), AnimationDirection.down);
+      Navigator.of(context).pushReplacement(route);
     }
     super.initState();
   }
