@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
 import 'package:test_bilimlab_project/domain/testUser.dart';
-import 'package:test_bilimlab_project/presentation/Widgets/ReportDialog.dart';
+import 'package:test_bilimlab_project/presentation/AuthorizationPages/LoginPage.dart';
 import 'package:test_bilimlab_project/utils/AppTexts.dart';
+import 'package:test_bilimlab_project/utils/CrateAnimatedRoute.dart';
 
 import '../../utils/AppColors.dart';
 import '../../utils/AppImages.dart';
@@ -33,7 +34,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
         },
         onConfirmBtnTap: () async {
           await SharedPreferencesOperator.clearUserWithJwt();
-          Navigator.pushReplacementNamed(context, '/');
+          Route route = CrateAnimatedRoute.createRoute(() => const LoginPage());
+          Navigator.of(context).push(route);
         }
     );
   }

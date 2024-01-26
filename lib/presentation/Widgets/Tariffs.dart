@@ -16,6 +16,11 @@ class _TariffsState extends State<Tariffs> {
   int _currentPage = 0;
   PageController _pageController = PageController(initialPage: 0);
 
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

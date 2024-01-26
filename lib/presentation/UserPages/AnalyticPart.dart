@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:test_bilimlab_project/data/service/test_service.dart';
 import 'package:test_bilimlab_project/domain/barData.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
@@ -121,17 +120,17 @@ class _AnalyticPartState extends State<AnalyticPart> {
 
             const SizedBox(height: 16,),
 
-            // Text('${AppText.passedTests}:  0'),
-            // Text('${AppText.lastPassedTest}:  0'),
-            // Text('${AppText.averageScore}:  0'),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CustomGreyRoundedContainer(title:  AppText.passedTests,num: datas!=null ?  datas!.general.scores.length : 0,icon: const Icon(Icons.all_inbox_rounded),),
+                  if(datas!=null)
+                    CustomGreyRoundedContainer(title:  AppText.passedTests,num: datas?.passedTestCount ,icon: const Icon(Icons.all_inbox_rounded),),
                   const SizedBox(width: 8,),
-                  CustomGreyRoundedContainer(title: AppText.lastPassedTest,num: datas!=null ?datas!.general.scores.first :0,icon: const Icon(Icons.hourglass_top_rounded),),
+                  if(datas!=null)
+                    CustomGreyRoundedContainer(title: AppText.lastPassedTest,num: datas?.lastTestScore,icon: const Icon(Icons.hourglass_top_rounded),),
                   const SizedBox(width: 8,),
-                  CustomGreyRoundedContainer(title: AppText.averageScore,num: getAverageScore(),icon: const Icon(Icons.align_vertical_bottom_rounded),),
+                  if(datas!=null)
+                    CustomGreyRoundedContainer(title: AppText.averageScore,num: datas?.averageTestScore,icon: const Icon(Icons.align_vertical_bottom_rounded),),
                 ],
               ),
               const SizedBox(height: 28,),

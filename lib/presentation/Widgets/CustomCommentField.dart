@@ -19,6 +19,12 @@ class _CustomCommentFieldState extends State<CustomCommentField> {
 
   TextEditingController _commentController = TextEditingController();
 
+  @override
+  void dispose() {
+    _commentController.dispose();
+    super.dispose();
+  }
+
 
   void onSaveButtonPressed(){
     CommentsService().saveComment(widget.id, _commentController.text, widget.type);

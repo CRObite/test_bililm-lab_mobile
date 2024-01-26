@@ -3,9 +3,6 @@ import 'package:test_bilimlab_project/data/service/balance_service.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
 import 'package:test_bilimlab_project/domain/wallet.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/ServerErrorDialog.dart';
-import 'package:test_bilimlab_project/presentation/Widgets/SmallButton.dart';
-import 'package:test_bilimlab_project/presentation/Widgets/Tariffs.dart';
-import 'package:test_bilimlab_project/presentation/Widgets/TopUpYourBalance.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
 import 'package:test_bilimlab_project/utils/AppImages.dart';
 

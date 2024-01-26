@@ -5,7 +5,7 @@ class CustomGreyRoundedContainer extends StatelessWidget {
 
 
   final String title;
-  final int num;
+  final int? num;
   final Icon icon;
 
   @override
@@ -25,7 +25,7 @@ class CustomGreyRoundedContainer extends StatelessWidget {
                   width: 8,
                 ),
                 Text(
-                  '$num',style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 34),),
+                  num != null  ? '$num' : '...',style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 34),),
               ],
             ),
             Text(title,style: const TextStyle( fontSize: 8),),

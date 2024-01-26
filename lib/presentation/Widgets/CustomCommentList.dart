@@ -38,6 +38,11 @@ class _CustomCommentListState extends State<CustomCommentList> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    _commentController.dispose();
+    super.dispose();
+  }
   void getCommentsAnswers(int id) async {
     CustomResponse response = await CommentsService().getCommentsAnswersById(id);
 

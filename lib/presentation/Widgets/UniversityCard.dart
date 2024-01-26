@@ -1,7 +1,5 @@
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
-import 'package:test_bilimlab_project/config/SetBytes.dart';
-import 'package:test_bilimlab_project/domain/university.dart';
 import 'package:test_bilimlab_project/domain/universityItem.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/ImageBuilder.dart';
 import 'package:test_bilimlab_project/utils/AppTexts.dart';

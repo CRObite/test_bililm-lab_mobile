@@ -1,10 +1,8 @@
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
 import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
 import 'package:test_bilimlab_project/data/service/login_service.dart';
-import 'package:test_bilimlab_project/data/service/media_service.dart';
 import 'package:test_bilimlab_project/data/service/university_service.dart';
 import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
@@ -14,7 +12,6 @@ import 'package:test_bilimlab_project/presentation/Widgets/CustomTextFields.dart
 import 'package:test_bilimlab_project/presentation/Widgets/ServerErrorDialog.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/UniversityCard.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
-import 'package:test_bilimlab_project/utils/AppImages.dart';
 import 'package:test_bilimlab_project/utils/AppTexts.dart';
 
 class UniversityPage extends StatefulWidget {
@@ -49,6 +46,13 @@ class _UniversityPageState extends State<UniversityPage> {
 
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _searchPanelController.dispose();
+    _controller.dispose();
+    super.dispose();
   }
 
 

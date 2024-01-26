@@ -1,21 +1,15 @@
 
-import 'dart:typed_data';
-
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:test_bilimlab_project/config/ExtractDate.dart';
 import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
 import 'package:test_bilimlab_project/data/service/login_service.dart';
-import 'package:test_bilimlab_project/data/service/media_service.dart';
 import 'package:test_bilimlab_project/data/service/post_service.dart';
-import 'package:test_bilimlab_project/data/service/test_service.dart';
 import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
 import 'package:test_bilimlab_project/domain/postItem.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/ImageBuilder.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/ServerErrorDialog.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
-import 'package:test_bilimlab_project/utils/AppImages.dart';
 import 'package:test_bilimlab_project/utils/AppTexts.dart';
 
 import '../../domain/post.dart';
@@ -54,6 +48,13 @@ class _PostPageState extends State<PostPage> {
 
     super.initState();
   }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
 
   Future getNextPage() async {
 

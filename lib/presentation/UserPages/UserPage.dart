@@ -21,14 +21,10 @@ class _UserPageState extends State<UserPage> {
 
   @override
   void initState() {
-    // if(CurrentUser.currentTestUser == null){
-    //   Navigator.pushReplacementNamed(context, '/');
-    // }
-
-
-
     super.initState();
   }
+
+
 
 
 

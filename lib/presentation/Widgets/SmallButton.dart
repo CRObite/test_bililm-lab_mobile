@@ -1,6 +1,5 @@
 
 import 'package:flutter/material.dart';
-import '../../utils/AppColors.dart';
 
 class SmallButton extends StatelessWidget {
   final VoidCallback onPressed;

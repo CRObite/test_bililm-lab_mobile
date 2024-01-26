@@ -1,11 +1,5 @@
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:get/get.dart';
-
-import 'package:test_bilimlab_project/data/service/media_service.dart';
-import 'package:test_bilimlab_project/presentation/Widgets/ComparativeDraggableBuild.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/ImageBuilder.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/TestContentBuilder.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/TestNumbersBuilder.dart';
@@ -16,7 +10,6 @@ import '../../domain/test.dart';
 import '../../domain/testQuestion.dart';
 import '../../utils/AppTexts.dart';
 import '../../utils/TestFormatEnum.dart';
-import '../Widgets/QuestionCircle.dart';
 import '../Widgets/SmallButton.dart';
 import '../Widgets/TestCheckBoxListTitle.dart';
 
@@ -48,7 +41,6 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
   late List<int?> selectedValues;
   final ScrollController _scrollDraggableController = ScrollController();
   final _listViewKey = GlobalKey();
-  static const detectedRange = 100;
   bool _isDragging = false;
 
   @override
@@ -61,6 +53,8 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
 
   @override
   void dispose() {
+    _scrollController.dispose();
+    _scrollDraggableController.dispose();
     super.dispose();
   }
 

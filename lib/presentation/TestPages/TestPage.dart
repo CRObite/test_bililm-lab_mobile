@@ -3,19 +3,16 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:test_bilimlab_project/data/service/ResultService.dart';
-import 'package:test_bilimlab_project/data/service/media_service.dart';
 import 'package:test_bilimlab_project/data/service/test_service.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
 import 'package:test_bilimlab_project/domain/modoResult.dart';
 import 'package:test_bilimlab_project/domain/result.dart';
 import 'package:test_bilimlab_project/domain/schoolQuestion.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/ImageBuilder.dart';
-import 'package:test_bilimlab_project/presentation/Widgets/QuestionCircle.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/SmallButton.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/TestCheckBoxListTitle.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/TestContentBuilder.dart';
@@ -70,7 +67,6 @@ class _TestPageState extends State<TestPage> {
   final ScrollController _scrollDraggableController = ScrollController();
 
   final _listViewKey = GlobalKey();
-  static const detectedRange = 100;
   bool _isDragging = false;
 
 
@@ -112,6 +108,8 @@ class _TestPageState extends State<TestPage> {
   }
 
 
+
+
   Widget _createListener(Widget child) {
     return Listener(
       child: child,
@@ -143,6 +141,8 @@ class _TestPageState extends State<TestPage> {
   @override
   void dispose() {
     _timer.cancel();
+    _scrollController.dispose();
+    _scrollDraggableController.dispose();
     super.dispose();
   }
 

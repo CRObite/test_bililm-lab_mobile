@@ -9,15 +9,11 @@ import 'package:test_bilimlab_project/domain/comment.dart';
 import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
 import 'package:test_bilimlab_project/domain/specialization.dart';
-import 'package:test_bilimlab_project/domain/university.dart';
 import 'package:test_bilimlab_project/domain/universityItem.dart';
-import 'package:test_bilimlab_project/presentation/Widgets/CustomCommentField.dart';
-import 'package:test_bilimlab_project/presentation/Widgets/CustomCommentList.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/ImageBuilder.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/ServerErrorDialog.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/SmallButton.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
-import 'package:test_bilimlab_project/utils/AppImages.dart';
 import 'package:test_bilimlab_project/utils/AppTexts.dart';
 
 class UniversityInfoPage extends StatefulWidget {

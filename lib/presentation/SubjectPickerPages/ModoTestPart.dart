@@ -24,26 +24,19 @@ class ModoTestPart extends StatefulWidget {
 
 class _ModoTestPartState extends State<ModoTestPart> {
   List<ModoClass> dropItems = [];
-  bool _mounted = false;
   String? errorMessage;
   bool isLoading = false;
 
   @override
   void initState() {
-    _mounted = true;
     getClass();
     super.initState();
   }
 
-  @override
-  void dispose() {
-    _mounted = false;
-    super.dispose();
-  }
 
   Future<void> getClass() async {
     List<ModoClass> listOfClass = await SchoolClassService().getAllModoClass();
-    if (_mounted) {
+    if (mounted) {
       setState(() {
         dropItems = listOfClass;
       });

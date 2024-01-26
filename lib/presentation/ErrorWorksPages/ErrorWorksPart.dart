@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:test_bilimlab_project/config/ExtractDate.dart';
 import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
 import 'package:test_bilimlab_project/domain/revision.dart';
@@ -52,6 +51,7 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
   @override
   void dispose() {
     _controller.removeListener(getNextPage);
+    _controller.dispose();
     super.dispose();
   }
 

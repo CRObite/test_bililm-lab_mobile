@@ -9,7 +9,6 @@ import 'package:test_bilimlab_project/domain/modoTest.dart';
 import 'package:test_bilimlab_project/domain/test.dart';
 import 'package:test_bilimlab_project/presentation/SubjectPickerPages/EntTestPart.dart';
 import 'package:test_bilimlab_project/presentation/SubjectPickerPages/ModoTestPart.dart';
-import 'package:test_bilimlab_project/presentation/Widgets/CustomAppBar.dart';
 import '../../config/SharedPreferencesOperator.dart';
 import '../../data/service/login_service.dart';
 import '../../utils/AppColors.dart';
@@ -41,6 +40,12 @@ class _SubjectPickerPageState extends State<SubjectPickerPage> {
     super.initState();
   }
 
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   Future<void> _continueTestPopUp() async {
 

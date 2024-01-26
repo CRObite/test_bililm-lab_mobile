@@ -8,7 +8,6 @@ import 'package:test_bilimlab_project/presentation/Widgets/CustomTextFields.dart
 import 'package:test_bilimlab_project/presentation/Widgets/LongButton.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/ServerErrorDialog.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
-import 'package:test_bilimlab_project/utils/AppImages.dart';
 import 'package:test_bilimlab_project/utils/AppTexts.dart';
 
 class PasswordRecoveryPage extends StatefulWidget {

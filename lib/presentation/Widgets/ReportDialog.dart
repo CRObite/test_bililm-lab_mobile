@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:test_bilimlab_project/data/repository/balance_repository.dart';
-import 'package:test_bilimlab_project/data/service/login_service.dart';
-import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/SmallButton.dart';
 import 'package:test_bilimlab_project/utils/AppTexts.dart';
 
@@ -14,6 +11,12 @@ class ReportDialog extends StatefulWidget {
 
 class _ReportDialogState extends State<ReportDialog> {
   TextEditingController _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

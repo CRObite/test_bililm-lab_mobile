@@ -181,6 +181,7 @@ class _RegisterPageState extends State<RegisterPage> {
     _lastNameController.dispose();
     _secondNameController.dispose();
     _numberController.dispose();
+    _emailController.dispose();
     super.dispose();
   }
 

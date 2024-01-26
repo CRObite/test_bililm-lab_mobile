@@ -4,7 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:intl/intl.dart';
+
 import 'package:test_bilimlab_project/config/ExtractDate.dart';
 import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
 import 'package:test_bilimlab_project/data/service/comments_service.dart';
@@ -13,17 +13,10 @@ import 'package:test_bilimlab_project/data/service/media_service.dart';
 import 'package:test_bilimlab_project/domain/comment.dart';
 import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
-import 'package:test_bilimlab_project/domain/post.dart';
 import 'package:test_bilimlab_project/domain/postItem.dart';
-import 'package:test_bilimlab_project/presentation/Widgets/CustomCommentField.dart';
-import 'package:test_bilimlab_project/presentation/Widgets/CustomCommentList.dart';
-import 'package:test_bilimlab_project/presentation/Widgets/CustomTextFields.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/ImageBuilder.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/ServerErrorDialog.dart';
-import 'package:test_bilimlab_project/presentation/Widgets/SmallButton.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
-import 'package:test_bilimlab_project/utils/AppImages.dart';
-import 'package:test_bilimlab_project/utils/AppTexts.dart';
 
 class InnerPostPage extends StatefulWidget {
   const InnerPostPage({super.key, required this.post});
