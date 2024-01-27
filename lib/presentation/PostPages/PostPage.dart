@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:test_bilimlab_project/config/ExtractDate.dart';
 import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
 import 'package:test_bilimlab_project/data/service/login_service.dart';
@@ -273,7 +274,7 @@ class _PostPageState extends State<PostPage> {
                               ),
                             ),
                           ),
-                        );
+                        ).animate().fadeIn().scaleY();
                     }),
               ),
             ):

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:test_bilimlab_project/data/service/test_service.dart';
 import 'package:test_bilimlab_project/domain/barData.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
@@ -124,13 +125,21 @@ class _AnalyticPartState extends State<AnalyticPart> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   if(datas!=null)
-                    CustomGreyRoundedContainer(title:  AppText.passedTests,num: datas?.passedTestCount ,icon: const Icon(Icons.all_inbox_rounded),),
+                    Animate(
+                        effects: [FadeEffect(), ScaleEffect()],
+                        child: CustomGreyRoundedContainer(title:  AppText.passedTests,num: datas?.passedTestCount ,icon: const Icon(Icons.all_inbox_rounded),
+                        )
+                    ),
                   const SizedBox(width: 8,),
                   if(datas!=null)
-                    CustomGreyRoundedContainer(title: AppText.lastPassedTest,num: datas?.lastTestScore,icon: const Icon(Icons.hourglass_top_rounded),),
+                    Animate(
+                        effects: [FadeEffect(), ScaleEffect()],
+                        child: CustomGreyRoundedContainer(title: AppText.lastPassedTest,num: datas?.lastTestScore,icon: const Icon(Icons.hourglass_top_rounded),)),
                   const SizedBox(width: 8,),
                   if(datas!=null)
-                    CustomGreyRoundedContainer(title: AppText.averageScore,num: datas?.averageTestScore,icon: const Icon(Icons.align_vertical_bottom_rounded),),
+                    Animate(
+                        effects: [FadeEffect(), ScaleEffect()],
+                        child: CustomGreyRoundedContainer(title: AppText.averageScore,num: datas?.averageTestScore,icon: const Icon(Icons.align_vertical_bottom_rounded),)),
                 ],
               ),
               const SizedBox(height: 28,),
@@ -141,7 +150,7 @@ class _AnalyticPartState extends State<AnalyticPart> {
                 CustomBarChart(
                     barColor: AppColors.generalBarChartColor,
                     data:  ScoresData(datas != null ? datas!.general.dates: [], datas!=null ? datas!.general.scores: [], datas!=null? datas !.general.maxScore: 40),
-                    type: BarTypeEnum.GENERAL),
+                    type: BarTypeEnum.GENERAL).animate().fadeIn(duration: 600.ms).slideX(),
               
               if(datas != null)
               Container(
@@ -163,7 +172,7 @@ class _AnalyticPartState extends State<AnalyticPart> {
                         CustomBarChart(
                             barColor:  getColorForBar(index),
                             data:  datas!.subjects[list[index]] ?? ScoresData( [], [], 40),
-                            type: BarTypeEnum.GENERAL),
+                            type: BarTypeEnum.GENERAL).animate().fadeIn(duration: 600.ms).slideX(),
                       ],
                     );
                   },

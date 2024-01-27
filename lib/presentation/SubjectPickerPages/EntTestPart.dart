@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:test_bilimlab_project/data/service/subject_service.dart';
 import 'package:test_bilimlab_project/data/service/test_service.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
@@ -271,7 +272,7 @@ class _EntTestPartState extends State<EntTestPart> {
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Column(
-      
+
                     children: [
                       Text(AppText.creative),
                       const SizedBox(

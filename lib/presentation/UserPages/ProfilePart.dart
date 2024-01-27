@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:test_bilimlab_project/data/service/balance_service.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
 import 'package:test_bilimlab_project/domain/wallet.dart';
@@ -177,8 +178,8 @@ class _ProfilePartState extends State<ProfilePart> {
                     const SizedBox(height: 8,),
                     Text(CurrentUser.currentTestUser!.testUser.iin , style: const TextStyle(fontSize: 16,),),
                     const SizedBox(height: 16,),
-      
-      
+
+
                     // Container(
                     //   width: 350,
                     //
@@ -249,10 +250,10 @@ class _ProfilePartState extends State<ProfilePart> {
                     //     ),
                     //   ),
                     // ),
-      
-      
+
+
                     // const SizedBox(height: 16,),
-      
+
                     Container(
                       width: 350,
                       child: Row(

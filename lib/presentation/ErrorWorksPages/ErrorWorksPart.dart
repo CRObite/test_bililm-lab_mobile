@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:test_bilimlab_project/config/ExtractDate.dart';
 import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
 import 'package:test_bilimlab_project/domain/revision.dart';
@@ -291,7 +292,7 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
                           ),
                         ),
                       ),
-                    );
+                    ).animate().fadeIn().scaleY();
                   },
                 ),
               ),
