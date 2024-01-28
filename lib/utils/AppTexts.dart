@@ -38,8 +38,8 @@ class AppText {
   static String mathematicalLiteracy = 'Математикалық сауаттылық';
   static String readingLiteracy = 'Оқу сауаттылығы';
   static String recommendation = 'Ұсыныс';
-  static String modoPermission = 'Модоға рұқсат';
-  static String entPermission = 'ҰБТға рұқсат';
+  static String modoPermission = 'МОДО-ға рұқсат';
+  static String entPermission = 'ҰБТ-ға рұқсат';
   static String emptyFiled = 'Бос орын';
   static String unknown = 'Белгісіз';
   static String noErrorWorkTests = 'Қателермен жұмыс істеуге арналған сынақтарыңыз жоқ';
@@ -109,14 +109,16 @@ class AppText {
   static String average = 'Орташа';
   static String high = 'Жоғары';
   static String recover = 'Жаңарту';
-  static String exit = 'Есептік жазбадан шығу';
-  static String exitFromLogin = 'Есептік жазбадан шыққыңыз келе ме ?';
+  static String exit = 'Аккаунттан шығу';
+  static String exitFromLogin = 'Есептік жазбадан шыққыңыз келе ме?';
   static String enterValidEmail = 'Жарамды электрондық пошта енгізіңіз';
   static String fillAll = 'Барлық мәтін жолақтарын толтырыңыз';
   static String iinMustContain = 'ИИН 12 таңбалы болуы керек';
   static String endTestAndShowRes = 'Тестті аяқтап, нәтижелерді көргіңіз келе ме?';
   static String doYouHaveAcc = 'Аккаунтыңыз жоқ па?';
   static String goBack = 'Артқа оралу';
+  static String deleteAccount = 'Аккаунтты жою' ;
+  static String areYouWantToDeleteAcc = 'Есептік жазбаңызды толығымен жойғыңыз келе ме?';
 
 
 }

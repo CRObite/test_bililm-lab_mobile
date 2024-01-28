@@ -22,24 +22,7 @@ class CustomAppBar extends StatefulWidget {
 
 class _CustomAppBarState extends State<CustomAppBar> {
 
-  void areYouSureAboutThis(){
-    QuickAlert.show(
-        context: context,
-        type:QuickAlertType.confirm,
-        text: AppText.exitFromLogin,
-        title: AppText.exit,
-        confirmBtnText: AppText.yes,
-        cancelBtnText: AppText.no,
-        onCancelBtnTap:(){
-          Navigator.pop(context);
-        },
-        onConfirmBtnTap: () async {
-          await SharedPreferencesOperator.clearUserWithJwt();
-          Route route = CrateAnimatedRoute.createRoute(() => const LoginPage(), AnimationDirection.down);
-          Navigator.of(context).pushReplacement(route);
-        }
-    );
-  }
+
 
 
   @override
@@ -64,79 +47,74 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 width: 120,
                 child: Image.asset(AppImages.full_logo)
             ),
-            GestureDetector(
-              onTap: () {
-                areYouSureAboutThis();
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
 
-                  // IconButton(
-                  //     onPressed: (){
-                  //       showDialog(
-                  //         context: context,
-                  //         builder: (context) => ReportDialog(),
-                  //       );
-                  //     },
-                  //     icon: Icon(Icons.notifications_none),),
+                // IconButton(
+                //     onPressed: (){
+                //       showDialog(
+                //         context: context,
+                //         builder: (context) => ReportDialog(),
+                //       );
+                //     },
+                //     icon: Icon(Icons.notifications_none),),
 
 
-                  Container(
-                    width: 35,
-                    height: 35,
-                    decoration: BoxDecoration(
-                      color: AppColors.colorGrayButton,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Center(child: Text('${widget.user.lastName[0]}${widget.user.firstName[0]}',style: const TextStyle(fontSize: 14),)),
+                Container(
+                  width: 35,
+                  height: 35,
+                  decoration: BoxDecoration(
+                    color: AppColors.colorGrayButton,
+                    borderRadius: BorderRadius.circular(20),
                   ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("${widget.user.lastName} ${widget.user.firstName[0]}.", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),),
-                      Text(widget.user.iin, style: const TextStyle(fontSize: 12),),
-                    ],
-                  ),
-                  const SizedBox(
-                    width: 16,
-                  ),
+                  child: Center(child: Text('${widget.user.lastName[0]}${widget.user.firstName[0]}',style: const TextStyle(fontSize: 14),)),
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("${widget.user.lastName} ${widget.user.firstName[0]}.", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),),
+                    Text(widget.user.iin, style: const TextStyle(fontSize: 12),),
+                  ],
+                ),
+                const SizedBox(
+                  width: 16,
+                ),
 
 
 
 
 
 
-                  // DropdownButton<Language>(
-                  //   underline: SizedBox(),
-                  //   icon: Icon(Icons.language_rounded, size: 26, color: Colors.black),
-                  //   style: TextStyle(fontSize: 16, color: Colors.black), // Adjust the font size and color
-                  //   onChanged: (Language? lan) {
-                  //     setState(() {
-                  //       print(lan);
-                  //     });
-                  //     print(lan!.name);
-                  //   },
-                  //   items: Language.languageList().map<DropdownMenuItem<Language>>(
-                  //         (Language e) => DropdownMenuItem<Language>(
-                  //       value: e,
-                  //       child: Text(
-                  //         e.name,
-                  //         style: TextStyle(fontSize: 12),
-                  //       ),
-                  //     ),
-                  //   ).toList(),
-                  // ),
+                // DropdownButton<Language>(
+                //   underline: SizedBox(),
+                //   icon: Icon(Icons.language_rounded, size: 26, color: Colors.black),
+                //   style: TextStyle(fontSize: 16, color: Colors.black), // Adjust the font size and color
+                //   onChanged: (Language? lan) {
+                //     setState(() {
+                //       print(lan);
+                //     });
+                //     print(lan!.name);
+                //   },
+                //   items: Language.languageList().map<DropdownMenuItem<Language>>(
+                //         (Language e) => DropdownMenuItem<Language>(
+                //       value: e,
+                //       child: Text(
+                //         e.name,
+                //         style: TextStyle(fontSize: 12),
+                //       ),
+                //     ),
+                //   ).toList(),
+                // ),
 
 
-                ],
-              ),
+              ],
             ),
 
           ],

@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:test_bilimlab_project/data/service/balance_service.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
 import 'package:test_bilimlab_project/domain/wallet.dart';
+import 'package:test_bilimlab_project/presentation/AuthorizationPages/LoginPage.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/LongButton.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/ServerErrorDialog.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/SmallButton.dart';
+import 'package:test_bilimlab_project/utils/AnimationDirection.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
 import 'package:test_bilimlab_project/utils/AppImages.dart';
+import 'package:test_bilimlab_project/utils/CrateAnimatedRoute.dart';
 
 import '../../config/SharedPreferencesOperator.dart';
 import '../../data/service/login_service.dart';
@@ -138,203 +144,299 @@ class _ProfilePartState extends State<ProfilePart> {
     }
   }
 
+  void areYouSureAboutThis(){
+    QuickAlert.show(
+        context: context,
+        type:QuickAlertType.confirm,
+        text: AppText.exitFromLogin,
+        title: AppText.exit,
+        confirmBtnText: AppText.yes,
+        cancelBtnText: AppText.no,
+        onCancelBtnTap:(){
+          Navigator.pop(context);
+        },
+        onConfirmBtnTap: () async {
+          await SharedPreferencesOperator.clearUserWithJwt();
+          Route route = CrateAnimatedRoute.createRoute(() => const LoginPage(), AnimationDirection.down);
+          Navigator.of(context).pushReplacement(route);
+        }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return isLoading? Center(child: CircularProgressIndicator(color: AppColors.colorButton,)) :  SingleChildScrollView(
-      child: Stack(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
+          Stack(
             children: [
-              Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Colors.lightGreen.withOpacity(0.2),Colors.lightGreen,AppColors.firstAndSecondProfileBarChartColor ],
+              Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Colors.lightGreen.withOpacity(0.2),Colors.lightGreen,AppColors.firstAndSecondProfileBarChartColor ],
+                      ),
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(20.0),
+                        bottomRight: Radius.circular(20.0),
+                      ),
+                    ),
+                    width: double.infinity,
+                    height: 300,
+                    child: Center(child: Image.asset(AppImages.profile_image)),
                   ),
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(20.0),
-                    bottomRight: Radius.circular(20.0),
-                  ),
-                ),
-                width: double.infinity,
-                height: 300,
-                child: Center(child: Image.asset(AppImages.profile_image)),
+
+                ],
               ),
-      
-            ],
-          ),
-      
-          Container(
-            margin: EdgeInsets.fromLTRB(10, 250, 10, 0),
-            child: Card(
-              elevation: 4,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('${CurrentUser.currentTestUser!.testUser.lastName} ${CurrentUser.currentTestUser!.testUser.firstName }', style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 24,),),
-                    const SizedBox(height: 8,),
-                    Text(CurrentUser.currentTestUser!.testUser.iin , style: const TextStyle(fontSize: 16,),),
-                    const SizedBox(height: 16,),
 
-
-                    // Container(
-                    //   width: 350,
-                    //
-                    //   decoration:  BoxDecoration(
-                    //     color: AppColors.darkerBlue,
-                    //     borderRadius: BorderRadius.all(
-                    //       Radius.circular(20.0),
-                    //     ),
-                    //   ),
-                    //   child: Padding(
-                    //     padding: const EdgeInsets.all(16.0),
-                    //     child: Column(
-                    //       mainAxisAlignment: MainAxisAlignment.center,
-                    //       crossAxisAlignment: CrossAxisAlignment.start,
-                    //       mainAxisSize: MainAxisSize.min,
-                    //       children: [
-                    //           Text(AppText.userBalance, style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.colorGrayButton.withOpacity(0.8))),
-                    //           Text(wallet != null ? wallet!.balance : '0', style: const TextStyle(fontSize: 30, color: Colors.white),),
-                    //
-                    //           SizedBox(height: 16,),
-                    //           Row(
-                    //             children: [
-                    //               Expanded(
-                    //                 child: SmallButton(
-                    //                     onPressed: (){
-                    //                       showDialog(
-                    //                         context: context,
-                    //                         builder: (context) => TopUpYourBalance(),
-                    //                       );
-                    //                     },
-                    //                     buttonColors: AppColors.colorButton,
-                    //                     innerElement: Row(
-                    //                       children: [
-                    //                         Icon(Icons.account_balance_wallet_rounded, color: Colors.white,),
-                    //                         SizedBox(width: 8,),
-                    //                         Text(AppText.replenish, style: TextStyle(color: Colors.white),),
-                    //                       ],
-                    //                     ),
-                    //                     isDisabled: false,
-                    //                     isBordered: true),
-                    //               ),
-                    //
-                    //               SizedBox(width: 8,),
-                    //
-                    //               Expanded(
-                    //                 child: SmallButton(
-                    //                     onPressed: (){
-                    //                       showDialog(
-                    //                         context: context,
-                    //                         builder: (context) => Tariffs(),
-                    //                       );
-                    //                     },
-                    //                     buttonColors: Colors.white,
-                    //                     innerElement: Row(
-                    //                       children: [
-                    //                         Icon(Icons.ad_units_outlined,),
-                    //                         SizedBox(width: 8,),
-                    //                         Text(AppText.tariffs),
-                    //                       ],
-                    //                     ),
-                    //                     isDisabled: false,
-                    //                     isBordered: true),
-                    //               ),
-                    //             ],
-                    //           )
-                    //
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
-
-
-                    // const SizedBox(height: 16,),
-
-                    Container(
-                      width: 350,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Center(
+                child: Container(
+                  margin: EdgeInsets.only(top: 250),
+                  child: Card(
+                    elevation: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Expanded(
-                            child: Container(
-                              decoration:  BoxDecoration(
-                                color: AppColors.colorButton,
-                                borderRadius: const BorderRadius.all(
-                                   Radius.circular(20.0),
-                                ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Column(
-                                  children: [
-                                    Text(AppText.entPermission, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12),),
-                                    const SizedBox(height: 8,),
-                                    Container(
-                                      height: 40,
-                                      width: 40,
-                                      decoration: const BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(20.0),
-                                        ),
-                                      ),
-                                      child: Center(
-                                          child: user!= null ? getPermissionIcon(user!.permissionForTest): getPermissionIcon(false)
-                                      )
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
+                          Text('${CurrentUser.currentTestUser!.testUser.lastName} ${CurrentUser.currentTestUser!.testUser.firstName }', style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 24,),),
+                          const SizedBox(height: 8,),
+                          Text(CurrentUser.currentTestUser!.testUser.iin , style: const TextStyle(fontSize: 16,),),
+                          const SizedBox(height: 16,),
 
-                          const SizedBox(width: 8,),
 
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: AppColors.colorButton,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(20.0),
-                                ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Column(
-                                  children: [
-                                    Text(AppText.modoPermission, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12),),
-                                    const SizedBox(height: 8,),
-                                    Container(
-                                      height: 40,
-                                      width: 40,
-                                      decoration: const BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(20.0),
-                                        ),
+                          // Container(
+                          //   width: 350,
+                          //
+                          //   decoration:  BoxDecoration(
+                          //     color: AppColors.darkerBlue,
+                          //     borderRadius: BorderRadius.all(
+                          //       Radius.circular(20.0),
+                          //     ),
+                          //   ),
+                          //   child: Padding(
+                          //     padding: const EdgeInsets.all(16.0),
+                          //     child: Column(
+                          //       mainAxisAlignment: MainAxisAlignment.center,
+                          //       crossAxisAlignment: CrossAxisAlignment.start,
+                          //       mainAxisSize: MainAxisSize.min,
+                          //       children: [
+                          //           Text(AppText.userBalance, style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.colorGrayButton.withOpacity(0.8))),
+                          //           Text(wallet != null ? wallet!.balance : '0', style: const TextStyle(fontSize: 30, color: Colors.white),),
+                          //
+                          //           SizedBox(height: 16,),
+                          //           Row(
+                          //             children: [
+                          //               Expanded(
+                          //                 child: SmallButton(
+                          //                     onPressed: (){
+                          //                       showDialog(
+                          //                         context: context,
+                          //                         builder: (context) => TopUpYourBalance(),
+                          //                       );
+                          //                     },
+                          //                     buttonColors: AppColors.colorButton,
+                          //                     innerElement: Row(
+                          //                       children: [
+                          //                         Icon(Icons.account_balance_wallet_rounded, color: Colors.white,),
+                          //                         SizedBox(width: 8,),
+                          //                         Text(AppText.replenish, style: TextStyle(color: Colors.white),),
+                          //                       ],
+                          //                     ),
+                          //                     isDisabled: false,
+                          //                     isBordered: true),
+                          //               ),
+                          //
+                          //               SizedBox(width: 8,),
+                          //
+                          //               Expanded(
+                          //                 child: SmallButton(
+                          //                     onPressed: (){
+                          //                       showDialog(
+                          //                         context: context,
+                          //                         builder: (context) => Tariffs(),
+                          //                       );
+                          //                     },
+                          //                     buttonColors: Colors.white,
+                          //                     innerElement: Row(
+                          //                       children: [
+                          //                         Icon(Icons.ad_units_outlined,),
+                          //                         SizedBox(width: 8,),
+                          //                         Text(AppText.tariffs),
+                          //                       ],
+                          //                     ),
+                          //                     isDisabled: false,
+                          //                     isBordered: true),
+                          //               ),
+                          //             ],
+                          //           )
+                          //
+                          //       ],
+                          //     ),
+                          //   ),
+                          // ),
+
+
+                          // const SizedBox(height: 16,),
+
+                          Container(
+                            width: 350,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    decoration:  BoxDecoration(
+                                      color: AppColors.colorButton,
+                                      borderRadius: const BorderRadius.all(
+                                         Radius.circular(20.0),
                                       ),
-                                      child:  Center(
-                                          child: user!= null ? getPermissionIcon(user!.permissionForModo): getPermissionIcon(false)
-                                      )
                                     ),
-                                  ],
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Column(
+                                        children: [
+                                          Text(AppText.entPermission, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12),),
+                                          const SizedBox(height: 8,),
+                                          Container(
+                                            height: 40,
+                                            width: 40,
+                                            decoration: const BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(20.0),
+                                              ),
+                                            ),
+                                            child: Center(
+                                                child: user!= null ? getPermissionIcon(user!.permissionForTest): getPermissionIcon(false)
+                                            )
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ),
+
+                                const SizedBox(width: 8,),
+
+                                Expanded(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: AppColors.colorButton,
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(20.0),
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Column(
+                                        children: [
+                                          Text(AppText.modoPermission, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12),),
+                                          const SizedBox(height: 8,),
+                                          Container(
+                                            height: 40,
+                                            width: 40,
+                                            decoration: const BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(20.0),
+                                              ),
+                                            ),
+                                            child:  Center(
+                                                child: user!= null ? getPermissionIcon(user!.permissionForModo): getPermissionIcon(false)
+                                            )
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              )
+            ]
+          ),
+
+          SizedBox(height: 16,),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+
+                      Flexible(
+                          flex: 1,
+                          child: Text(AppText.exitFromLogin)
+                      ),
+
+                      Flexible(
+                        flex: 1,
+                        child: SmallButton(
+                          onPressed: (){
+                            areYouSureAboutThis();
+                          },
+                          buttonColors:AppColors.colorButton,
+                          innerElement: Text(AppText.exit, style: TextStyle(color: Colors.white),),
+                          isDisabled: false,
+                          isBordered: true,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: 8,),
+
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.red),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+
+                        Flexible(
+                          flex: 1,
+                            child: Text(AppText.areYouWantToDeleteAcc)
+                        ),
+
+                        Flexible(
+                          flex: 1,
+                          child: SmallButton(
+                              onPressed: (){},
+                              buttonColors: Colors.red,
+                              innerElement: Text(AppText.deleteAccount, style: TextStyle(color: Colors.white),),
+                              isDisabled: false,
+                              isBordered: true,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-          )
-        ]
+          ),
+
+        ],
       ),
     );
   }
