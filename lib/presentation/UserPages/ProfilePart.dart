@@ -157,6 +157,7 @@ class _ProfilePartState extends State<ProfilePart> {
         },
         onConfirmBtnTap: () async {
           await SharedPreferencesOperator.clearUserWithJwt();
+          Navigator.pop(context);
           Route route = CrateAnimatedRoute.createRoute(() => const LoginPage(), AnimationDirection.down);
           Navigator.of(context).pushReplacement(route);
         }
