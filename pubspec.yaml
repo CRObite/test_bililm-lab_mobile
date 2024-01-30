@@ -94,6 +94,8 @@ flutter:
     - assets/sqr_logo.jpg
     - assets/table1.png
     - assets/table2.jpg
+    - assets/delete-trash.gif
+    - assets/exit.png
     - certificates/oqutest_kz.crt
     - certificates/_oquway_kz.crt
 

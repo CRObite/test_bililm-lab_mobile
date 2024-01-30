@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:get/get.dart';
 
 import '../domain/customResponse.dart';
 
@@ -23,6 +24,8 @@ class HandleErrorResponse {
         );
       }
 
+    }else if(error is FormatException){
+      return CustomResponse(600, 'Format Exception Error', null);
     } else {
       return CustomResponse(500, 'Server Error', null);
     }

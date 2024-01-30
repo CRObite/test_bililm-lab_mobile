@@ -22,6 +22,10 @@ class LoginService{
     return await LoginRepository().recoverPassword(email, iin);
   }
 
+  Future<CustomResponse> deleteUser() async {
+    return await LoginRepository().deleteUser();
+  }
+
 
   Future<CustomResponse> register(
       String email,

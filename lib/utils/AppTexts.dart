@@ -119,6 +119,9 @@ class AppText {
   static String goBack = 'Артқа оралу';
   static String deleteAccount = 'Аккаунтты жою' ;
   static String areYouWantToDeleteAcc = 'Есептік жазбаңызды толығымен жойғыңыз келе ме?';
-
+  static String thereAreNoTariffs = 'Әзірге тарифтер жоқ';
+  static String dayCount = 'Тарифтің күндер саны';
+  static String dayTestLimit = 'Тест тапсыру шегі (күніне)';
+  static String connectToInternetAgain = 'Интернетке қайта қосылыңыз';
 
 }

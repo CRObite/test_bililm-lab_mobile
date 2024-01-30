@@ -15,6 +15,10 @@ TestUser _$TestUserFromJson(Map<String, dynamic> json) => TestUser(
       json['phoneNumber'] as String,
       json['permissionForTest'] as bool,
       json['permissionForModo'] as bool,
+      json['subscription'] == null
+          ? null
+          : UserSubscription.fromJson(
+              json['subscription'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$TestUserToJson(TestUser instance) => <String, dynamic>{
@@ -26,4 +30,5 @@ Map<String, dynamic> _$TestUserToJson(TestUser instance) => <String, dynamic>{
       'phoneNumber': instance.phoneNumber,
       'permissionForTest': instance.permissionForTest,
       'permissionForModo': instance.permissionForModo,
+      'subscription': instance.subscription,
     };

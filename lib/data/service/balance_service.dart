@@ -6,4 +6,8 @@ class BalanceService{
   Future<CustomResponse> getBalance() async {
     return await BalanceRepository().getBalance();
   }
+
+  Future<CustomResponse> getAllSubscription() async {
+    return await BalanceRepository().getAllSubscription();
+  }
 }

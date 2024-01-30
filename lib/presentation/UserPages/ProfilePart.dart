@@ -3,11 +3,14 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:test_bilimlab_project/data/service/balance_service.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
+import 'package:test_bilimlab_project/domain/subscription.dart';
 import 'package:test_bilimlab_project/domain/wallet.dart';
 import 'package:test_bilimlab_project/presentation/AuthorizationPages/LoginPage.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/LongButton.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/ServerErrorDialog.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/SmallButton.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/Tariffs.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/TopUpYourBalance.dart';
 import 'package:test_bilimlab_project/utils/AnimationDirection.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
 import 'package:test_bilimlab_project/utils/AppImages.dart';
@@ -27,131 +30,140 @@ class ProfilePart extends StatefulWidget {
 }
 
 class _ProfilePartState extends State<ProfilePart> {
-
   bool isLoading = true;
   TestUser? user;
   Wallet? wallet;
+  List<Subscription> subscriptions = [
+    Subscription(
+        1,
+        'Mega Limit',
+        'Meeeeeeeeeeeeeeega LIIIIIIIIIIMIT',
+        500,
+        7,
+        1
+    )];
 
   @override
   void initState() {
-    if(CurrentUser.currentTestUser == null){
+    super.initState();
+    if (CurrentUser.currentTestUser == null) {
       Navigator.pushReplacementNamed(context, '/');
     }
 
-
     getUserInfo();
     getWalletInfo();
-    super.initState();
+    // getAllSubscription();
   }
 
 
-  Widget getPermissionIcon(bool permission){
-    if(permission){
-      return const Icon(Icons.check, color: Colors.green, size: 28,);
-    }else{
-      return Transform.rotate(angle: 45 * (3.1415926535897932 / 180) , child: const Icon(Icons.add, color: Colors.red,size: 30,));
-    }
-  }
 
 
-  void getUserInfo() async {
+  Future<void> getUserInfo() async {
     try {
-
-      setState(() {
-        isLoading = true;
-      });
+      setState(() => isLoading = true);
 
       CustomResponse response = await LoginService().userGetMe();
 
       if (response.code == 200 && mounted) {
-        setState(() {
-          user = response.body;
-        });
-      } else if(response.code == 401 && mounted ){
-        if(CurrentUser.currentTestUser != null){
-          CustomResponse response = await LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
-          if(response.code == 200){
-            Navigator.pushReplacementNamed(context, '/app');
-          }else{
-            SharedPreferencesOperator.clearUserWithJwt();
-            Navigator.pushReplacementNamed(context, '/');
-          }
-
-        }else {
-          SharedPreferencesOperator.clearUserWithJwt();
-          Navigator.pushReplacementNamed(context, '/');
-        }
-      } else if(response.code == 500 && mounted){
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return ServerErrorDialog();
-          },
-        );
+        setState(() => user = response.body);
+      } else {
+        handleResponseError(response);
       }
-
-
     } finally {
-
-      if(mounted){
-        setState(() {
-          isLoading = false;
-        });
-      }
+      updateLoadingState();
     }
   }
 
-
-  void getWalletInfo() async {
+  Future<void> getWalletInfo() async {
     try {
-
-      setState(() {
-        isLoading = true;
-      });
+      setState(() => isLoading = true);
 
       CustomResponse response = await BalanceService().getBalance();
 
       if (response.code == 200 && mounted) {
-        setState(() {
-          wallet = response.body;
-        });
-      } else if(response.code == 401 && mounted ){
-        if(CurrentUser.currentTestUser != null){
-          LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
-          Navigator.pushReplacementNamed(context, '/app');
-        }else {
-          SharedPreferencesOperator.clearUserWithJwt();
-          Navigator.pushReplacementNamed(context, '/');
-        }
-      } else if(response.code == 500 && mounted){
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return ServerErrorDialog();
-          },
-        );
+        setState(() => wallet = response.body);
+      } else {
+        handleResponseError(response);
       }
-
     } finally {
+      updateLoadingState();
+    }
+  }
 
-      if(mounted){
-        setState(() {
-          isLoading = false;
-        });
+  Future<void> getAllSubscription() async {
+    try {
+      setState(() => isLoading = true);
+
+      CustomResponse response = await BalanceService().getAllSubscription();
+
+      if (response.code == 200 && mounted) {
+        setState(() => subscriptions = response.body);
+      } else {
+        handleResponseError(response);
       }
+    } finally {
+      updateLoadingState();
+    }
+  }
+
+
+
+  void handleResponseError(CustomResponse response) {
+    if (response.code == 401 && mounted) {
+      refreshTokenOrRedirect();
+    } else if (response.code == 500 && mounted) {
+      showServerErrorDialog();
+    }
+  }
+
+  void refreshTokenOrRedirect() async {
+    if (CurrentUser.currentTestUser != null) {
+      CustomResponse response =
+      await LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
+      if (response.code == 200) {
+        Navigator.pushReplacementNamed(context, '/app');
+      } else {
+        handleLogout();
+      }
+    } else {
+      handleLogout();
+    }
+  }
+
+  void handleLogout() {
+    SharedPreferencesOperator.clearUserWithJwt();
+    Navigator.pushReplacementNamed(context, '/');
+  }
+
+  void showServerErrorDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return ServerErrorDialog();
+      },
+    );
+  }
+
+  void updateLoadingState() {
+    if (mounted) {
+      setState(() => isLoading = false);
     }
   }
 
   void areYouSureAboutThis(){
+
     QuickAlert.show(
         context: context,
-        type:QuickAlertType.confirm,
-        text: AppText.exitFromLogin,
-        title: AppText.exit,
+        type: QuickAlertType.custom,
+        barrierDismissible: true,
+        showCancelBtn: true,
         confirmBtnText: AppText.yes,
         cancelBtnText: AppText.no,
+        customAsset: 'assets/exit.png',
+        widget: Container(),
+        text: AppText.exitFromLogin,
+        title: AppText.exit,
         onCancelBtnTap:(){
           Navigator.pop(context);
         },
@@ -160,6 +172,54 @@ class _ProfilePartState extends State<ProfilePart> {
           Navigator.pop(context);
           Route route = CrateAnimatedRoute.createRoute(() => const LoginPage(), AnimationDirection.down);
           Navigator.of(context).pushReplacement(route);
+        }
+    );
+  }
+
+  void deletingTestUser(){
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.custom,
+      barrierDismissible: true,
+      showCancelBtn: true,
+      confirmBtnText: AppText.yes,
+      cancelBtnText: AppText.no,
+      confirmBtnColor: Colors.red,
+      customAsset: 'assets/delete-trash.gif',
+      widget: Container(),
+      title: AppText.deleteAccount,
+      text: AppText.areYouWantToDeleteAcc,
+        onCancelBtnTap:(){
+          Navigator.pop(context);
+        },
+        onConfirmBtnTap: () async {
+
+          CustomResponse response = await LoginService().deleteUser();
+
+          if(response.code == 200){
+            await SharedPreferencesOperator.clearUserWithJwt();
+            Navigator.pop(context);
+            Route route = CrateAnimatedRoute.createRoute(() => const LoginPage(), AnimationDirection.down);
+            Navigator.of(context).pushReplacement(route);
+          } else if(response.code == 401 && mounted ){
+            if(CurrentUser.currentTestUser != null){
+              LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
+              Navigator.pushReplacementNamed(context, '/app');
+            }else {
+              SharedPreferencesOperator.clearUserWithJwt();
+              Navigator.pushReplacementNamed(context, '/');
+            }
+          } else if(response.code == 500 && mounted){
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return ServerErrorDialog();
+              },
+            );
+          }
+
+
         }
     );
   }
@@ -210,155 +270,157 @@ class _ProfilePartState extends State<ProfilePart> {
                           const SizedBox(height: 16,),
 
 
-                          // Container(
-                          //   width: 350,
-                          //
-                          //   decoration:  BoxDecoration(
-                          //     color: AppColors.darkerBlue,
-                          //     borderRadius: BorderRadius.all(
-                          //       Radius.circular(20.0),
-                          //     ),
-                          //   ),
-                          //   child: Padding(
-                          //     padding: const EdgeInsets.all(16.0),
-                          //     child: Column(
-                          //       mainAxisAlignment: MainAxisAlignment.center,
-                          //       crossAxisAlignment: CrossAxisAlignment.start,
-                          //       mainAxisSize: MainAxisSize.min,
-                          //       children: [
-                          //           Text(AppText.userBalance, style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.colorGrayButton.withOpacity(0.8))),
-                          //           Text(wallet != null ? wallet!.balance : '0', style: const TextStyle(fontSize: 30, color: Colors.white),),
-                          //
-                          //           SizedBox(height: 16,),
-                          //           Row(
-                          //             children: [
-                          //               Expanded(
-                          //                 child: SmallButton(
-                          //                     onPressed: (){
-                          //                       showDialog(
-                          //                         context: context,
-                          //                         builder: (context) => TopUpYourBalance(),
-                          //                       );
-                          //                     },
-                          //                     buttonColors: AppColors.colorButton,
-                          //                     innerElement: Row(
-                          //                       children: [
-                          //                         Icon(Icons.account_balance_wallet_rounded, color: Colors.white,),
-                          //                         SizedBox(width: 8,),
-                          //                         Text(AppText.replenish, style: TextStyle(color: Colors.white),),
-                          //                       ],
-                          //                     ),
-                          //                     isDisabled: false,
-                          //                     isBordered: true),
-                          //               ),
-                          //
-                          //               SizedBox(width: 8,),
-                          //
-                          //               Expanded(
-                          //                 child: SmallButton(
-                          //                     onPressed: (){
-                          //                       showDialog(
-                          //                         context: context,
-                          //                         builder: (context) => Tariffs(),
-                          //                       );
-                          //                     },
-                          //                     buttonColors: Colors.white,
-                          //                     innerElement: Row(
-                          //                       children: [
-                          //                         Icon(Icons.ad_units_outlined,),
-                          //                         SizedBox(width: 8,),
-                          //                         Text(AppText.tariffs),
-                          //                       ],
-                          //                     ),
-                          //                     isDisabled: false,
-                          //                     isBordered: true),
-                          //               ),
-                          //             ],
-                          //           )
-                          //
-                          //       ],
-                          //     ),
-                          //   ),
-                          // ),
-
-
-                          // const SizedBox(height: 16,),
-
                           Container(
                             width: 350,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    decoration:  BoxDecoration(
-                                      color: AppColors.colorButton,
-                                      borderRadius: const BorderRadius.all(
-                                         Radius.circular(20.0),
-                                      ),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Column(
-                                        children: [
-                                          Text(AppText.entPermission, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12),),
-                                          const SizedBox(height: 8,),
-                                          Container(
-                                            height: 40,
-                                            width: 40,
-                                            decoration: const BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(20.0),
-                                              ),
-                                            ),
-                                            child: Center(
-                                                child: user!= null ? getPermissionIcon(user!.permissionForTest): getPermissionIcon(false)
-                                            )
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
 
-                                const SizedBox(width: 8,),
+                            decoration:  BoxDecoration(
+                              color: AppColors.darkerBlue,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(20.0),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                    Text(AppText.userBalance, style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.colorGrayButton.withOpacity(0.8))),
+                                    Text(wallet != null ? wallet!.balance : '0', style: const TextStyle(fontSize: 30, color: Colors.white),),
 
-                                Expanded(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: AppColors.colorButton,
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.circular(20.0),
-                                      ),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Column(
-                                        children: [
-                                          Text(AppText.modoPermission, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12),),
-                                          const SizedBox(height: 8,),
-                                          Container(
-                                            height: 40,
-                                            width: 40,
-                                            decoration: const BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(20.0),
+                                    SizedBox(height: 16,),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: SmallButton(
+                                              onPressed: (){
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) => TopUpYourBalance(),
+                                                );
+                                              },
+                                              buttonColors: AppColors.colorButton,
+                                              innerElement: Row(
+                                                children: [
+                                                  Icon(Icons.account_balance_wallet_rounded, color: Colors.white,),
+                                                  SizedBox(width: 8,),
+                                                  Text(AppText.replenish, style: TextStyle(color: Colors.white),),
+                                                ],
                                               ),
-                                            ),
-                                            child:  Center(
-                                                child: user!= null ? getPermissionIcon(user!.permissionForModo): getPermissionIcon(false)
-                                            )
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                                              isDisabled: false,
+                                              isBordered: true),
+                                        ),
+
+                                        SizedBox(width: 8,),
+
+                                        Expanded(
+                                          child: SmallButton(
+                                              onPressed: (){
+                                                if(subscriptions!= null){
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (context) => Tariffs(subscriptions: subscriptions!,),
+                                                  );
+                                                }
+                                              },
+                                              buttonColors: Colors.white,
+                                              innerElement: Row(
+                                                children: [
+                                                  Icon(Icons.ad_units_outlined,),
+                                                  SizedBox(width: 8,),
+                                                  Text(AppText.tariffs),
+                                                ],
+                                              ),
+                                              isDisabled: false,
+                                              isBordered: true),
+                                        ),
+                                      ],
+                                    )
+
+                                ],
+                              ),
                             ),
                           ),
+
+
+                          const SizedBox(height: 16,),
+
+                          // Container(
+                          //   width: 350,
+                          //   child: Row(
+                          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //     children: [
+                          //       Expanded(
+                          //         child: Container(
+                          //           decoration:  BoxDecoration(
+                          //             color: AppColors.colorButton,
+                          //             borderRadius: const BorderRadius.all(
+                          //                Radius.circular(20.0),
+                          //             ),
+                          //           ),
+                          //           child: Padding(
+                          //             padding: const EdgeInsets.all(16.0),
+                          //             child: Column(
+                          //               children: [
+                          //                 Text(AppText.entPermission, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12),),
+                          //                 const SizedBox(height: 8,),
+                          //                 Container(
+                          //                   height: 40,
+                          //                   width: 40,
+                          //                   decoration: const BoxDecoration(
+                          //                     color: Colors.white,
+                          //                     borderRadius: BorderRadius.all(
+                          //                       Radius.circular(20.0),
+                          //                     ),
+                          //                   ),
+                          //                   child: Center(
+                          //                       child: user!= null ? getPermissionIcon(user!.permissionForTest): getPermissionIcon(false)
+                          //                   )
+                          //                 ),
+                          //               ],
+                          //             ),
+                          //           ),
+                          //         ),
+                          //       ),
+                          //
+                          //       const SizedBox(width: 8,),
+                          //
+                          //       Expanded(
+                          //         child: Container(
+                          //           decoration: BoxDecoration(
+                          //             color: AppColors.colorButton,
+                          //             borderRadius: const BorderRadius.all(
+                          //               Radius.circular(20.0),
+                          //             ),
+                          //           ),
+                          //           child: Padding(
+                          //             padding: const EdgeInsets.all(16.0),
+                          //             child: Column(
+                          //               children: [
+                          //                 Text(AppText.modoPermission, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12),),
+                          //                 const SizedBox(height: 8,),
+                          //                 Container(
+                          //                   height: 40,
+                          //                   width: 40,
+                          //                   decoration: const BoxDecoration(
+                          //                     color: Colors.white,
+                          //                     borderRadius: BorderRadius.all(
+                          //                       Radius.circular(20.0),
+                          //                     ),
+                          //                   ),
+                          //                   child:  Center(
+                          //                       child: user!= null ? getPermissionIcon(user!.permissionForModo): getPermissionIcon(false)
+                          //                   )
+                          //                 ),
+                          //               ],
+                          //             ),
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
@@ -392,7 +454,7 @@ class _ProfilePartState extends State<ProfilePart> {
                             areYouSureAboutThis();
                           },
                           buttonColors:AppColors.colorButton,
-                          innerElement: Text(AppText.exit, style: TextStyle(color: Colors.white),),
+                          innerElement: Text(AppText.exit, style: TextStyle(color: Colors.white,fontSize: 12),),
                           isDisabled: false,
                           isBordered: true,
                         ),
@@ -422,9 +484,11 @@ class _ProfilePartState extends State<ProfilePart> {
                         Flexible(
                           flex: 1,
                           child: SmallButton(
-                              onPressed: (){},
+                              onPressed: (){
+                                deletingTestUser();
+                              },
                               buttonColors: Colors.red,
-                              innerElement: Text(AppText.deleteAccount, style: TextStyle(color: Colors.white),),
+                              innerElement: Text(AppText.deleteAccount, style: TextStyle(color: Colors.white,fontSize: 12),),
                               isDisabled: false,
                               isBordered: true,
                           ),

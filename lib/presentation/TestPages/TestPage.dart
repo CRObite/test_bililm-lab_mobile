@@ -532,7 +532,7 @@ class _TestPageState extends State<TestPage> {
                               }
                             )
                           ),
-                        if(widget.format == TestFormatEnum.ENT && (currentQuestions[currentQuestion].subOptions != null))
+                        if(widget.format == TestFormatEnum.ENT && currentQuestions[currentQuestion].type == "COMPARISON" && currentQuestions[currentQuestion].subOptions != null)
                             Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [

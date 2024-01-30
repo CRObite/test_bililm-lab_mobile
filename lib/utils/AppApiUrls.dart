@@ -5,6 +5,7 @@ class AppApiUrls{
   static String getMe = '$mainApi/universal-get-me';
   static String registration = '$mainApi/user-registration';
   static String recoverPassword = '$mainApi/user-recover-password';
+  static String deleteUser = '$mainApi/user-delete';
 
   static String getAllSub = '$mainApi/ent-test/subjects';
   static String getAllSubInMSS = '$mainApi/ent-test/subjects-in-mss';
@@ -20,7 +21,6 @@ class AppApiUrls{
   static String getStatisticByUser = '$mainApi/ent-test/get-statistic-by-user';
   static String getTestMistakes = '$mainApi/ent-test/get-mistakes/';
 
-
   static String generateSchoolTest = '$mainApi/school-test/generate';
   static String endSchoolTest = '$mainApi/school-test/end';
   static String saveAnswerSchoolTest = '$mainApi/school-test/answer';
@@ -32,8 +32,7 @@ class AppApiUrls{
   static String getSchoolResult = '$mainApi/school-test/result';
 
   static String refreshToken = '$mainApi/user-refresh';
-  static String getBalance = '$mainApi/user/get-balance';
-
+  static String getBalance = '$mainApi/user-wallet/get-balance';
 
   static String getRegions = '$mainApi/dictionary/regions';
   static String getCity = '$mainApi/dictionary/cities';
@@ -50,13 +49,12 @@ class AppApiUrls{
   static String getCommentsByPost = '$mainApi/comment/get-all-by-post/';
   static String saveComment = '$mainApi/comment/save';
 
-
   static String getCommentsAnswersById = '$mainApi/comment-answer/get-by-id/';
   static String saveCommentAnswer = '$mainApi/comment-answer/save';
-
 
   static String getAllSpecialization = '$mainApi/specialization/get-all';
   static String getSpecializationById = '$mainApi/specialization/get-by-id/';
 
-
+  static String subscription = '$mainApi/dictionary/subscriptions';
+  static String setSubscriptionToUser = '$mainApi/user/subscribe/{subscriptionId}';
 }

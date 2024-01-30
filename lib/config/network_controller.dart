@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
+import 'package:test_bilimlab_project/utils/AppTexts.dart';
 
 class NetworkController extends GetxController{
 
@@ -21,8 +22,8 @@ class NetworkController extends GetxController{
 
     if(connectivityResult == ConnectivityResult.none){
       Get.rawSnackbar(
-        messageText: const Text(
-          'Интернет ажыратылды, интернетке қосылыңыз',
+        messageText: Text(
+          AppText.connectToInternetAgain,
           style: TextStyle(
             color: Colors.white,
             fontSize: 14,

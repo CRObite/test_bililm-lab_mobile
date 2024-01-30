@@ -154,6 +154,22 @@ class LoginRepository {
   }
 
 
+  Future<CustomResponse> deleteUser() async {
+    try {
+      dio.options.headers['Authorization'] = 'Bearer ${CurrentUser.currentTestUser?.accessToken}';
 
+      final response = await dio.delete(
+        AppApiUrls.deleteUser,
+      );
+
+      print(response.data);
+
+      return CustomResponse(200, '', null);
+
+    } catch (e) {
+      print(e);
+      return HandleErrorResponse.handleErrorResponse(e);
+    }
+  }
 
 }
