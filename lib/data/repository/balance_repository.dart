@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:test_bilimlab_project/config/handleErrorResponse.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
 import 'package:test_bilimlab_project/domain/subscription.dart';
+import 'package:test_bilimlab_project/domain/testUser.dart';
 import 'package:test_bilimlab_project/domain/wallet.dart';
 import '../../domain/currentUser.dart';
 import '../../utils/AppApiUrls.dart';
@@ -52,6 +53,26 @@ class BalanceRepository {
       List<Subscription> subscriptions = (response.data as List<dynamic>)
           .map((subscriptionData) => Subscription.fromJson(subscriptionData)).toList();
       return CustomResponse(200, '', subscriptions);
+
+    } catch (e) {
+      print(e);
+      return HandleErrorResponse.handleErrorResponse(e);
+    }
+  }
+
+  Future<CustomResponse> setSubscription(int subscriptionId ) async {
+    try {
+      dio.options.headers['Authorization'] = 'Bearer ${CurrentUser.currentTestUser?.accessToken}';
+
+      final response = await dio.post(
+        '${AppApiUrls.setSubscriptionToUser}$subscriptionId',
+      );
+
+      print(response.data);
+
+      TestUser user = TestUser.fromJson(response.data);
+
+      return CustomResponse(200, '', user);
 
     } catch (e) {
       print(e);

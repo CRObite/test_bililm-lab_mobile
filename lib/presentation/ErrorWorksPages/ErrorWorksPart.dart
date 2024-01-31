@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:test_bilimlab_project/config/ExtractDate.dart';
+import 'package:test_bilimlab_project/config/ResponseHandle.dart';
 import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
 import 'package:test_bilimlab_project/domain/revision.dart';
 import 'package:test_bilimlab_project/domain/revisionItem.dart';
@@ -72,44 +73,24 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
           revisions = response.body;
           items.addAll(revisions!.items);
         });
-      } else if(response.code == 401 && mounted ){
-        if(CurrentUser.currentTestUser != null){
-          CustomResponse response = await LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
-
-          if(response.code == 200){
-            Navigator.pushReplacementNamed(context, '/app');
-          }else{
-            SharedPreferencesOperator.clearUserWithJwt();
-            Navigator.pushReplacementNamed(context, '/');
-          }
-        }else {
-          SharedPreferencesOperator.clearUserWithJwt();
-          Navigator.pushReplacementNamed(context, '/');
-        }
-      } else if(response.code == 500 && mounted){
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return ServerErrorDialog();
-          },
-        );
+      } else if(mounted){
+        ResponseHandle.handleResponseError(response,context);
       }
-
     } finally {
-      if(mounted){
-        setState(() {
-          firstLoading = false;
-        });
+      updateFirstLoadingState();
+    }
+  }
 
-        if(pageNum == revisions!.totalPages){
-          hasNextPage = false;
-        }
+  void updateFirstLoadingState() {
+    if(mounted){
+      setState(() {
+        firstLoading = false;
+      });
 
+      if(pageNum == revisions!.totalPages){
+        hasNextPage = false;
       }
     }
-
-
   }
 
   Future getNextPage() async {
@@ -165,32 +146,39 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
   void goToMistakes(String id) async {
 
 
-    setState(() {
-      firstLoading = true;
-    });
+    try{
+      setState(() {
+        firstLoading = true;
+      });
 
-    CustomResponse response = await TestService().getMistakes(id);
+      CustomResponse response = await TestService().getMistakes(id);
 
+      setState(() {
+        firstLoading = false;
+      });
+      if(response.code == 200){
+        EntTest entTest = response.body as EntTest;
 
-    setState(() {
-      firstLoading = false;
-    });
-    if(response.code == 200){
-      EntTest entTest = response.body as EntTest;
+        Route route = CrateAnimatedRoute.createRoute(() => ErrorWorkTestPage(
+          test: Test(entTest, null),
+          format: TestFormatEnum.ENT,),
+            AnimationDirection.open
+        );
+        Navigator.of(context).push(route);
 
-      Route route = CrateAnimatedRoute.createRoute(() => ErrorWorkTestPage(
-        test: Test(entTest, null),
-        format: TestFormatEnum.ENT,),
-          AnimationDirection.open
-      );
-      Navigator.of(context).push(route);
-
-    }else if(response.code == 401 && mounted ){
-      Navigator.pushReplacementNamed(context, '/');
+      }else {
+        ResponseHandle.handleResponseError(response,context);
+      }
+    } finally {
+      updateLoadingState();
     }
 
   }
-
+  void updateLoadingState() {
+    if (mounted) {
+      setState(() => isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -230,7 +218,7 @@ class _ErrorWorksPartState extends State<ErrorWorksPart> {
             width: double.infinity,
             child:  Padding(
               padding: const EdgeInsets.only(top: 8,left: 8,right: 8),
-              child: items.isEmpty ? Center(child: Text(AppText.noErrorWorkTests, style: TextStyle(color: Colors.white, fontSize: 24),),) : RefreshIndicator(
+              child: items.isEmpty ? Center(child: Text(AppText.noErrorWorkTests, style: TextStyle(color: Colors.white, fontSize: 24),textAlign: TextAlign.center,),) : RefreshIndicator(
                 onRefresh: onRefresh,
                 child: GridView.builder(
                   controller: _controller,

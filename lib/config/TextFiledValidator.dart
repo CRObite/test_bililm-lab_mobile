@@ -8,14 +8,6 @@ class TextFieldValidator {
     return null;
   }
 
-  static String? validateEmail(String value) {
-
-    final emailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
-    if (!emailRegex.hasMatch(value)) {
-      return AppText.enterValidEmail;
-    }
-    return null;
-  }
 
   static String? validateIIN(String value) {
     if (value.isEmpty || value == '') {

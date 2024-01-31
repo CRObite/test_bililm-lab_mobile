@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:test_bilimlab_project/config/ResponseHandle.dart';
 import 'package:test_bilimlab_project/data/service/balance_service.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
 import 'package:test_bilimlab_project/domain/subscription.dart';
@@ -31,17 +32,27 @@ class ProfilePart extends StatefulWidget {
 
 class _ProfilePartState extends State<ProfilePart> {
   bool isLoading = true;
+  bool buttonLoading = false;
   TestUser? user;
   Wallet? wallet;
   List<Subscription> subscriptions = [
     Subscription(
         1,
         'Mega Limit',
-        'Meeeeeeeeeeeeeeega LIIIIIIIIIIMIT',
+        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
         500,
         7,
         1
-    )];
+    ),
+    Subscription(
+        2,
+        'Mega Limit2',
+        'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+        600,
+        5,
+        5
+    )
+  ];
 
   @override
   void initState() {
@@ -67,7 +78,7 @@ class _ProfilePartState extends State<ProfilePart> {
       if (response.code == 200 && mounted) {
         setState(() => user = response.body);
       } else {
-        handleResponseError(response);
+        ResponseHandle.handleResponseError(response,context);
       }
     } finally {
       updateLoadingState();
@@ -83,7 +94,7 @@ class _ProfilePartState extends State<ProfilePart> {
       if (response.code == 200 && mounted) {
         setState(() => wallet = response.body);
       } else {
-        handleResponseError(response);
+        ResponseHandle.handleResponseError(response,context);
       }
     } finally {
       updateLoadingState();
@@ -99,7 +110,7 @@ class _ProfilePartState extends State<ProfilePart> {
       if (response.code == 200 && mounted) {
         setState(() => subscriptions = response.body);
       } else {
-        handleResponseError(response);
+        ResponseHandle.handleResponseError(response,context);
       }
     } finally {
       updateLoadingState();
@@ -108,42 +119,6 @@ class _ProfilePartState extends State<ProfilePart> {
 
 
 
-  void handleResponseError(CustomResponse response) {
-    if (response.code == 401 && mounted) {
-      refreshTokenOrRedirect();
-    } else if (response.code == 500 && mounted) {
-      showServerErrorDialog();
-    }
-  }
-
-  void refreshTokenOrRedirect() async {
-    if (CurrentUser.currentTestUser != null) {
-      CustomResponse response =
-      await LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
-      if (response.code == 200) {
-        Navigator.pushReplacementNamed(context, '/app');
-      } else {
-        handleLogout();
-      }
-    } else {
-      handleLogout();
-    }
-  }
-
-  void handleLogout() {
-    SharedPreferencesOperator.clearUserWithJwt();
-    Navigator.pushReplacementNamed(context, '/');
-  }
-
-  void showServerErrorDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return ServerErrorDialog();
-      },
-    );
-  }
 
   void updateLoadingState() {
     if (mounted) {
@@ -182,44 +157,40 @@ class _ProfilePartState extends State<ProfilePart> {
       type: QuickAlertType.custom,
       barrierDismissible: true,
       showCancelBtn: true,
-      confirmBtnText: AppText.yes,
-      cancelBtnText: AppText.no,
+      confirmBtnText: buttonLoading ? AppText.loading:AppText.yes,
+      cancelBtnText: buttonLoading ? AppText.loading: AppText.no,
       confirmBtnColor: Colors.red,
       customAsset: 'assets/delete-trash.gif',
       widget: Container(),
       title: AppText.deleteAccount,
       text: AppText.areYouWantToDeleteAcc,
         onCancelBtnTap:(){
-          Navigator.pop(context);
-        },
-        onConfirmBtnTap: () async {
-
-          CustomResponse response = await LoginService().deleteUser();
-
-          if(response.code == 200){
-            await SharedPreferencesOperator.clearUserWithJwt();
+          if(!buttonLoading){
             Navigator.pop(context);
-            Route route = CrateAnimatedRoute.createRoute(() => const LoginPage(), AnimationDirection.down);
-            Navigator.of(context).pushReplacement(route);
-          } else if(response.code == 401 && mounted ){
-            if(CurrentUser.currentTestUser != null){
-              LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
-              Navigator.pushReplacementNamed(context, '/app');
-            }else {
-              SharedPreferencesOperator.clearUserWithJwt();
-              Navigator.pushReplacementNamed(context, '/');
-            }
-          } else if(response.code == 500 && mounted){
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return ServerErrorDialog();
-              },
-            );
           }
 
+        },
+        onConfirmBtnTap: () async {
+          if(!buttonLoading){
+            try{
+              setState(() =>  buttonLoading = true);
 
+              CustomResponse response = await LoginService().deleteUser();
+
+              if(response.code == 200){
+                await SharedPreferencesOperator.clearUserWithJwt();
+                Navigator.pop(context);
+                Route route = CrateAnimatedRoute.createRoute(() => const LoginPage(), AnimationDirection.down);
+                Navigator.of(context).pushReplacement(route);
+              }  else {
+                ResponseHandle.handleResponseError(response,context);
+              }
+            } finally {
+              if(mounted){
+                setState(() =>  buttonLoading = false);
+              }
+            }
+          }
         }
     );
   }

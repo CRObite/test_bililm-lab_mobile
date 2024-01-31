@@ -9,6 +9,7 @@ class ServerErrorDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        Navigator.pop(context);
         SharedPreferencesOperator.clearUserWithJwt();
         Navigator.pushReplacementNamed(context, '/');
         return true;

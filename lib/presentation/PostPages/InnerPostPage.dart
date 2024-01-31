@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 
 import 'package:test_bilimlab_project/config/ExtractDate.dart';
+import 'package:test_bilimlab_project/config/ResponseHandle.dart';
 import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
 import 'package:test_bilimlab_project/data/service/comments_service.dart';
 import 'package:test_bilimlab_project/data/service/login_service.dart';
@@ -53,43 +54,20 @@ class _InnerPostPageState extends State<InnerPostPage> {
         setState(() {
           comments = response.body;
         });
-      }else if(response.code == 401 && mounted ){
-        if(CurrentUser.currentTestUser != null){
-          CustomResponse response = await LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
-
-          if(response.code == 200){
-            Navigator.pushReplacementNamed(context, '/app');
-          }else{
-            SharedPreferencesOperator.clearUserWithJwt();
-            Navigator.pushReplacementNamed(context, '/');
-          }
-        }else {
-          SharedPreferencesOperator.clearUserWithJwt();
-          Navigator.pushReplacementNamed(context, '/');
-        }
-      }else if(response.code == 500 && mounted){
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return ServerErrorDialog();
-          },
-        );
+      }else {
+        ResponseHandle.handleResponseError(response,context);
       }
-
     } finally {
-      if(mounted){
-        setState(() {
-          isLoading = false;
-        });
-      }
+      updateLoadingState();
     }
   }
 
-  Future<Uint8List?> setBytes(String id) async {
-    Uint8List? bytes =  await MediaService().getMediaById(id);
-    return bytes;
+  void updateLoadingState() {
+    if (mounted) {
+      setState(() => isLoading = false);
+    }
   }
+
 
   void ReDrawAfterSaved(){
     setState(() {

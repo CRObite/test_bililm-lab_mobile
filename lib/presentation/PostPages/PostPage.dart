@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:test_bilimlab_project/config/ExtractDate.dart';
+import 'package:test_bilimlab_project/config/ResponseHandle.dart';
 import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
 import 'package:test_bilimlab_project/data/service/login_service.dart';
 import 'package:test_bilimlab_project/data/service/post_service.dart';
@@ -122,47 +123,18 @@ class _PostPageState extends State<PostPage> {
           post = response.body;
           items = post!.items;
         });
-      }else if(response.code == 401 && mounted ){
-
-        if(CurrentUser.currentTestUser != null){
-          CustomResponse response = await LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
-
-          if(response.code == 200){
-            Navigator.pushReplacementNamed(context, '/app');
-          }else{
-            SharedPreferencesOperator.clearUserWithJwt();
-            Navigator.pushReplacementNamed(context, '/');
-          }
-        }else {
-          SharedPreferencesOperator.clearUserWithJwt();
-          Navigator.pushReplacementNamed(context, '/');
-        }
-      }else if(response.code == 500 && mounted){
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return ServerErrorDialog();
-          },
-        );
+      }else {
+        ResponseHandle.handleResponseError(response,context);
       }
-
     } finally {
-      if(mounted){
-        setState(() {
-          isLoading = false;
-        });
-      }
-
+      updateLoadingState();
     }
 
   }
 
   void getPostDataById(int id) async {
     try {
-      setState(() {
-        isLoading = true;
-      });
+      setState(() => isLoading = true);
 
       CustomResponse response = await PostService().getPostByID(id);
 
@@ -173,48 +145,27 @@ class _PostPageState extends State<PostPage> {
               AnimationDirection.open
           );
           Navigator.of(context).push(route);
-      }else if(response.code == 401 && mounted ){
-        if(CurrentUser.currentTestUser != null){
-          CustomResponse response = await LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
-
-          if(response.code == 200){
-            Navigator.pushReplacementNamed(context, '/app');
-          }else{
-            SharedPreferencesOperator.clearUserWithJwt();
-            Navigator.pushReplacementNamed(context, '/');
-          }
-        }else {
-          SharedPreferencesOperator.clearUserWithJwt();
-          Navigator.pushReplacementNamed(context, '/');
-        }
-      }else if(response.code == 500 && mounted){
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return ServerErrorDialog();
-          },
-        );
+      } else {
+        ResponseHandle.handleResponseError(response,context);
       }
-
     } finally {
-      if(mounted){
-        setState(() {
-          isLoading = false;
-        });
-      }
+      updateLoadingState();
+    }
+  }
+
+  void updateLoadingState() {
+    if (mounted) {
+      setState(() => isLoading = false);
     }
   }
 
 
-
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return isLoading ? Center(child: CircularProgressIndicator(color: AppColors.colorButton,),) :SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: isLoading ? Center(child: CircularProgressIndicator(color: AppColors.colorButton,),) :
-        Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(AppText.posts, style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),

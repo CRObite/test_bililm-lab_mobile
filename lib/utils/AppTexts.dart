@@ -110,7 +110,7 @@ class AppText {
   static String high = 'Жоғары';
   static String recover = 'Жаңарту';
   static String exit = 'Аккаунттан шығу';
-  static String exitFromLogin = 'Есептік жазбадан шыққыңыз келе ме?';
+  static String exitFromLogin = 'Аккаунттан шыққыңыз келе ме?';
   static String enterValidEmail = 'Жарамды электрондық пошта енгізіңіз';
   static String fillAll = 'Барлық мәтін жолақтарын толтырыңыз';
   static String iinMustContain = 'ИИН 12 таңбалы болуы керек';
@@ -123,5 +123,10 @@ class AppText {
   static String dayCount = 'Тарифтің күндер саны';
   static String dayTestLimit = 'Тест тапсыру шегі (күніне)';
   static String connectToInternetAgain = 'Интернетке қайта қосылыңыз';
+  static String setSubscriptionAgain = 'Жаңарту';
+  static String subscription = 'Тарифті қосу';
+  static String subscriptionAgain = 'Тарифті жаңарту';
+  static String subscriptionSure = 'Сіз жаңа тарифке қосылғыңыз келетініне сенімдісіз бе?';
+  static String subscriptionAgainSure = 'Сіз тарифті жаңартқыңыз келетініне сенімдісіз бе?';
 
 }

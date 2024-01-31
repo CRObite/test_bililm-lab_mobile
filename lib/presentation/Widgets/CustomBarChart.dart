@@ -1,7 +1,6 @@
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:test_bilimlab_project/config/ExtractDate.dart';
 
 import 'package:test_bilimlab_project/domain/scoresData.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
@@ -88,7 +87,7 @@ class _CustomBarChartState extends State<CustomBarChart> {
                   touchTooltipData: BarTouchTooltipData(
                       getTooltipItem: (group, groupIndex, rod, rodIndex) {
 
-                        String info = dates[groupIndex] != null ? '${ExtractDate.extractDate(dates[groupIndex]!)}  \n' : '${AppText.unknown}  \n'  ;
+                        String info = dates[groupIndex] != null ? '${dates[groupIndex]!}  \n' : '${AppText.unknown}  \n'  ;
                         return BarTooltipItem(
                           info,
                           const TextStyle(

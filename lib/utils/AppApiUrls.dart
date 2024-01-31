@@ -56,5 +56,5 @@ class AppApiUrls{
   static String getSpecializationById = '$mainApi/specialization/get-by-id/';
 
   static String subscription = '$mainApi/dictionary/subscriptions';
-  static String setSubscriptionToUser = '$mainApi/user/subscribe/{subscriptionId}';
+  static String setSubscriptionToUser = '$mainApi/user/subscribe/';
 }

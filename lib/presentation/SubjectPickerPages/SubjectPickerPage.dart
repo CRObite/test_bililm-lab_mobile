@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
+import 'package:test_bilimlab_project/config/ResponseHandle.dart';
 import 'package:test_bilimlab_project/data/service/test_service.dart';
 import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
@@ -49,58 +50,48 @@ class _SubjectPickerPageState extends State<SubjectPickerPage> {
 
   Future<void> _continueTestPopUp() async {
 
+    try{
+      setState(() {
+        isLoading = true;
+      });
 
-    setState(() {
-      isLoading = true;
-    });
-
-    CustomResponse response = await TestService().getLastEntTest();
-    if(response.code == 200){
-      EntTest entTest = response.body;
-      if(!entTest.passed){
-        _onWillPop(TestFormatEnum.ENT , Test(entTest, null));
-      }
-    }else if(response.code == 401 && mounted ){
-      if(CurrentUser.currentTestUser != null){
-        CustomResponse response = await LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
-
-        if(response.code == 200){
-          Navigator.pushReplacementNamed(context, '/app');
-        }else{
-          SharedPreferencesOperator.clearUserWithJwt();
-          Navigator.pushReplacementNamed(context, '/');
+      CustomResponse response = await TestService().getLastEntTest();
+      if(response.code == 200){
+        EntTest entTest = response.body;
+        if(!entTest.passed){
+          _onWillPop(TestFormatEnum.ENT , Test(entTest, null));
         }
       }else {
-        SharedPreferencesOperator.clearUserWithJwt();
-        Navigator.pushReplacementNamed(context, '/');
+        ResponseHandle.handleResponseError(response,context);
       }
+    } finally {
+      updateLoadingState();
+      updateLoadingState();
     }
 
-    CustomResponse responseSchool = await TestService().getLastSchoolTest();
-    if(responseSchool.code == 200){
-      ModoTest modoTest = responseSchool.body;
-      if(!modoTest.passed){
-        _onWillPop(TestFormatEnum.SCHOOL , Test(null, modoTest));
-      }
-    }else if(response.code == 401 && mounted ){
-      SharedPreferencesOperator.clearUserWithJwt();
-      Navigator.pushReplacementNamed(context, '/');
-    }else if(response.code == 500 && mounted){
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return ServerErrorDialog();
-        },
-      );
-    }
-
-    if(mounted){
+    try{
       setState(() {
-        isLoading = false;
+        isLoading = true;
       });
-    }
 
+      CustomResponse responseSchool = await TestService().getLastSchoolTest();
+      if(responseSchool.code == 200){
+        ModoTest modoTest = responseSchool.body;
+        if(!modoTest.passed){
+          _onWillPop(TestFormatEnum.SCHOOL , Test(null, modoTest));
+        }
+      }else {
+        ResponseHandle.handleResponseError(responseSchool,context);
+      }
+    } finally {
+      updateLoadingState();
+    }
+  }
+
+  void updateLoadingState() {
+    if (mounted) {
+      setState(() => isLoading = false);
+    }
   }
 
   Future<bool> _onWillPop(TestFormatEnum format, Test test) async {

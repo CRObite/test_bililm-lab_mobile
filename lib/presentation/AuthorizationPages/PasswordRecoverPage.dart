@@ -35,7 +35,7 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
 
       return null;
     }
-    validationText = TextFieldValidator.validateEmail(_emailController.text);
+    validationText = TextFieldValidator.validateRequired(_emailController.text);
     if(validationText != null){
       setState(() {
         errorMessage = validationText;

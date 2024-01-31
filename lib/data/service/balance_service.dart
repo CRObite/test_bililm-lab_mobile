@@ -10,4 +10,9 @@ class BalanceService{
   Future<CustomResponse> getAllSubscription() async {
     return await BalanceRepository().getAllSubscription();
   }
+
+
+  Future<CustomResponse> setSubscription(int subscriptionId) async {
+    return await BalanceRepository().setSubscription(subscriptionId);
+  }
 }

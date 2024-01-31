@@ -69,7 +69,7 @@ class DictionaryRepository {
     try {
 
       final response = await dio.get(
-        '${AppApiUrls.getCity}',
+        '${AppApiUrls.getSchool}',
         queryParameters: {
           "name": searchText,
           "cityId": cityInd,

@@ -11,7 +11,6 @@ School _$SchoolFromJson(Map<String, dynamic> json) => School(
       json['name'] as String,
       json['permissionForTest'] as bool?,
       json['permissionForModo'] as bool?,
-      json['city'] as String?,
     );
 
 Map<String, dynamic> _$SchoolToJson(School instance) => <String, dynamic>{
@@ -19,5 +18,4 @@ Map<String, dynamic> _$SchoolToJson(School instance) => <String, dynamic>{
       'name': instance.name,
       'permissionForTest': instance.permissionForTest,
       'permissionForModo': instance.permissionForModo,
-      'city': instance.city,
     };

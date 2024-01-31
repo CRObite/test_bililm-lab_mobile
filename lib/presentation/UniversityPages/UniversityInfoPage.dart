@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:test_bilimlab_project/config/ResponseHandle.dart';
 import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
 import 'package:test_bilimlab_project/data/service/comments_service.dart';
 import 'package:test_bilimlab_project/data/service/login_service.dart';
@@ -51,36 +52,17 @@ class _UniversityInfoPageState extends State<UniversityInfoPage> {
         setState(() {
           comments = response.body;
         });
-      }else if(response.code == 401 && mounted ){
-        if(CurrentUser.currentTestUser != null){
-          CustomResponse response = await LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
-
-          if(response.code == 200){
-            Navigator.pushReplacementNamed(context, '/app');
-          }else{
-            SharedPreferencesOperator.clearUserWithJwt();
-            Navigator.pushReplacementNamed(context, '/');
-          }
-        }else {
-          SharedPreferencesOperator.clearUserWithJwt();
-          Navigator.pushReplacementNamed(context, '/');
-        }
-      }else if(response.code == 500 && mounted){
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return ServerErrorDialog();
-          },
-        );
+      } else {
+        ResponseHandle.handleResponseError(response,context);
       }
-
     } finally {
-      if(mounted){
-        setState(() {
-          isLoading = false;
-        });
-      }
+      updateLoadingState();
+    }
+  }
+
+  void updateLoadingState() {
+    if (mounted) {
+      setState(() => isLoading = false);
     }
   }
 
@@ -100,36 +82,11 @@ class _UniversityInfoPageState extends State<UniversityInfoPage> {
         );
         Navigator.of(context).push(route);
 
-      }else if(response.code == 401 && mounted ){
-        if(CurrentUser.currentTestUser != null){
-          CustomResponse response = await LoginService().refreshToken(CurrentUser.currentTestUser!.refreshToken);
-
-          if(response.code == 200){
-            Navigator.pushReplacementNamed(context, '/app');
-          }else{
-            SharedPreferencesOperator.clearUserWithJwt();
-            Navigator.pushReplacementNamed(context, '/');
-          }
-        }else {
-          SharedPreferencesOperator.clearUserWithJwt();
-          Navigator.pushReplacementNamed(context, '/');
-        }
-      }else if(response.code == 500 && mounted){
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return ServerErrorDialog();
-          },
-        );
+      } else {
+        ResponseHandle.handleResponseError(response,context);
       }
-
     } finally {
-      if(mounted){
-        setState(() {
-          isLoading = false;
-        });
-      }
+      updateLoadingState();
     }
   }
 

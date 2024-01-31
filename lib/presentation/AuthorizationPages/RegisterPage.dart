@@ -87,7 +87,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
       return null;
     }
-    validationText = TextFieldValidator.validateEmail(_emailController.text);
+    validationText = TextFieldValidator.validateRequired(_emailController.text);
     if(validationText != null){
       setState(() {
         errorMessage = validationText;
@@ -103,7 +103,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
       return null;
     }
-    validationText = TextFieldValidator.validateEmail(_lastNameController.text);
+    validationText = TextFieldValidator.validateRequired(_lastNameController.text);
     if(validationText != null){
       setState(() {
         errorMessage = validationText;
@@ -111,7 +111,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
       return null;
     }
-    validationText = TextFieldValidator.validateEmail(_numberController.text);
+    validationText = TextFieldValidator.validateRequired(_numberController.text);
     if(validationText != null){
       setState(() {
         errorMessage = validationText;
@@ -352,6 +352,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               onSuggestionTap: (value) {
                                 setState(() {
                                   selectedRegion = value.item;
+                                  FocusScope.of(context).unfocus();
                                 });
                               },
                               suggestions: regions
@@ -408,6 +409,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 onSuggestionTap: (value) {
                                   setState(() {
                                     selectedCity = value.item;
+                                    FocusScope.of(context).unfocus();
                                   });
                                 },
                                 suggestions: cities
@@ -459,7 +461,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     selectedSchool = null;
                                   });
                                   _debounceTimer = Timer(Duration(milliseconds: 500), () {
-                                    makeSearchRequestCity(selectedCity!.id,text);
+                                    makeSearchRequestSchool(selectedCity!.id,text);
                                   });
 
                                   return null;
@@ -467,6 +469,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 onSuggestionTap: (value) {
                                   setState(() {
                                     selectedSchool = value.item;
+                                    FocusScope.of(context).unfocus();
                                   });
                                 },
                                 suggestions: schools
