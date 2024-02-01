@@ -2,22 +2,17 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:test_bilimlab_project/config/ResponseHandle.dart';
-import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
 import 'package:test_bilimlab_project/data/service/comments_service.dart';
 import 'package:test_bilimlab_project/data/service/media_service.dart';
 import 'package:test_bilimlab_project/data/service/university_service.dart';
 import 'package:test_bilimlab_project/domain/comment.dart';
-import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
 import 'package:test_bilimlab_project/domain/specialization.dart';
 import 'package:test_bilimlab_project/domain/universityItem.dart';
-import 'package:test_bilimlab_project/presentation/Widgets/ServerErrorDialog.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/SmallButton.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/UniversityCard.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
 import 'package:test_bilimlab_project/utils/AppTexts.dart';
-
-import '../../data/service/login_service.dart';
 
 class SpecializationPage extends StatefulWidget {
   const SpecializationPage({super.key, required this.specialization});

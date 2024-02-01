@@ -4,13 +4,12 @@ import 'package:test_bilimlab_project/config/TextFiledValidator.dart';
 import 'package:test_bilimlab_project/data/service/login_service.dart';
 import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
-import 'package:test_bilimlab_project/domain/subscription.dart';
 import 'package:test_bilimlab_project/domain/userWithJwt.dart';
-import 'package:test_bilimlab_project/presentation/Widgets/Tariffs.dart';
 import 'package:test_bilimlab_project/presentation/application.dart';
 import 'package:test_bilimlab_project/utils/AnimationDirection.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
 import 'package:test_bilimlab_project/utils/CrateAnimatedRoute.dart';
+
 import '../../utils/AppImages.dart';
 import '../../utils/AppTexts.dart';
 import '../Widgets/CustomTextFields.dart';

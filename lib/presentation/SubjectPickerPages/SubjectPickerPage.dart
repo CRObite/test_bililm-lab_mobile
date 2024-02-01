@@ -10,12 +10,10 @@ import 'package:test_bilimlab_project/domain/modoTest.dart';
 import 'package:test_bilimlab_project/domain/test.dart';
 import 'package:test_bilimlab_project/presentation/SubjectPickerPages/EntTestPart.dart';
 import 'package:test_bilimlab_project/presentation/SubjectPickerPages/ModoTestPart.dart';
-import '../../config/SharedPreferencesOperator.dart';
-import '../../data/service/login_service.dart';
+
 import '../../utils/AppColors.dart';
 import '../../utils/AppTexts.dart';
 import '../../utils/TestFormatEnum.dart';
-import '../Widgets/ServerErrorDialog.dart';
 
 
 class SubjectPickerPage extends StatefulWidget {
@@ -61,7 +59,7 @@ class _SubjectPickerPageState extends State<SubjectPickerPage> {
         if(!entTest.passed){
           _onWillPop(TestFormatEnum.ENT , Test(entTest, null));
         }
-      }else {
+      }else if(mounted){
         ResponseHandle.handleResponseError(response,context);
       }
     } finally {
@@ -70,9 +68,12 @@ class _SubjectPickerPageState extends State<SubjectPickerPage> {
     }
 
     try{
-      setState(() {
-        isLoading = true;
-      });
+      if(mounted){
+        setState(() {
+          isLoading = true;
+        });
+      }
+
 
       CustomResponse responseSchool = await TestService().getLastSchoolTest();
       if(responseSchool.code == 200){
@@ -80,7 +81,7 @@ class _SubjectPickerPageState extends State<SubjectPickerPage> {
         if(!modoTest.passed){
           _onWillPop(TestFormatEnum.SCHOOL , Test(null, modoTest));
         }
-      }else {
+      }else if(mounted){
         ResponseHandle.handleResponseError(responseSchool,context);
       }
     } finally {

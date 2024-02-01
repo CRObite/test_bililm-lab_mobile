@@ -44,7 +44,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Region? selectedRegion = null;
   City? selectedCity = null;
   School? selectedSchool = null;
-  late Timer _debounceTimer;
+
 
   @override
   void initState() {
@@ -130,15 +130,15 @@ class _RegisterPageState extends State<RegisterPage> {
 
     CustomResponse currentResponse =
     await LoginService().register(
-        _emailController.text,
-        convertPhoneNumberToInt(_numberController.text),
+    _emailController.text,
+        '${convertPhoneNumberToInt(_numberController.text)}',
         _nameController.text,
         _secondNameController.text != '' ? _secondNameController.text : null,
         _lastNameController.text,
         _iinController.text,
-        selectedRegion,
-        selectedCity,
-        selectedSchool);
+        selectedRegion != null ? selectedRegion!.name : null ,
+        selectedCity != null ? selectedCity!.name : null ,
+        selectedSchool != null ? selectedSchool!.name : null );
 
     if (currentResponse.code == 200) {
       QuickAlert.show(
@@ -149,9 +149,9 @@ class _RegisterPageState extends State<RegisterPage> {
           text: AppText.sendToEmail,
           confirmBtnText: AppText.enter,
           onConfirmBtnTap: (){
+            Navigator.pop(context);
             Navigator.pushReplacementNamed(context, '/');
           }
-
       );
     } else if (currentResponse.code == 500 && mounted) {
       _showErrorDialog();
@@ -344,7 +344,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 setState(() {
                                   selectedRegion = null;
                                 });
-                                _debounceTimer = Timer(Duration(milliseconds: 500), () {
+                                Timer(Duration(milliseconds: 500), () {
                                   makeSearchRequestRegion(text);
                                 });
                                  return null;
@@ -401,7 +401,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   setState(() {
                                     selectedCity = null;
                                   });
-                                  _debounceTimer = Timer(Duration(milliseconds: 500), () {
+                                  Timer(Duration(milliseconds: 500), () {
                                     makeSearchRequestCity(selectedRegion!.id,text);
                                   });
                                   return null;
@@ -460,7 +460,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   setState(() {
                                     selectedSchool = null;
                                   });
-                                  _debounceTimer = Timer(Duration(milliseconds: 500), () {
+                                  Timer(Duration(milliseconds: 500), () {
                                     makeSearchRequestSchool(selectedCity!.id,text);
                                   });
 

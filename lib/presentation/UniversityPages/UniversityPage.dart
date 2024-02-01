@@ -2,17 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:test_bilimlab_project/config/ResponseHandle.dart';
-
-import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
-import 'package:test_bilimlab_project/data/service/login_service.dart';
 import 'package:test_bilimlab_project/data/service/university_service.dart';
-import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
 import 'package:test_bilimlab_project/domain/university.dart';
 import 'package:test_bilimlab_project/domain/universityItem.dart';
 import 'package:test_bilimlab_project/presentation/UniversityPages/UniversityInfoPage.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/CustomTextFields.dart';
-import 'package:test_bilimlab_project/presentation/Widgets/ServerErrorDialog.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/UniversityCard.dart';
 import 'package:test_bilimlab_project/utils/AnimationDirection.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';

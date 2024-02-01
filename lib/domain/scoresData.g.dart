@@ -8,8 +8,8 @@ part of 'scoresData.dart';
 
 ScoresData _$ScoresDataFromJson(Map<String, dynamic> json) => ScoresData(
       (json['dates'] as List<dynamic>).map((e) => e as String?).toList(),
-      (json['scores'] as List<dynamic>).map((e) => e as int).toList(),
-      json['maxScore'] as int,
+      (json['scores'] as List<dynamic>).map((e) => e as int?).toList(),
+      json['maxScore'] as int?,
     );
 
 Map<String, dynamic> _$ScoresDataToJson(ScoresData instance) =>

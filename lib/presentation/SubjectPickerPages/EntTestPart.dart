@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:test_bilimlab_project/data/service/subject_service.dart';
 import 'package:test_bilimlab_project/data/service/test_service.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
@@ -13,7 +12,6 @@ import 'package:test_bilimlab_project/utils/TestTypeEnum.dart';
 import '../../utils/AppColors.dart';
 import '../../utils/AppImages.dart';
 import '../../utils/AppTexts.dart';
-
 import '../Widgets/CustomDropDown.dart';
 
 class EntTestPart extends StatefulWidget {

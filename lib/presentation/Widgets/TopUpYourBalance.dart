@@ -27,7 +27,9 @@ class _TopUpYourBalanceState extends State<TopUpYourBalance> {
     return Dialog(
       child: Container(
         width: 350.0,
-        height: 450.0,
+        constraints: BoxConstraints(
+          maxHeight: 560.0,
+        ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(

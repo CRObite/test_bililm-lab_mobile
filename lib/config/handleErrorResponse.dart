@@ -2,13 +2,12 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:get/get.dart';
 
 import '../domain/customResponse.dart';
 
 class HandleErrorResponse {
   static CustomResponse handleErrorResponse(dynamic error) {
-    if (error is DioError) {
+    if (error is DioException) {
       print(error.response?.data);
       print(error.response?.statusCode);
       print('asdadasdasdasdasda');

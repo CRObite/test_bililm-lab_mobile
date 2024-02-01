@@ -1,8 +1,6 @@
 
 import 'package:json_annotation/json_annotation.dart';
 import 'package:test_bilimlab_project/domain/mediaFile.dart';
-import 'package:test_bilimlab_project/domain/testUser.dart';
-
 
 part 'postItem.g.dart';
 

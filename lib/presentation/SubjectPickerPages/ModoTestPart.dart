@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-
 import 'package:test_bilimlab_project/domain/modoClass.dart';
 import 'package:test_bilimlab_project/domain/modoTest.dart';
 import 'package:test_bilimlab_project/domain/test.dart';

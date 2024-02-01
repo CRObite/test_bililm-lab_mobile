@@ -11,8 +11,6 @@ import 'package:test_bilimlab_project/presentation/Widgets/SmallButton.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
 import 'package:test_bilimlab_project/utils/AppTexts.dart';
 
-import '../../utils/AppImages.dart';
-
 class Tariffs extends StatefulWidget {
 
   const Tariffs({super.key, required this.subscriptions});

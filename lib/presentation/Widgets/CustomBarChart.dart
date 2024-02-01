@@ -22,7 +22,7 @@ class CustomBarChart extends StatefulWidget {
 class _CustomBarChartState extends State<CustomBarChart> {
 
   late List<String?> dates;
-  late List<int> scores;
+  late List<int?> scores;
   final ScrollController _scrollController = ScrollController();
 
 
@@ -71,7 +71,7 @@ class _CustomBarChartState extends State<CustomBarChart> {
             BarChartData(
               groupsSpace: 4,
               minY: 0,
-              maxY: widget.data.maxScore.toDouble(),
+              maxY: widget.data.maxScore != null ?  widget.data.maxScore!.toDouble() : 0,
               titlesData: const FlTitlesData(
                 show: true,
                 topTitles: AxisTitles( sideTitles: SideTitles( showTitles: false,),),
@@ -130,10 +130,10 @@ class _CustomBarChartState extends State<CustomBarChart> {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                       ),
-                      toY: scores[index].toDouble(),
+                      toY:scores[index] != null ?  scores[index]!.toDouble() : 0,
                       backDrawRodData: BackgroundBarChartRodData(
                         show: true,
-                        toY: widget.data.maxScore.toDouble(),
+                        toY: widget.data.maxScore!= null? widget.data.maxScore!.toDouble() : 0,
                         color: Colors.grey[200],
                       )
                     ),

@@ -1,9 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:test_bilimlab_project/domain/city.dart';
-import 'package:test_bilimlab_project/domain/mediaFile.dart';
-import 'package:test_bilimlab_project/domain/specialization.dart';
 import 'package:test_bilimlab_project/domain/universityItem.dart';
-
 
 part 'university.g.dart';
 

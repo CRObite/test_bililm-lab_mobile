@@ -4,17 +4,12 @@ import 'package:test_bilimlab_project/config/ResponseHandle.dart';
 import 'package:test_bilimlab_project/data/service/test_service.dart';
 import 'package:test_bilimlab_project/domain/barData.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
+import 'package:test_bilimlab_project/domain/scoresData.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/CustomBarChart.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/CustomGreyRoundedContainer.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
 import 'package:test_bilimlab_project/utils/AppTexts.dart';
-import 'package:test_bilimlab_project/domain/scoresData.dart';
 import 'package:test_bilimlab_project/utils/barTypeEnum.dart';
-
-import '../../config/SharedPreferencesOperator.dart';
-import '../../data/service/login_service.dart';
-import '../../domain/currentUser.dart';
-import '../Widgets/ServerErrorDialog.dart';
 
 class AnalyticPart extends StatefulWidget {
   const AnalyticPart({super.key});
@@ -55,20 +50,6 @@ class _AnalyticPartState extends State<AnalyticPart> {
     } finally {
       updateLoadingState();
     }
-  }
-
-  int getAverageScore(){
-     if(datas != null && datas!.general.scores.isNotEmpty){
-       int sum = 0;
-       for (int element in datas!.general.scores) {
-         sum += element;
-       }
-
-       return (sum/datas!.general.scores.length).round();
-
-     }else{
-       return 0;
-     }
   }
 
 
@@ -124,15 +105,15 @@ class _AnalyticPartState extends State<AnalyticPart> {
               ),
               const SizedBox(height: 28,),
 
-              if(datas != null)
-              Text(AppText.allTestsScores,style: const TextStyle(fontWeight: FontWeight.bold),),
+
+              Text( datas != null && datas!.passedTestCount != null ? AppText.allTestsScores: AppText.noPassedTests,style: const TextStyle(fontWeight: FontWeight.bold),),
               if(datas != null)
                 CustomBarChart(
                     barColor: AppColors.generalBarChartColor,
                     data:  ScoresData(datas != null ? datas!.general.dates: [], datas!=null ? datas!.general.scores: [], datas!=null? datas !.general.maxScore: 40),
                     type: BarTypeEnum.GENERAL).animate().fadeIn(duration: 600.ms).slideX(),
               
-              if(datas != null)
+              if(datas != null && datas!.passedTestCount != null)
               Container(
                 width: double.infinity,
                 height: datas!.subjects.length* 365,

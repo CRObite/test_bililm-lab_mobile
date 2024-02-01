@@ -1,11 +1,8 @@
 
 import 'package:dio/dio.dart';
 import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
-import 'package:test_bilimlab_project/domain/city.dart';
 import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
-import 'package:test_bilimlab_project/domain/region.dart';
-import 'package:test_bilimlab_project/domain/school.dart';
 import 'package:test_bilimlab_project/domain/testUser.dart';
 import 'package:test_bilimlab_project/domain/userWithJwt.dart';
 import 'package:test_bilimlab_project/utils/AppApiUrls.dart';
@@ -115,14 +112,14 @@ class LoginRepository {
 
   Future<CustomResponse> register(
       String email,
-      int phoneNumber,
+      String phoneNumber,
       String firstName,
       String? middleName,
       String lastName,
       String iin,
-      Region? region,
-      City? city,
-      School? school) async {
+      String? region,
+      String? city,
+      String? school) async {
 
     try {
 

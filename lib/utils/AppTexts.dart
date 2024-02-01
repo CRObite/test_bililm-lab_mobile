@@ -109,7 +109,7 @@ class AppText {
   static String average = 'Орташа';
   static String high = 'Жоғары';
   static String recover = 'Жаңарту';
-  static String exit = 'Аккаунттан шығу';
+  static String exit = 'Шығу';
   static String exitFromLogin = 'Аккаунттан шыққыңыз келе ме?';
   static String enterValidEmail = 'Жарамды электрондық пошта енгізіңіз';
   static String fillAll = 'Барлық мәтін жолақтарын толтырыңыз';
@@ -118,7 +118,7 @@ class AppText {
   static String doYouHaveAcc = 'Аккаунтыңыз жоқ па?';
   static String goBack = 'Артқа оралу';
   static String deleteAccount = 'Аккаунтты жою' ;
-  static String areYouWantToDeleteAcc = 'Есептік жазбаңызды толығымен жойғыңыз келе ме?';
+  static String areYouWantToDeleteAcc = 'Аккаунтты толығымен жойғыңыз келе ме?';
   static String thereAreNoTariffs = 'Әзірге тарифтер жоқ';
   static String dayCount = 'Тарифтің күндер саны';
   static String dayTestLimit = 'Тест тапсыру шегі (күніне)';
@@ -128,5 +128,6 @@ class AppText {
   static String subscriptionAgain = 'Тарифті жаңарту';
   static String subscriptionSure = 'Сіз жаңа тарифке қосылғыңыз келетініне сенімдісіз бе?';
   static String subscriptionAgainSure = 'Сіз тарифті жаңартқыңыз келетініне сенімдісіз бе?';
+  static String noPassedTests = 'Тапсырылған тесттер жоқ';
 
 }

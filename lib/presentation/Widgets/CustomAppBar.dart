@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quickalert/quickalert.dart';
-import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
 import 'package:test_bilimlab_project/domain/testUser.dart';
-import 'package:test_bilimlab_project/presentation/AuthorizationPages/LoginPage.dart';
-import 'package:test_bilimlab_project/utils/AnimationDirection.dart';
-import 'package:test_bilimlab_project/utils/AppTexts.dart';
-import 'package:test_bilimlab_project/utils/CrateAnimatedRoute.dart';
 
 import '../../utils/AppColors.dart';
 import '../../utils/AppImages.dart';
