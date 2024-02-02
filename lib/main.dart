@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_upgrade_version/flutter_upgrade_version.dart';
+import 'package:get/get.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:test_bilimlab_project/config/dependency_injection.dart';
+import 'package:test_bilimlab_project/config/network_controller.dart';
 import 'package:test_bilimlab_project/domain/postItem.dart';
 import 'package:test_bilimlab_project/domain/specialization.dart';
 import 'package:test_bilimlab_project/domain/universityItem.dart';
@@ -179,6 +181,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: routes,
+
     );
   }
 }

@@ -23,8 +23,8 @@ class HandleErrorResponse {
         );
       }
 
-    }else if(error is FormatException){
-      return CustomResponse(600, 'Format Exception Error', null);
+    }else if(error is TypeError){
+      return CustomResponse(601, 'Type Error: ${error.toString()}', null);
     } else {
       return CustomResponse(500, 'Server Error', null);
     }
