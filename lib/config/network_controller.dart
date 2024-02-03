@@ -26,24 +26,39 @@ class NetworkController extends GetxController {
 
   void _updateConnectionStatus(ConnectivityResult connectivityResult) {
     if (connectivityResult == ConnectivityResult.none) {
-      Get.rawSnackbar(
-          messageText: Text(
-            AppText.connectToInternetAgain,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-            ),
-          ),
-          isDismissible: false,
-          duration: const Duration(days: 1),
-          backgroundColor: AppColors.colorButton,
-          icon: const Icon(Icons.wifi_off, color: Colors.white, size: 35),
-          margin: EdgeInsets.zero,
-          snackStyle: SnackStyle.GROUNDED);
+      Get.to(() => NoInternetPage());
     } else {
-      if (Get.isSnackbarOpen) {
-        Get.closeCurrentSnackbar();
-      }
+      Get.back();
     }
+  }
+}
+
+class NoInternetPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.colorButton,
+      body: WillPopScope(
+        onWillPop: () async {
+          return false;
+        },
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.wifi_off, color: Colors.white, size: 35),
+              SizedBox(height: 10),
+              Text(
+                AppText.connectToInternetAgain,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -23,6 +23,7 @@ class _AnalyticPartState extends State<AnalyticPart> {
   BarData? datas;
   bool isLoading = true;
 
+
   @override
   void initState() {
 
