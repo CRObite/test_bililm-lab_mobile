@@ -62,7 +62,7 @@ class _ProfilePartState extends State<ProfilePart> {
 
     getUserInfo();
     getWalletInfo();
-    getAllSubscription();
+    // getAllSubscription();
   }
 
 
@@ -263,45 +263,53 @@ class _ProfilePartState extends State<ProfilePart> {
                                     SizedBox(height: 16,),
                                     Row(
                                       children: [
+                                        // Expanded(
+                                        //   child: SmallButton(
+                                        //       onPressed: (){
+                                        //         showDialog(
+                                        //           context: context,
+                                        //           builder: (context) => TopUpYourBalance(),
+                                        //         );
+                                        //       },
+                                        //       buttonColors: AppColors.colorButton,
+                                        //       innerElement: Row(
+                                        //         children: [
+                                        //           Icon(Icons.account_balance_wallet_rounded, color: Colors.white,),
+                                        //           SizedBox(width: 8,),
+                                        //           Text(AppText.replenish, style: TextStyle(color: Colors.white),),
+                                        //         ],
+                                        //       ),
+                                        //       isDisabled: false,
+                                        //       isBordered: true),
+                                        // ),
+                                        //
+                                        // SizedBox(width: 8,),
+
                                         Expanded(
                                           child: SmallButton(
                                               onPressed: (){
+                                                // if(subscriptions!= null){
+                                                //   showDialog(
+                                                //     context: context,
+                                                //     builder: (context) => Tariffs(subscriptions: subscriptions!,),
+                                                //   );
+                                                // }
+
                                                 showDialog(
                                                   context: context,
-                                                  builder: (context) => TopUpYourBalance(),
+                                                  builder: (context) => Tariffs (),
                                                 );
                                               },
-                                              buttonColors: AppColors.colorButton,
-                                              innerElement: Row(
-                                                children: [
-                                                  Icon(Icons.account_balance_wallet_rounded, color: Colors.white,),
-                                                  SizedBox(width: 8,),
-                                                  Text(AppText.replenish, style: TextStyle(color: Colors.white),),
-                                                ],
-                                              ),
-                                              isDisabled: false,
-                                              isBordered: true),
-                                        ),
-
-                                        SizedBox(width: 8,),
-
-                                        Expanded(
-                                          child: SmallButton(
-                                              onPressed: (){
-                                                if(subscriptions!= null){
-                                                  showDialog(
-                                                    context: context,
-                                                    builder: (context) => Tariffs(subscriptions: subscriptions!,),
-                                                  );
-                                                }
-                                              },
                                               buttonColors: Colors.white,
-                                              innerElement: Row(
-                                                children: [
-                                                  Icon(Icons.ad_units_outlined,),
-                                                  SizedBox(width: 8,),
-                                                  Text(AppText.tariffs),
-                                                ],
+                                              innerElement: Center(
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    Icon(Icons.ad_units_outlined,),
+                                                    SizedBox(width: 8,),
+                                                    Text(AppText.tariffs),
+                                                  ],
+                                                ),
                                               ),
                                               isDisabled: false,
                                               isBordered: true),
@@ -313,9 +321,67 @@ class _ProfilePartState extends State<ProfilePart> {
                               ),
                             ),
                           ),
-
-
                           const SizedBox(height: 16,),
+
+                          if(CurrentUser.currentTestUser!.testUser.subscription != null)
+                          Container(
+                            width: 350,
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(AppText.dayCount,style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                                    Container(
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: AppColors.colorButton,
+                                            ),
+                                            borderRadius:
+                                            BorderRadius.all(
+                                                Radius.circular(20)
+                                            )
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 16),
+                                          child: Text(CurrentUser.currentTestUser!.testUser.subscription!.subscription.durationInDay!= null ?
+                                            '${CurrentUser.currentTestUser!.testUser.subscription!.subscription.durationInDay}' :
+                                            '...'
+                                          ),
+                                        )
+                                      ),
+                                    ],
+                                ),
+                                SizedBox(height: 8,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(AppText.dayTestLimit,style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                                    Container(
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: AppColors.colorButton,
+                                            ),
+                                            borderRadius:
+                                            BorderRadius.all(
+                                                Radius.circular(20)
+                                            )
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 16),
+                                          child: Text(CurrentUser.currentTestUser!.testUser.subscription!.subscription.limitToDay!= null ?
+                                          '${CurrentUser.currentTestUser!.testUser.subscription!.subscription.limitToDay}' :
+                                          '...'
+                                          ),
+                                        )
+                                    ),
+                                  ],
+                                ),
+
+                              ],
+                            ),
+                          ),
+
 
                           // Container(
                           //   width: 350,

@@ -181,7 +181,6 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: routes,
-
     );
   }
 }

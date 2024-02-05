@@ -118,6 +118,7 @@ class _TopUpYourBalanceState extends State<TopUpYourBalance> {
               SizedBox(height: 16,)
             ],
           ),
+
         ),
       ),
     );
