@@ -8,9 +8,9 @@ part 'specialization.g.dart';
 class Specialization {
   int id;
   String name;
-  int grandScore;
-  int grandCount;
-  int averageSalary;
+  int? grandScore;
+  int? grandCount;
+  int? averageSalary;
   String demand;
   String code;
   String description;

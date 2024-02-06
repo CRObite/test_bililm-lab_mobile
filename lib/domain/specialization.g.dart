@@ -10,9 +10,9 @@ Specialization _$SpecializationFromJson(Map<String, dynamic> json) =>
     Specialization(
       json['id'] as int,
       json['name'] as String,
-      json['grandScore'] as int,
-      json['grandCount'] as int,
-      json['averageSalary'] as int,
+      json['grandScore'] as int?,
+      json['grandCount'] as int?,
+      json['averageSalary'] as int?,
       json['demand'] as String,
       json['code'] as String,
       json['description'] as String,

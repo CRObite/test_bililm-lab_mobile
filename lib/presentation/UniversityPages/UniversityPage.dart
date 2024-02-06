@@ -27,7 +27,7 @@ class _UniversityPageState extends State<UniversityPage> {
   bool isLoading = false;
   University? university;
   List<UniversityItem> universityItems = [];
-  bool isMoreLoading = true;
+  bool isMoreLoading = false;
   bool hasNextPage = true;
 
   int pageNum = 1;
@@ -162,41 +162,43 @@ class _UniversityPageState extends State<UniversityPage> {
 
   @override
   Widget build(BuildContext context) {
-    return isLoading ? Center(child: CircularProgressIndicator(color: AppColors.colorButton,),) : SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(AppText.university, style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-            SizedBox(height: 8,),
-            Row(
-              children: [
-                Expanded(
-                  child: CustomTextField(
-                      controller: _searchPanelController,
-                      title:  AppText.byName,
-                      suffix: false,
-                      keybordType: TextInputType.text
-                  ),
+    return isLoading ? Center(child: CircularProgressIndicator(color: AppColors.colorButton,),) : 
+    Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(AppText.university, style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+          SizedBox(height: 8,),
+          Row(
+            children: [
+              Expanded(
+                child: CustomTextField(
+                    controller: _searchPanelController,
+                    title:  AppText.byName,
+                    suffix: false,
+                    keybordType: TextInputType.text
                 ),
-                SizedBox(width: 8,),
-                IconButton(
-                    onPressed: (){
-                      getAllUniversity(query: _searchPanelController.text);
-                    },
+              ),
+              SizedBox(width: 8,),
+              IconButton(
+                  onPressed: (){
+                    getAllUniversity(query: _searchPanelController.text);
+                  },
 
-                    icon: Icon(Icons.search, color: AppColors.colorButton,)),
-              ],
-            ),
+                  icon: Icon(Icons.search, color: AppColors.colorButton,)),
+            ],
+          ),
 
-            SizedBox(height: 16,),
+          SizedBox(height: 16,),
 
-            universityItems.isNotEmpty ? Container(
+          universityItems.isNotEmpty ? Expanded(
+            child: Container(
               height: MediaQuery.of(context).size.height * 0.8,
               child: RefreshIndicator(
                 onRefresh: onRefresh,
                 child: ListView.builder(
+                  controller: _controller,
                   scrollDirection: Axis.vertical,
                   itemCount: universityItems.length,
                   itemBuilder: (context, index) {
@@ -207,18 +209,18 @@ class _UniversityPageState extends State<UniversityPage> {
                     ).animate().fadeIn(duration: 300.ms).slideX();
                   }),
               ),
-            ): Center(child: Text(AppText.noUniversity, style: TextStyle(fontWeight: FontWeight.bold),),),
+            ),
+          ): Center(child: Text(AppText.noUniversity, style: TextStyle(fontWeight: FontWeight.bold),),),
 
+          
 
-
-            if(isMoreLoading)
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Center(child: CircularProgressIndicator(color: Colors.black,)),
-              ),
-          ],
-        )
-      ),
+          if(isMoreLoading)
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Center(child: CircularProgressIndicator(color: Colors.black,)),
+            ),
+        ],
+      )
     );
   }
 }

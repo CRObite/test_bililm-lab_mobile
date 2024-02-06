@@ -11,7 +11,7 @@ class UniversityItem{
   int id;
   String name;
   String address;
-  int middlePrice;
+  int? middlePrice;
   String? status;
   bool militaryDepartment;
   bool dormitory;

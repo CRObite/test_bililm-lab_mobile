@@ -33,6 +33,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
       ),
       child: DropdownButton<int>(
         isExpanded: true,
+        underline: Container(),
         menuMaxHeight: 250,
         hint: Text(widget.hint),
         value: widget.selectedItemId,

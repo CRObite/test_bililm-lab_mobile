@@ -28,7 +28,7 @@ class _PostPageState extends State<PostPage> {
   Post? post;
   List<PostItem> items =[];
   bool pictureIsLoading = false;
-  bool isMoreLoading = true;
+  bool isMoreLoading = false;
   bool hasNextPage = true;
 
   int pageNum = 1;
@@ -158,22 +158,24 @@ class _PostPageState extends State<PostPage> {
 
   @override
   Widget build(BuildContext context) {
-    return isLoading ? Center(child: CircularProgressIndicator(color: AppColors.colorButton,),) :SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(AppText.posts, style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-            items.isNotEmpty? Container(
+    return isLoading ? Center(child: CircularProgressIndicator(color: AppColors.colorButton,),) :
+    Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(AppText.posts, style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+          items.isNotEmpty? Expanded(
+            child: Container(
               height: MediaQuery.of(context).size.height * 0.8,
               child: RefreshIndicator(
                 onRefresh: onRefresh,
                 child: ListView.builder(
+                    controller: _controller,
                     scrollDirection: Axis.vertical,
                     itemCount: items.length,
                     itemBuilder: (context, index) {
-
+            
                         return GestureDetector(
                           onTap: (){
                             getPostDataById(items[index].id);
@@ -224,22 +226,22 @@ class _PostPageState extends State<PostPage> {
                         ).animate().fadeIn().scaleY();
                     }),
               ),
-            ):
-            Container(
-              margin: EdgeInsets.only(top: 16),
-              child: Center(
-                child: Text(AppText.noNewNews, style: TextStyle(fontWeight: FontWeight.bold),),
-              ),
             ),
+          ):
+          Container(
+            margin: EdgeInsets.only(top: 16),
+            child: Center(
+              child: Text(AppText.noNewNews, style: TextStyle(fontWeight: FontWeight.bold),),
+            ),
+          ),
 
 
-            if(isMoreLoading)
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Center(child: CircularProgressIndicator(color: Colors.black,)),
-              ),
-          ],
-        ),
+          if(isMoreLoading)
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Center(child: CircularProgressIndicator(color: Colors.black,)),
+            ),
+        ],
       ),
     );
   }

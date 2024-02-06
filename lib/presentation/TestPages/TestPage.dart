@@ -12,6 +12,7 @@ import 'package:test_bilimlab_project/domain/customResponse.dart';
 import 'package:test_bilimlab_project/domain/modoResult.dart';
 import 'package:test_bilimlab_project/domain/result.dart';
 import 'package:test_bilimlab_project/domain/schoolQuestion.dart';
+import 'package:test_bilimlab_project/presentation/Widgets/CustomTimer.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/ImageBuilder.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/SmallButton.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/TestCheckBoxListTitle.dart';
@@ -42,9 +43,7 @@ class TestPage extends StatefulWidget {
 class _TestPageState extends State<TestPage> {
 
 
-  late Timer _timer;
 
-  int _elapsedSeconds = 0;
   int currentContext = 0;
   int currentSubject = 0;
   int currentQuestion = 0;
@@ -60,9 +59,8 @@ class _TestPageState extends State<TestPage> {
   List<String> allContents = [];
   List<int> allLength = [];
   int? startedIndex;
-  Uint8List? currentBytes;
+  Widget? currentImage;
   bool _isLoading = true;
-  bool pictureIsLoading = true;
   late List<int?> selectedValues;
   final ScrollController _scrollDraggableController = ScrollController();
 
@@ -79,19 +77,6 @@ class _TestPageState extends State<TestPage> {
       _isLoading  = true;
     });
 
-    if(widget.format == TestFormatEnum.ENT){
-      if(widget.test.entTest!.timeLimitInMilliseconds != null){
-        _elapsedSeconds = (widget.test.entTest!.timeLimitInMilliseconds!/1000).round();
-      }else{
-        _elapsedSeconds = 12600;
-      }
-
-    }else if(widget.format == TestFormatEnum.SCHOOL){
-      _elapsedSeconds = (widget.test.modoTest!.timeLimitInMilliseconds/1000).round();
-    }
-
-
-    _timer = Timer.periodic(const Duration(seconds: 1), _updateTimer);
     _scrollController = ScrollController();
 
     if(widget.format == TestFormatEnum.SCHOOL){
@@ -102,6 +87,8 @@ class _TestPageState extends State<TestPage> {
     setState(() {
       _isLoading  = false;
     });
+
+
 
 
     ComplexCheck();
@@ -140,23 +127,13 @@ class _TestPageState extends State<TestPage> {
 
   @override
   void dispose() {
-    _timer.cancel();
+
     _scrollController.dispose();
     _scrollDraggableController.dispose();
     super.dispose();
   }
 
-  void _updateTimer(Timer timer) {
-    if (_elapsedSeconds > 0) {
-      setState(() {
-        _elapsedSeconds--;
-      });
-    } else {
 
-      _timer.cancel();
-      _endTest();
-    }
-  }
 
   void ComplexCheck(){
 
@@ -189,7 +166,17 @@ class _TestPageState extends State<TestPage> {
   }
 
 
+  void checkImage(){
 
+    if (widget.format == TestFormatEnum.ENT && currentQuestions[currentQuestion].mediaFiles.isNotEmpty){
+      currentImage = ImageBuilder(mediaID: currentQuestions[currentQuestion].mediaFiles[0].id);
+    }else if(widget.format == TestFormatEnum.SCHOOL && currentSchoolQuestions[currentQuestion].mediaFiles.isNotEmpty){
+      currentImage = ImageBuilder(mediaID: currentSchoolQuestions[currentQuestion].mediaFiles[0].id);
+    }else {
+      currentImage = null;
+    }
+
+  }
 
   List<String> getAllTypeSubject() {
     List<String> categoryNames = [];
@@ -223,9 +210,7 @@ class _TestPageState extends State<TestPage> {
       widget.test.modoTest!.typeSubjectQuestionMap[currentTypeSubjects[currentTypeSubject]]!.forEach((categoryName, category) {
         categoryNames.add(categoryName);
       });
-
     }
-
     return categoryNames;
   }
 
@@ -297,7 +282,7 @@ class _TestPageState extends State<TestPage> {
     return false;
   }
 
-  Future<void> _endTest() async {
+  void _endTest() async {
     widget.format == TestFormatEnum.ENT ?
     await TestService().endEntTest(widget.test.entTest!.id):
     await TestService().endSchoolTest(widget.test.modoTest!.id);
@@ -370,7 +355,7 @@ class _TestPageState extends State<TestPage> {
   @override
   Widget build(BuildContext context) {
 
-    String formattedTime = DateFormat('h:mm:ss').format(DateTime.utc(0, 1, 1, 0, 0, _elapsedSeconds));
+
 
 
 
@@ -400,11 +385,13 @@ class _TestPageState extends State<TestPage> {
 
               Row(
                 children: [
-                  Text(
-                    formattedTime,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+
+                  CustomTimer(
+                      onEnd:  _endTest,
+                      timeInSeconds: widget.format == TestFormatEnum.ENT ?
+                        (widget.test.entTest!.timeLimitInMilliseconds!/1000).round():
+                        (widget.test.modoTest!.timeLimitInMilliseconds/1000).round()
                   ),
-                  
                   SizedBox(width: 8,),
                   IconButton(
                       onPressed: (){
@@ -458,10 +445,8 @@ class _TestPageState extends State<TestPage> {
                         ),
 
 
-                        if (widget.format == TestFormatEnum.ENT && currentQuestions[currentQuestion].mediaFiles.isNotEmpty)
-                          ImageBuilder(mediaID: currentQuestions[currentQuestion].mediaFiles[0].id),
-                        if(widget.format == TestFormatEnum.SCHOOL && currentSchoolQuestions[currentQuestion].mediaFiles.isNotEmpty)
-                          ImageBuilder(mediaID: currentSchoolQuestions[currentQuestion].mediaFiles[0].id),
+
+                        currentImage ?? Container(),
 
                         if(widget.format == TestFormatEnum.ENT && (currentQuestions[currentQuestion].subOptions == null  || currentQuestions[currentQuestion].subOptions!.isEmpty))
                           Container(
@@ -863,6 +848,7 @@ class _TestPageState extends State<TestPage> {
 
                                 currentQuestion-=1;
                                 checkContext();
+                                checkImage();
                                 if(widget.format == TestFormatEnum.ENT){
                                   checkComp();
                                 }
@@ -890,6 +876,7 @@ class _TestPageState extends State<TestPage> {
 
                                 currentQuestion+=1;
                                 checkContext();
+                                checkImage();
                                 checkComp();
                                 setState(() {
                                 });
@@ -911,6 +898,7 @@ class _TestPageState extends State<TestPage> {
                             if(currentQuestion != currentSchoolQuestions.length-1){
                               currentQuestion+=1;
                               checkContext();
+                              checkImage();
                               setState(() {
                               });
                               _scrollToElement(currentQuestion);

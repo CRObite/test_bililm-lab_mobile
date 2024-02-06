@@ -21,7 +21,7 @@ class _ImageBuilderState extends State<ImageBuilder> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
           return ClipRRect(
-            borderRadius: BorderRadius.circular(8.0), // Adjust the radius as needed
+            borderRadius: BorderRadius.circular(8.0),
             child: Image.memory(
               snapshot.data!,
               fit: BoxFit.cover,

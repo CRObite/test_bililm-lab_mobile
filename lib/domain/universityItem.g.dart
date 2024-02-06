@@ -11,7 +11,7 @@ UniversityItem _$UniversityItemFromJson(Map<String, dynamic> json) =>
       json['id'] as int,
       json['name'] as String,
       json['address'] as String,
-      json['middlePrice'] as int,
+      json['middlePrice'] as int?,
       json['status'] as String?,
       json['militaryDepartment'] as bool,
       json['dormitory'] as bool,
