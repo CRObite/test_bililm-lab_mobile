@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:test_bilimlab_project/domain/schoolQuestion.dart';
 import 'package:test_bilimlab_project/domain/testQuestion.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/QuestionCircle.dart';
 
 class TestNumbersBuilder extends StatefulWidget {
-  const TestNumbersBuilder({super.key, required this.count, required this.scrollController, required this.onTapNumber, required this.currentQuestion,  required this.questions});
+  const TestNumbersBuilder({super.key, required this.count, required this.scrollController, required this.onTapNumber, required this.currentQuestion,  this.questions});
 
   final int count;
   final ScrollController scrollController;
   final ValueChanged<int> onTapNumber;
   final int  currentQuestion;
-  final List<TestQuestion> questions;
+  final List<TestQuestion>?  questions;
 
   @override
   State<TestNumbersBuilder> createState() => _TestNumbersBuilderState();
@@ -48,7 +49,7 @@ class _TestNumbersBuilderState extends State<TestNumbersBuilder> {
                 },
                 child: QuestionCircle(
                     qusetionNuber: index+1,
-                    roundColor: getCircleColor(widget.questions[index].answeredType ?? "NO_CORRECT"),
+                    roundColor: getCircleColor(widget.questions!= null? widget.questions![index].answeredType ?? "NO_CORRECT" : "NO_CORRECT"),
                     itsFocusedQuestion: index == widget.currentQuestion)
             ),
           );

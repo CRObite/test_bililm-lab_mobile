@@ -1,4 +1,4 @@
-package com.example.test_bilimlab_project
+package com.oqu_test
 
 import io.flutter.embedding.android.FlutterActivity
 

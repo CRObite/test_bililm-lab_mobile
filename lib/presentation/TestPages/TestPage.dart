@@ -417,13 +417,16 @@ class _TestPageState extends State<TestPage> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
+
+
               TestNumbersBuilder(
                   count: widget.format == TestFormatEnum.ENT ? currentQuestions.length: currentSchoolQuestions.length,
                   scrollController: _scrollController,
                   onTapNumber: (int index){onTapNumber(index); },
                   currentQuestion: currentQuestion,
-                  questions: currentQuestions,
               ),
+
+
               SizedBox(height: 8,),
 
               Expanded(
