@@ -31,9 +31,18 @@ class _TopUpYourBalanceState extends State<TopUpYourBalance> {
           maxHeight: 560.0,
         ),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
+
             children: [
+              Text(
+                AppText.byKaspi,
+                style: TextStyle(
+                  fontSize: 14
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 16,),
               Expanded(
                 child: PageView(
                   controller: _pageController,
@@ -45,27 +54,22 @@ class _TopUpYourBalanceState extends State<TopUpYourBalance> {
                   children: [
                     Container(
                       child: Center(
-                        child: Image.asset(AppImages.pie_chart),
+                        child: Image.asset('assets/topUpFirst.jpg'),
                       ),
                     ),
                     Container(
 
                       child: Center(
-                        child: Image.asset(AppImages.pie_chart),
+                        child: Image.asset('assets/topUpSecond.jpg'),
                       ),
                     ),
                     Container(
 
                       child: Center(
-                        child: Image.asset(AppImages.pie_chart),
+                        child: Image.asset('assets/topUpThird.jpg'),
                       ),
                     ),
-                    Container(
 
-                      child: Center(
-                        child: Image.asset(AppImages.pie_chart),
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -75,23 +79,23 @@ class _TopUpYourBalanceState extends State<TopUpYourBalance> {
                   SmallButton(
                       onPressed: (){
                         setState(() {
-                          _currentPage = 3;
+                          _currentPage = 2;
                         });
                         _pageController.jumpToPage(_currentPage);
                       },
                       buttonColors: AppColors.colorButton,
                       innerElement: Text(AppText.skip, style: TextStyle(color: AppColors.colorButton),),
-                      isDisabled: _currentPage == 3? true : false,
+                      isDisabled: _currentPage == 2? true : false,
                       isBordered: false),
                   SizedBox(width: 1,),
-                  SmallButton(
-                      onPressed: (){
-
-                      },
-                      buttonColors: AppColors.colorButton,
-                      innerElement: Text(AppText.topUpBalance, style: TextStyle(color: AppColors.colorButton),),
-                      isDisabled: _currentPage == 3? false : true,
-                      isBordered: false),
+                  // SmallButton(
+                  //     onPressed: (){
+                  //
+                  //     },
+                  //     buttonColors: AppColors.colorButton,
+                  //     innerElement: Text(AppText.topUpBalance, style: TextStyle(color: AppColors.colorButton),),
+                  //     isDisabled: _currentPage == 2? false : true,
+                  //     isBordered: false),
 
                 ],
               ),
@@ -101,7 +105,7 @@ class _TopUpYourBalanceState extends State<TopUpYourBalance> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(
-                  4,
+                  3,
                       (index) => Container(
                     margin: EdgeInsets.symmetric(horizontal: 4.0),
                     width: 10.0,

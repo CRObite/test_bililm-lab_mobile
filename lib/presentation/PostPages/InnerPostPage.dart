@@ -73,63 +73,70 @@ class _InnerPostPageState extends State<InnerPostPage> {
       appBar: AppBar(
         title: Text(widget.post.title ?? '',style: TextStyle(fontSize: 16), ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              widget.post.mediaFiles!= null ?
-              Container(
-                width: double.infinity,
-                child: ImageBuilder( mediaID: widget.post.mediaFiles!.id,),
-              ): Container(),
-              SizedBox(height: 16,),
-              Text(widget.post.title ?? '', style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
-              SizedBox(height: 8,),
-              Html(
-                data: '${widget.post.description}',
-              ),
-
-              SizedBox(height: 16,),
-              widget.post.dateTime != null ? Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(ExtractDate.extractDate(widget.post.dateTime!), style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
-                ],
-              ): Container(),
-              SizedBox(height: 16,),
-
-              SizedBox(height: 8,),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      color: AppColors.colorGrayButton,
-                      width: 1.0,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            widget.post.mediaFiles!= null ?
+            Container(
+              width: double.infinity,
+              child: ImageBuilder( mediaID: widget.post.mediaFiles!.id,),
+            ): Container(),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SizedBox(height: 16,),
+                    Text(widget.post.title ?? '', style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+                    SizedBox(height: 8,),
+                    Html(
+                      data: '${widget.post.description}',
                     ),
-                  ),
+                
+                    SizedBox(height: 16,),
+                    widget.post.dateTime != null ? Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(ExtractDate.extractDate(widget.post.dateTime!), style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+                      ],
+                    ): Container(),
+                    SizedBox(height: 16,),
+                
+                    SizedBox(height: 8,),
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.grey,
+                            width: 1.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
+            ),
 
 
 
-              // comments.isNotEmpty ?
-              //   CustomCommentList(comments: comments,):
-              //   Row(
-              //     children: [
-              //       SizedBox(height: 20,),
-              //       Text(AppText.beFirst, style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,  color: Colors.grey),),
-              //       SizedBox(height: 20,),
-              //     ],
-              //   ),
-              //
-              // SizedBox(height: 16,),
-              //
-              // CustomCommentField(onPressed: ReDrawAfterSaved, id: widget.post.id, type: 'Post',),
-            ],
-          ),
+
+            // comments.isNotEmpty ?
+            //   CustomCommentList(comments: comments,):
+            //   Row(
+            //     children: [
+            //       SizedBox(height: 20,),
+            //       Text(AppText.beFirst, style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,  color: Colors.grey),),
+            //       SizedBox(height: 20,),
+            //     ],
+            //   ),
+            //
+            // SizedBox(height: 16,),
+            //
+            // CustomCommentField(onPressed: ReDrawAfterSaved, id: widget.post.id, type: 'Post',),
+          ],
         ),
       ),
     );

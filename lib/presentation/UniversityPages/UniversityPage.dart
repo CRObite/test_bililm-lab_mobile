@@ -122,7 +122,9 @@ class _UniversityPageState extends State<UniversityPage> {
           universityItems = university!.items;
         });
       }else {
-        ResponseHandle.handleResponseError(response,context);
+        if(mounted){
+          ResponseHandle.handleResponseError(response,context);
+        }
       }
     } finally {
       updateLoadingState();

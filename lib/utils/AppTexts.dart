@@ -129,5 +129,6 @@ class AppText {
   static String subscriptionSure = 'Сіз жаңа тарифке қосылғыңыз келетініне сенімдісіз бе?';
   static String subscriptionAgainSure = 'Сіз тарифті жаңартқыңыз келетініне сенімдісіз бе?';
   static String noPassedTests = 'Тапсырылған тесттер жоқ';
+  static String byKaspi = 'Сіз өзіңіздің балансыңызды "төлемдер" бөлімінде Kaspi көмегімен толтыра аласыз';
 
 }

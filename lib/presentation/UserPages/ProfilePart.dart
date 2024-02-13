@@ -62,7 +62,7 @@ class _ProfilePartState extends State<ProfilePart> {
 
     getUserInfo();
     getWalletInfo();
-    // getAllSubscription();
+    getAllSubscription();
   }
 
 
@@ -263,42 +263,39 @@ class _ProfilePartState extends State<ProfilePart> {
                                     SizedBox(height: 16,),
                                     Row(
                                       children: [
-                                        // Expanded(
-                                        //   child: SmallButton(
-                                        //       onPressed: (){
-                                        //         showDialog(
-                                        //           context: context,
-                                        //           builder: (context) => TopUpYourBalance(),
-                                        //         );
-                                        //       },
-                                        //       buttonColors: AppColors.colorButton,
-                                        //       innerElement: Row(
-                                        //         children: [
-                                        //           Icon(Icons.account_balance_wallet_rounded, color: Colors.white,),
-                                        //           SizedBox(width: 8,),
-                                        //           Text(AppText.replenish, style: TextStyle(color: Colors.white),),
-                                        //         ],
-                                        //       ),
-                                        //       isDisabled: false,
-                                        //       isBordered: true),
-                                        // ),
-                                        //
-                                        // SizedBox(width: 8,),
+                                        Expanded(
+                                          child: SmallButton(
+                                              onPressed: (){
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) => TopUpYourBalance(),
+                                                );
+                                              },
+                                              buttonColors: AppColors.colorButton,
+                                              innerElement: Row(
+                                                children: [
+                                                  Icon(Icons.account_balance_wallet_rounded, color: Colors.white,),
+                                                  SizedBox(width: 8,),
+                                                  Text(AppText.replenish, style: TextStyle(color: Colors.white),),
+                                                ],
+                                              ),
+                                              isDisabled: false,
+                                              isBordered: true),
+                                        ),
+
+                                        SizedBox(width: 8,),
 
                                         Expanded(
                                           child: SmallButton(
                                               onPressed: (){
-                                                // if(subscriptions!= null){
-                                                //   showDialog(
-                                                //     context: context,
-                                                //     builder: (context) => Tariffs(subscriptions: subscriptions!,),
-                                                //   );
-                                                // }
+                                                if(subscriptions!= null){
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (context) => Tariffs(subscriptions: subscriptions!,),
+                                                  );
+                                                }
 
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (context) => Tariffs (),
-                                                );
+
                                               },
                                               buttonColors: Colors.white,
                                               innerElement: Center(
