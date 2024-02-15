@@ -79,6 +79,7 @@ class _TariffsState extends State<Tariffs> {
           Navigator.pop(context);
         },
         onConfirmBtnTap: () async {
+          Navigator.pop(context);
           onSubscribeButtonPressed(subscriptionId);
         }
     );
@@ -96,7 +97,7 @@ class _TariffsState extends State<Tariffs> {
       child: Container(
         width: 350.0,
         constraints: BoxConstraints(
-          maxHeight: 580.0,
+          maxHeight: 600.0,
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -110,6 +111,7 @@ class _TariffsState extends State<Tariffs> {
                     controller: _pageController,
                     onPageChanged: (int page) {
                       setState(() {
+                        errorText = null;
                         _currentPage = page;
                       });
                     },
@@ -143,13 +145,13 @@ class _TariffsState extends State<Tariffs> {
                                 ),
                               ),
                               constraints: BoxConstraints(
-                                maxHeight: 200.0,
+                                maxHeight: 150.0,
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.only(bottom: 16),
                                 child: SingleChildScrollView(
                                   child: Text(subscription.description ?? '...',
-                                    textAlign: TextAlign.center,
+                                    textAlign: TextAlign.left,
                                   ),
                                 ),
                               ),
@@ -233,7 +235,7 @@ class _TariffsState extends State<Tariffs> {
                             if(errorText!= null)
                               Text(errorText!,style: TextStyle(color: Colors.red),),
                             if(errorText!= null)
-                              SizedBox(height: 16,),
+                              SizedBox(height: 8,),
 
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -241,26 +243,27 @@ class _TariffsState extends State<Tariffs> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Expanded(
-                                    child: CurrentUser.currentTestUser!.testUser.subscription!=null ?
+                                    child: CurrentUser.currentTestUser!.testUser.subscription !=null ?
                                       SmallButton(
                                           onPressed: (){
-                                            onSubscribeButtonPressed(subscription.id);
+                                            if(CurrentUser.currentTestUser!.testUser.subscription!.subscription.id ==
+                                                subscription.id){
+                                              areYouSureAboutThis(CurrentUser.currentTestUser!.testUser.subscription!.subscription.id ==
+                                                  subscription.id, subscription.id);
+                                            }else{
+                                              areYouSureAboutThis(false, subscription.id);
+                                            }
+
                                           },
                                           buttonColors: CurrentUser.currentTestUser!.testUser.subscription!.subscription.id ==
-                                              subscription.id ? AppColors.colorButton : Colors.grey,
+                                              subscription.id ?  Colors.grey:AppColors.colorButton,
                                           innerElement: Text(CurrentUser.currentTestUser!.testUser.subscription!.subscription.id ==
-                                              subscription.id ? AppText.subscribe: AppText.setSubscriptionAgain, style: TextStyle(color: Colors.white),),
+                                              subscription.id ?  AppText.setSubscriptionAgain: AppText.subscribe, style: TextStyle(color: Colors.white),),
                                           isDisabled: false,
                                           isBordered: true):
                                     SmallButton(
                                         onPressed: (){
-                                          if(CurrentUser.currentTestUser!.testUser.subscription != null){
-                                            areYouSureAboutThis(CurrentUser.currentTestUser!.testUser.subscription!.subscription.id ==
-                                                subscription.id, subscription.id);
-                                          }else{
-                                            areYouSureAboutThis(false, subscription.id);
-                                          }
-
+                                          onSubscribeButtonPressed(subscription.id);
                                         },
                                         buttonColors: AppColors.colorButton,
                                         innerElement: Text( AppText.subscribe, style: TextStyle(color: Colors.white),),
