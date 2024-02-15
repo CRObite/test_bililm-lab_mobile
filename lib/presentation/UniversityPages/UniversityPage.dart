@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:test_bilimlab_project/config/ResponseHandle.dart';
+import 'package:test_bilimlab_project/config/SetBytes.dart';
 import 'package:test_bilimlab_project/data/service/university_service.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
 import 'package:test_bilimlab_project/domain/university.dart';
@@ -52,6 +53,7 @@ class _UniversityPageState extends State<UniversityPage> {
   void dispose() {
     _searchPanelController.dispose();
     _controller.dispose();
+    SetBytes.clearImages();
     super.dispose();
   }
 
@@ -73,6 +75,7 @@ class _UniversityPageState extends State<UniversityPage> {
             universityItems.addAll(university!.items);
           });
         }
+
 
       } finally {
         if(mounted){

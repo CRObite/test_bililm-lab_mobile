@@ -16,6 +16,19 @@ class UniversityCard extends StatefulWidget {
 }
 
 class _UniversityCardState extends State<UniversityCard> {
+
+  Widget? currentImage;
+
+  @override
+  void initState() {
+    checkImage();
+    super.initState();
+  }
+
+  void checkImage(){
+    currentImage = ImageBuilder(mediaID: widget.university[widget.index].mediaFiles!.id,);
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -32,7 +45,7 @@ class _UniversityCardState extends State<UniversityCard> {
               SizedBox(
                 width: 70,
                 height: 70,
-                child: ImageBuilder(mediaID: widget.university[widget.index].mediaFiles!.id,),
+                child: currentImage
               ): Container(),
               SizedBox(width: 8,),
               Expanded(

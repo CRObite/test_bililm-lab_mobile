@@ -30,10 +30,22 @@ class _UniversityInfoPageState extends State<UniversityInfoPage> {
   bool currentMainInfo = true;
   bool isLoading = false;
   List<Comment> comments = [];
+  Widget? currentImage;
+
+
+  @override
+  void initState() {
+    super.initState();
+    checkImage();
+  }
 
   Future<Uint8List?> setBytes(String id) async {
     Uint8List? bytes =  await MediaService().getMediaById(id);
     return bytes;
+  }
+
+  void checkImage(){
+    currentImage = ImageBuilder(mediaID: widget.university.mediaFiles!.id);
   }
 
   void getComments() async {
@@ -110,10 +122,9 @@ class _UniversityInfoPageState extends State<UniversityInfoPage> {
                 children: [
                   widget.university.mediaFiles != null ?
                   SizedBox(
-                      width: 150,
-                      child: ImageBuilder(mediaID: widget.university.mediaFiles!.id),
+                      width: 100,
+                      child: currentImage
                   ): Container(),
-                  SizedBox(width: 8,),
                   Expanded(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,

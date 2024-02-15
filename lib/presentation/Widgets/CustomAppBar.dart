@@ -60,7 +60,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   width: 35,
                   height: 35,
                   decoration: BoxDecoration(
-                    color: AppColors.colorGrayButton,
+                    color: Colors.grey.withOpacity(0.3),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Center(child: Text('${widget.user.lastName[0]}${widget.user.firstName[0]}',style: const TextStyle(fontSize: 14),)),

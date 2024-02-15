@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
+import 'package:test_bilimlab_project/config/SetBytes.dart';
 import 'package:test_bilimlab_project/data/service/ResultService.dart';
 import 'package:test_bilimlab_project/data/service/test_service.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
@@ -130,6 +131,7 @@ class _TestPageState extends State<TestPage> {
 
     _scrollController.dispose();
     _scrollDraggableController.dispose();
+    SetBytes.clearImages();
     super.dispose();
   }
 

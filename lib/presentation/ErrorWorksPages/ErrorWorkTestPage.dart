@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:test_bilimlab_project/config/SetBytes.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/ImageBuilder.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/TestContentBuilder.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/TestNumbersBuilder.dart';
@@ -55,6 +56,7 @@ class _ErrorWorkTestPageState extends State<ErrorWorkTestPage> {
   void dispose() {
     _scrollController.dispose();
     _scrollDraggableController.dispose();
+    SetBytes.clearImages();
     super.dispose();
   }
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:test_bilimlab_project/config/ExtractDate.dart';
 import 'package:test_bilimlab_project/config/ResponseHandle.dart';
+import 'package:test_bilimlab_project/config/SetBytes.dart';
 import 'package:test_bilimlab_project/data/service/post_service.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
 import 'package:test_bilimlab_project/domain/postItem.dart';
@@ -53,6 +54,7 @@ class _PostPageState extends State<PostPage> {
   @override
   void dispose() {
     _controller.dispose();
+    SetBytes.clearImages();
     super.dispose();
   }
 
