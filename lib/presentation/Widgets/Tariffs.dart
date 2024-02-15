@@ -96,7 +96,7 @@ class _TariffsState extends State<Tariffs> {
       child: Container(
         width: 350.0,
         constraints: BoxConstraints(
-          maxHeight: 560.0,
+          maxHeight: 580.0,
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -171,21 +171,27 @@ class _TariffsState extends State<Tariffs> {
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(AppText.dayCount,style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-                                        Container(
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: AppColors.colorButton,
+                                        Flexible(
+                                            flex: 3,
+                                            child: Text(AppText.dayCount,style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),)
+                                        ),
+                                        Flexible(
+                                          flex: 1,
+                                          child: Container(
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: AppColors.colorButton,
+                                                ),
+                                                borderRadius:
+                                                  BorderRadius.all(
+                                                    Radius.circular(20)
+                                                  )
                                               ),
-                                              borderRadius:
-                                                BorderRadius.all(
-                                                  Radius.circular(20)
-                                                )
-                                            ),
-                                            child: Padding(
-                                              padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 16),
-                                              child: Text(subscription.durationInDay!= null ? '${subscription.durationInDay}' : '...'),
-                                            )
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 16),
+                                                child: Text(subscription.durationInDay!= null ? '${subscription.durationInDay}' : '...'),
+                                              )
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -193,22 +199,28 @@ class _TariffsState extends State<Tariffs> {
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(AppText.dayTestLimit,style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-                                        Container(
-                                            decoration: BoxDecoration(
-                                                border: Border.all(
-                                                  color: AppColors.colorButton,
-                                                ),
-                                                borderRadius:
-                                                BorderRadius.all(
-                                                    Radius.circular(20)
-                                                )
-                                            ),
+                                        Flexible(
+                                          flex: 3,
+                                            child: Text(AppText.dayTestLimit,style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),)
+                                        ),
+                                        Flexible(
+                                          flex: 1,
+                                          child: Container(
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color: AppColors.colorButton,
+                                                  ),
+                                                  borderRadius:
+                                                  BorderRadius.all(
+                                                      Radius.circular(20)
+                                                  )
+                                              ),
 
-                                            child: Padding(
-                                              padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 16),
-                                              child: Text(subscription.durationInDay!= null ? '${subscription.limitToDay}' : '...'),
-                                            )
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 16),
+                                                child: Text(subscription.durationInDay!= null ? '${subscription.limitToDay}' : '...'),
+                                              )
+                                          ),
                                         ),
                                       ],
                                     ),

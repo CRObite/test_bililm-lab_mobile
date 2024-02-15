@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
 import 'package:test_bilimlab_project/config/TextFiledValidator.dart';
 import 'package:test_bilimlab_project/data/service/login_service.dart';
 import 'package:test_bilimlab_project/domain/currentUser.dart';
 import 'package:test_bilimlab_project/domain/customResponse.dart';
+import 'package:test_bilimlab_project/domain/testUser.dart';
 import 'package:test_bilimlab_project/domain/userWithJwt.dart';
 import 'package:test_bilimlab_project/presentation/application.dart';
 import 'package:test_bilimlab_project/utils/AnimationDirection.dart';
@@ -27,23 +30,62 @@ class _LoginPageState extends State<LoginPage> {
   bool isLoading = false;
   String? errorMessage;
 
+  late final LocalAuthentication auth;
+  bool _supportState = false;
+
+
   final TextEditingController _iinController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    auth = LocalAuthentication();
+    auth.isDeviceSupported().then(
+        (bool isSupported) => setState(() {
+            _supportState = isSupported;
+        }),
+    );
     _checkCurrentUserInSP();
   }
 
 
+  Future<void> _getAvailableBiometrics() async {
+    List<BiometricType> availableBiometric =
+        await auth.getAvailableBiometrics();
+
+    print('List of biometric: $availableBiometric');
+
+    if(!mounted){
+      return;
+    }
+  }
+
+ Future<void> _authenticate(UserWithJwt user) async {
+    try{
+      bool authenticated = await auth.authenticate(
+          options:  AuthenticationOptions(
+            stickyAuth: true,
+            biometricOnly: false,
+          ),
+          localizedReason: 'Please authenticate to access your account.',
+      );
+
+      if(authenticated){
+        CurrentUser.currentTestUser = user;
+        Navigator.pushReplacementNamed(context, '/app');
+      }
+    } on PlatformException catch(e){
+      print(e);
+    }
+ }
 
   Future<void> _checkCurrentUserInSP() async {
     if (await SharedPreferencesOperator.containsUserWithJwt()) {
       UserWithJwt? user = await SharedPreferencesOperator.getUserWithJwt();
       if (user != null) {
-        CurrentUser.currentTestUser = user;
-        Navigator.pushReplacementNamed(context, '/app');
+        _getAvailableBiometrics();
+        _authenticate(user);
       }
     }
   }

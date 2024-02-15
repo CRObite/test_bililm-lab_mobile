@@ -28,7 +28,7 @@ class _TopUpYourBalanceState extends State<TopUpYourBalance> {
       child: Container(
         width: 350.0,
         constraints: BoxConstraints(
-          maxHeight: 560.0,
+          maxHeight: 580.0,
         ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
