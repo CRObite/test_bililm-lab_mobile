@@ -198,6 +198,7 @@ class _ProfilePartState extends State<ProfilePart> {
   @override
   Widget build(BuildContext context) {
     return isLoading? Center(child: CircularProgressIndicator(color: AppColors.colorButton,)) :  SingleChildScrollView(
+
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

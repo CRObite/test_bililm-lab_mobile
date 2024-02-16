@@ -47,7 +47,7 @@ class _UniversityCardState extends State<UniversityCard> {
                 height: 70,
                 child: currentImage
               ): Container(),
-              SizedBox(width: 8,),
+              SizedBox(width: 16,),
               Expanded(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,

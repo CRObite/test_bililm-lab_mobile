@@ -125,6 +125,8 @@ class _UniversityInfoPageState extends State<UniversityInfoPage> {
                       width: 100,
                       child: currentImage
                   ): Container(),
+
+                  SizedBox(width: 16,),
                   Expanded(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,

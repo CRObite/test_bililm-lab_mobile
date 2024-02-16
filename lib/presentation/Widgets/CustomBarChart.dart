@@ -51,15 +51,8 @@ class _CustomBarChartState extends State<CustomBarChart> {
   Widget build(BuildContext context) {
 
     return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: AppColors.colorGrayButton,
-            width: 2.0,
-          ),
-        ),
-      ),
-      margin: const EdgeInsets.only(bottom: 40),
+
+      margin: const EdgeInsets.only(bottom: 20),
       child: SingleChildScrollView(
         controller: _scrollController,
         scrollDirection: Axis.horizontal,
