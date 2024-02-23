@@ -30,8 +30,7 @@ class _LoginPageState extends State<LoginPage> {
   bool isLoading = false;
   String? errorMessage;
 
-  late final LocalAuthentication auth;
-  bool _supportState = false;
+
 
 
   final TextEditingController _iinController = TextEditingController();
@@ -40,52 +39,17 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    auth = LocalAuthentication();
-    auth.isDeviceSupported().then(
-        (bool isSupported) => setState(() {
-            _supportState = isSupported;
-        }),
-    );
     _checkCurrentUserInSP();
   }
 
 
-  Future<void> _getAvailableBiometrics() async {
-    List<BiometricType> availableBiometric =
-        await auth.getAvailableBiometrics();
 
-    print('List of biometric: $availableBiometric');
-
-    if(!mounted){
-      return;
-    }
-  }
-
- Future<void> _authenticate(UserWithJwt user) async {
-    try{
-      bool authenticated = await auth.authenticate(
-          options:  AuthenticationOptions(
-            stickyAuth: true,
-            biometricOnly: false,
-          ),
-          localizedReason: 'Please authenticate to access your account.',
-      );
-
-      if(authenticated){
-        CurrentUser.currentTestUser = user;
-        Navigator.pushReplacementNamed(context, '/app');
-      }
-    } on PlatformException catch(e){
-      print(e);
-    }
- }
 
   Future<void> _checkCurrentUserInSP() async {
     if (await SharedPreferencesOperator.containsUserWithJwt()) {
       UserWithJwt? user = await SharedPreferencesOperator.getUserWithJwt();
       if (user != null) {
-        _getAvailableBiometrics();
-        _authenticate(user);
+        Navigator.pushNamed(context, '/verification');
       }
     }
   }
@@ -119,8 +83,13 @@ class _LoginPageState extends State<LoginPage> {
     await LoginService().logIn(_iinController.text, _passwordController.text);
 
     if (currentResponse.code == 200) {
-      Route route = CrateAnimatedRoute.createRoute(() => const Application(), AnimationDirection.up);
-      Navigator.of(context).pushReplacement(route);
+      if(await SharedPreferencesOperator.containsPINCode()){
+        Route route = CrateAnimatedRoute.createRoute(() => const Application(), AnimationDirection.up);
+        Navigator.of(context).pushReplacement(route);
+      }else{
+        Navigator.pushNamed(context, '/pin_set');
+      }
+
 
     } else if (currentResponse.code == 500 && mounted) {
       _showErrorDialog();

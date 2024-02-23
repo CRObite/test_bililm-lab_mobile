@@ -22,6 +22,8 @@ import 'package:test_bilimlab_project/presentation/TestPages/TestPage.dart';
 import 'package:test_bilimlab_project/presentation/UniversityPages/SpecializationPage.dart';
 import 'package:test_bilimlab_project/presentation/UniversityPages/UniversityInfoPage.dart';
 import 'package:test_bilimlab_project/presentation/UserPages/UserPage.dart';
+import 'package:test_bilimlab_project/presentation/VerificationPages/SetPinPage.dart';
+import 'package:test_bilimlab_project/presentation/VerificationPages/VerificationPage.dart';
 import 'package:test_bilimlab_project/presentation/application.dart';
 import 'package:test_bilimlab_project/utils/TestFormatEnum.dart';
 
@@ -173,6 +175,10 @@ class _MyAppState extends State<MyApp> {
       final post = ModalRoute.of(context)!.settings.arguments as PostItem;
       return InnerPostPage(post: post);
     },
+    '/verification': (context) => const VerificationPage(),
+    '/pin_set': (context) => const SetPinPage(),
+
+
   };
 
   @override

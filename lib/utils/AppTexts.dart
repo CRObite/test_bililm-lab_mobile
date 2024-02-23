@@ -130,5 +130,13 @@ class AppText {
   static String subscriptionAgainSure = 'Сіз тарифті жаңартқыңыз келетініне сенімдісіз бе?';
   static String noPassedTests = 'Тапсырылған тесттер жоқ';
   static String byKaspi = 'Сіз өзіңіздің балансыңызды "төлемдер" бөлімінде Kaspi көмегімен толтыра аласыз';
+  static String enterPIN = 'PIN кодын енгізіңіз';
+  static String setPINDescription = 'PIN мұқият толтырыңыз және есте сақтаңыз';
+  static String enterPINDescription = 'PIN кодты енгізіңіз немесе биометриканы қолданыңыз';
+  static String forgotPIN = 'PIN кодты ұмыттыңыз ба?';
+  static String reset = 'Қайта';
+  static String confirm = 'Растау';
+  static String fill = 'Толығымен толтырыңыз';
+  static String wrongPin = 'Қате PIN кодты қайталап көріңіз';
 
 }

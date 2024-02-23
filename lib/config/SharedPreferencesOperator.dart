@@ -8,6 +8,7 @@ import '../domain/userWithJwt.dart';
 
 class SharedPreferencesOperator {
   static const String keyUserWithJwt = 'currentUser';
+  static const String keyPINCode = 'pinCode';
 
   static Future<void> saveUserWithJwt(UserWithJwt userWithJwt) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -35,5 +36,33 @@ class SharedPreferencesOperator {
   static Future<bool> containsUserWithJwt() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.containsKey(keyUserWithJwt);
+  }
+
+
+  static Future<void> savePINCode(String code) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(keyPINCode, code);
+  }
+
+
+  static Future<String?> getPINCode() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? code = prefs.getString(keyPINCode);
+
+    if (code != null) {
+      return code;
+    }
+
+    return null;
+  }
+
+  static Future<void> clearPINCode() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove(keyPINCode);
+  }
+
+  static Future<bool> containsPINCode() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.containsKey(keyPINCode);
   }
 }
