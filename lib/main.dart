@@ -22,6 +22,7 @@ import 'package:test_bilimlab_project/presentation/TestPages/TestPage.dart';
 import 'package:test_bilimlab_project/presentation/UniversityPages/SpecializationPage.dart';
 import 'package:test_bilimlab_project/presentation/UniversityPages/UniversityInfoPage.dart';
 import 'package:test_bilimlab_project/presentation/UserPages/UserPage.dart';
+import 'package:test_bilimlab_project/presentation/VerificationPages/CheckPassword.dart';
 import 'package:test_bilimlab_project/presentation/VerificationPages/SetPinPage.dart';
 import 'package:test_bilimlab_project/presentation/VerificationPages/VerificationPage.dart';
 import 'package:test_bilimlab_project/presentation/application.dart';
@@ -177,6 +178,7 @@ class _MyAppState extends State<MyApp> {
     },
     '/verification': (context) => const VerificationPage(),
     '/pin_set': (context) => const SetPinPage(),
+    '/password': (context) => const CheckPassword(),
 
 
   };

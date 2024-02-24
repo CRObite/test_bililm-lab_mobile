@@ -169,4 +169,28 @@ class LoginRepository {
     }
   }
 
+
+  Future<CustomResponse> checkPassword(String password) async {
+
+
+    try {
+      dio.options.headers['Authorization'] = 'Bearer ${CurrentUser.currentTestUser?.accessToken}';
+
+      final response = await dio.get(
+        AppApiUrls.checkPassword,
+        queryParameters: {
+          'password': password,
+        }
+      );
+
+      print(response.data);
+      bool correct  = response.data;
+      return CustomResponse(200, '', correct);
+
+    } catch (e) {
+      print(e);
+      return HandleErrorResponse.handleErrorResponse(e);
+    }
+  }
+
 }

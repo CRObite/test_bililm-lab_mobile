@@ -103,6 +103,12 @@ class _SetPinPageState extends State<SetPinPage> {
   }
 
   @override
+  void dispose() {
+    controllers.forEach((element) { element.dispose(); });
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,

@@ -500,6 +500,35 @@ class _ProfilePartState extends State<ProfilePart> {
 
                 SizedBox(height: 8,),
 
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+
+                      Flexible(
+                          flex: 1,
+                          child: Text(AppText.newPin)
+                      ),
+
+                      Flexible(
+                        flex: 1,
+                        child: SmallButton(
+                          onPressed: (){
+                            Navigator.pushNamed(context, '/pin_set');
+                          },
+                          buttonColors:AppColors.colorButton,
+                          innerElement: Text(AppText.setPin, style: TextStyle(color: Colors.white,fontSize: 12),),
+                          isDisabled: false,
+                          isBordered: true,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: 8,),
+
                 Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.red),

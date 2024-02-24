@@ -138,5 +138,12 @@ class AppText {
   static String confirm = 'Растау';
   static String fill = 'Толығымен толтырыңыз';
   static String wrongPin = 'Қате PIN кодты қайталап көріңіз';
+  static String newPin = 'PIN кодын өзгерткіңіз келе ме?';
+  static String setPin = 'Өзгерту';
+
+
+  static String passwordCheck = 'Құпия сөзіңізді енгізіңіз';
+  static String passwordIncorrect = 'Құпия сөз қате';
+  static String passwordCheckDescription = 'Жаңа PIN кодты одан әрі орнату үшін құпия сөзіңізді енгізіңіз';
 
 }

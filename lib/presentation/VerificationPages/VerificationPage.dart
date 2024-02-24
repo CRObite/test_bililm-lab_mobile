@@ -63,6 +63,8 @@ class _VerificationPageState extends State<VerificationPage> {
     super.initState();
   }
 
+
+
   Future<void> _checkCurrentUserInSP() async {
     UserWithJwt? user = await SharedPreferencesOperator.getUserWithJwt();
     if (user != null) {
@@ -185,9 +187,17 @@ class _VerificationPageState extends State<VerificationPage> {
     return true;
   }
 
+
+  @override
+  void dispose() {
+    controllers.forEach((element) { element.dispose(); });
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -294,7 +304,7 @@ class _VerificationPageState extends State<VerificationPage> {
                   children: [
                     GestureDetector(
                       onTap: (){
-
+                        Navigator.pushNamed(context, '/password');
                       },
                       child: Text(
                         AppText.forgotPIN,

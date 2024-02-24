@@ -57,4 +57,5 @@ class AppApiUrls{
 
   static String subscription = '$mainApi/dictionary/subscriptions';
   static String setSubscriptionToUser = '$mainApi/user/subscribe/';
+  static String checkPassword = '$mainApi/user-check-password';
 }

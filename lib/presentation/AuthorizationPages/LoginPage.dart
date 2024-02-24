@@ -48,6 +48,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _checkCurrentUserInSP() async {
     if (await SharedPreferencesOperator.containsUserWithJwt()) {
       UserWithJwt? user = await SharedPreferencesOperator.getUserWithJwt();
+      CurrentUser.currentTestUser = user;
       if (user != null) {
         Navigator.pushNamed(context, '/verification');
       }
