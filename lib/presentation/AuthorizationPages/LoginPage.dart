@@ -89,6 +89,9 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.of(context).pushReplacement(route);
       }else{
         Navigator.pushNamed(context, '/pin_set');
+        setState(() {
+          isLoading = false;
+        });
       }
 
 

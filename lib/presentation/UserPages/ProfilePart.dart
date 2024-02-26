@@ -76,7 +76,7 @@ class _ProfilePartState extends State<ProfilePart> {
 
       if (response.code == 200 && mounted) {
         setState(() => user = response.body);
-      } else {
+      } else if(mounted){
         ResponseHandle.handleResponseError(response,context);
       }
     } finally {

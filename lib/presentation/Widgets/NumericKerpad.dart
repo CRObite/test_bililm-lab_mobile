@@ -38,49 +38,46 @@ class NumericKeypad extends StatelessWidget {
   }
 
   Widget _buildKeyButton(String key) {
-    return GestureDetector(
-      onTap: () {
-        if(key == 'f'){
-          fingerPressed();
-        }else if (key.isNotEmpty && key != '<') {
-          onDigitPressed(key);
-        } else if (key == '<') {
-          onDeletePressed();
-        }
-      },
-      child: Container(
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+      ),
+      child: ClipOval(
+        child: Material(
+          child: Container(
+            child: InkWell(
+              splashColor: AppColors.colorButton.withOpacity(0.3),
+              highlightColor: Colors.white,
+              onTap: () {
+                if(key == 'f'){
+                  fingerPressed();
+                }else if (key.isNotEmpty && key != '<') {
+                  onDigitPressed(key);
+                } else if (key == '<') {
+                  onDeletePressed();
+                }
+              },
+              child: Center(
+                child: (key != '<' && key != 'f')
+                    ? Text(
+                  key,
+                  style: TextStyle(
+                    color: AppColors.colorButton,
+                    fontSize: 24.0,
+                  ),
+                ) :
+                key == '<'? Icon(
+                Icons.backspace,
+                color: AppColors.colorButton,
+              ) : key == 'f' && finger ? Icon(
+                  Icons.fingerprint_outlined,
+                  color: AppColors.colorButton,
+                ): null,
 
-        decoration: BoxDecoration(
-
-          boxShadow: !finger && key == 'f' ? null: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 2,
-              blurRadius: 3,
-              offset: Offset(0, 2),
+              ),
             ),
-          ] ,
-          color: !finger && key == 'f' ? Colors.transparent :  key == 'f' || key == '<' ?AppColors.colorButton : Colors.white,
-          shape: BoxShape.circle,
-        ),
-
-        child: Center(
-          child: (key != '<' && key != 'f')
-              ? Text(
-            key,
-            style: TextStyle(
-              color: AppColors.colorButton,
-              fontSize: 24.0,
-            ),
-          ) :
-          key == '<'? Icon(
-          Icons.backspace,
-          color: Colors.white,
-        ) : key == 'f' && finger ? Icon(
-            Icons.fingerprint_outlined,
-            color: Colors.white,
-          ): null,
-
+          ),
         ),
       ),
     );
