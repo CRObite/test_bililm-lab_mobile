@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
@@ -20,6 +22,9 @@ class _VerificationPageState extends State<VerificationPage> with SingleTickerPr
   int _selectedIndex = 0;
   String _pinCode = '';
 
+  late AnimationController _waveController;
+  late Animation<double> _waveAnimation;
+
 
 
   bool _supportState = false;
@@ -39,6 +44,21 @@ class _VerificationPageState extends State<VerificationPage> with SingleTickerPr
     _checkCurrentUserInSP();
     _checkPin();
 
+
+    _waveController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500),
+    );
+
+    _waveAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(
+      CurvedAnimation(
+        parent: _waveController,
+        curve: Curves.easeInOut,
+      ),
+    );
 
   }
 
@@ -103,6 +123,7 @@ class _VerificationPageState extends State<VerificationPage> with SingleTickerPr
           _pinCode = '';
           _selectedIndex = 0;
           _errorMessage = AppText.wrongPin;
+          _waveController.forward(from: 0);
         });
       });
 
@@ -179,18 +200,28 @@ class _VerificationPageState extends State<VerificationPage> with SingleTickerPr
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List.generate(4, (index) {
-                    return Container(
-                      height: 16,
-                      width: 16,
-                      margin: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: _selectedIndex > index ? Colors.blue : Colors.grey.withOpacity(0.3),
-                        shape: BoxShape.circle,
-
+                    return AnimatedBuilder(
+                      animation: _waveAnimation,
+                      builder: (context, child) {
+                        return Transform.translate(
+                          offset: Offset(10 * sin(_waveAnimation.value * pi), 0),
+                          child: child,
+                        );
+                      },
+                      child: Container(
+                        height: 16,
+                        width: 16,
+                        margin: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: _selectedIndex > index ? Colors.blue : Colors.grey.withOpacity(0.3),
+                          shape: BoxShape.circle,
+                        ),
                       ),
                     );
                   }),
                 ),
+
+
                 SizedBox(height: 20),
                 if (_errorMessage != null)
                   Row(

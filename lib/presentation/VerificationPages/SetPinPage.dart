@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:test_bilimlab_project/config/SharedPreferencesOperator.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/NumericKerpad.dart';
@@ -14,7 +16,7 @@ class SetPinPage extends StatefulWidget {
   State<SetPinPage> createState() => _SetPinPageState();
 }
 
-class _SetPinPageState extends State<SetPinPage> {
+class _SetPinPageState extends State<SetPinPage> with SingleTickerProviderStateMixin  {
   late String pinCode;
   late String againPinCode;
   int selectedIndex = 0;
@@ -22,11 +24,30 @@ class _SetPinPageState extends State<SetPinPage> {
   bool againOpened = false;
   String? errorMessage;
 
+  late AnimationController _waveController;
+  late Animation<double> _waveAnimation;
+
+
   @override
   void initState() {
     super.initState();
     pinCode = '';
     againPinCode = '';
+
+    _waveController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500),
+    );
+
+    _waveAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(
+      CurvedAnimation(
+        parent: _waveController,
+        curve: Curves.easeInOut,
+      ),
+    );
   }
 
   void updatePin(String pin) {
@@ -74,10 +95,15 @@ class _SetPinPageState extends State<SetPinPage> {
 
   Future<void> checkPIN() async {
     if (pinCode != againPinCode) {
-      resetPin();
-      setState(() {
-        errorMessage = AppText.fill;
+
+      Future.delayed(Duration(milliseconds: 300), () {
+        resetPin();
+        setState(() {
+          _waveController.forward(from: 0);
+          errorMessage = AppText.fill;
+        });
       });
+
     } else {
       SharedPreferencesOperator.savePINCode(pinCode);
       Navigator.pop(context);
@@ -172,16 +198,24 @@ class _SetPinPageState extends State<SetPinPage> {
     return Container(
       width: 200,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: List.generate(4, (index) {
-          return Container(
-            height: 16,
-            width: 16,
-            margin: EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: selectedIndex > index ? Colors.blue : Colors.grey.withOpacity(0.3),
-              shape: BoxShape.circle,
-
+          return AnimatedBuilder(
+            animation: _waveAnimation,
+            builder: (context, child) {
+              return Transform.translate(
+                offset: Offset(10 * sin(_waveAnimation.value * pi), 0),
+                child: child,
+              );
+            },
+            child: Container(
+              height: 16,
+              width: 16,
+              margin: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: selectedIndex > index ? Colors.blue : Colors.grey.withOpacity(0.3),
+                shape: BoxShape.circle,
+              ),
             ),
           );
         }),
