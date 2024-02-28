@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:test_bilimlab_project/presentation/Widgets/SmallButton.dart';
 import 'package:test_bilimlab_project/utils/AppColors.dart';
 import 'package:test_bilimlab_project/utils/AppImages.dart';
@@ -14,6 +15,9 @@ class TopUpYourBalance extends StatefulWidget {
 class _TopUpYourBalanceState extends State<TopUpYourBalance> {
   int _currentPage = 0;
   PageController _pageController = PageController(initialPage: 0);
+
+
+
 
 @override
   void dispose() {
@@ -88,14 +92,14 @@ class _TopUpYourBalanceState extends State<TopUpYourBalance> {
                       isDisabled: _currentPage == 2? true : false,
                       isBordered: false),
                   SizedBox(width: 1,),
-                  // SmallButton(
-                  //     onPressed: (){
-                  //
-                  //     },
-                  //     buttonColors: AppColors.colorButton,
-                  //     innerElement: Text(AppText.topUpBalance, style: TextStyle(color: AppColors.colorButton),),
-                  //     isDisabled: _currentPage == 2? false : true,
-                  //     isBordered: false),
+                  SmallButton(
+                      onPressed: (){
+
+                      },
+                      buttonColors: AppColors.colorButton,
+                      innerElement: Text(AppText.topUpBalance, style: TextStyle(color: AppColors.colorButton),),
+                      isDisabled: _currentPage == 2? false : true,
+                      isBordered: false),
 
                 ],
               ),

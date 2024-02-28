@@ -68,7 +68,7 @@ class AppText {
   static String loading = 'Жүктеу...';
   static String subscribe = 'Жазылу';
   static String skip = 'Өткізу';
-  static String topUpBalance = 'Толтыру';
+  static String topUpBalance = 'Басқа төлем әдісі';
   static String email = 'Электрондық пошта';
   static String enterEmail = 'Электрондық поштаны енгізіңіз';
   static String regionOptional = 'Аймақ (міндетті емес)';
